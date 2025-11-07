@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(20deg);
+  }
+}
+
+.sparkle-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 3px white;
+  animation: sparkle 1.5s infinite;
+}
+
+.sparkle-top-right {
+  top: 8px;
+  right: 8px;
+  animation-delay: 0s;
+}
+
+.sparkle-bottom-left {
+  bottom: 8px;
+  left: 8px;
+  animation-delay: 0.8s;
+}
