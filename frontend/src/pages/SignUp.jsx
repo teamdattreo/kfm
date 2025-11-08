@@ -363,7 +363,7 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import bgsignup from '../assets/signup1.jpg'
-import Animation from '../components/Animation';
+import Animation from '../components/animation';
 
 const SignUp = () => {
   const navigate = useNavigate();
