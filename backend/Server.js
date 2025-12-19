@@ -221,7 +221,6 @@ import * as PubertyBookingController from './controllers/pubertyBookingControlle
 import galleryRoutes from './routes/Galleryroutes.js';
 
 
-
 // Initialize environment variables
 dotenv.config();
 
@@ -253,27 +252,13 @@ app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 // CORS
 app.use(cors({
-  origin: (origin, callback) => {
-    if (process.env.NODE_ENV === 'production') {
-      if (origin === process.env.PRODUCTION_URL) {
-        return callback(null, true);
-      } else {
-        return callback(new Error('Not allowed by CORS'), false);
-      }
-    } else {
-      const allowedOrigins = ['http://localhost:5173', 'https://kfm-chi.vercel.app'];
-      if (allowedOrigins.includes(origin) || !origin) {
-        return callback(null, true);
-      } else {
-        return callback(new Error('Not allowed by CORS'), false);
-      }
-    }
-  },
+  origin: NODE_ENV === 'production' 
+    ? [process.env.PRODUCTION_URL] 
+    : ['http://localhost:3000', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-
 
 // Body parsers
 app.use(express.json({ limit: '100mb' }));
