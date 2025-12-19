@@ -23,16 +23,16 @@ const ProductsPage = () => {
     const fetchProducts = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
-        
-        // Ensure we always set an array, even if response.data is null/undefined
-        const productsData = Array.isArray(response?.data) ? response.data : [];
+
+        // Ensure we always set an array, even if response is null/undefined
+        const productsData = Array.isArray(response) ? response : [];
         setProducts(productsData);
         
         // For debugging - check the API response structure
-        console.log('API Response:', response.data);
+        console.log('API Response:', response);
       } catch (err) {
         console.error('Error fetching products:', err);
-        setError(err.response?.data?.message || 'Failed to fetch products');
+        setError(err.data?.message || err.message || 'Failed to fetch products');
         setProducts([]); // Set empty array on error
       } finally {
         setLoading(false);
@@ -48,7 +48,7 @@ const ProductsPage = () => {
       setProducts(prevProducts => prevProducts.filter(product => product._id !== id));
     } catch (err) {
       console.error('Error deleting product:', err);
-      setError(err.response?.data?.message || 'Failed to delete product');
+      setError(err.data?.message || err.message || 'Failed to delete product');
     }
   };
 

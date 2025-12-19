@@ -27,7 +27,8 @@ const AdminBookingPage = () => {
           response = { data: [] };
       }
       // Sort bookings by creation date (newest first)
-      const sortedData = response.data.sort((a, b) => 
+      const list = Array.isArray(response) ? response : [];
+      const sortedData = list.sort((a, b) => 
         new Date(b.createdAt || b.bookingDate || b.eventDate) - 
         new Date(a.createdAt || a.bookingDate || a.eventDate)
       );

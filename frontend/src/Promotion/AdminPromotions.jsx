@@ -31,9 +31,9 @@ const AdminPromotions = () => {
   const fetchPromotions = async () => {
     try {
       const response = await api.get(API_ENDPOINTS.PROMOTIONS.GET_ALL);
-      setPromotions(Array.isArray(response?.data) ? response.data : []);
+      setPromotions(Array.isArray(response) ? response : []);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load promotions');
+      setError(err.data?.message || err.message || 'Failed to load promotions');
       console.error('Error fetching promotions:', err);
     } finally {
       setIsLoading(false);

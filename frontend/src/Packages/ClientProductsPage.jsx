@@ -32,7 +32,7 @@ const ClientProductsPage = () => {
       const fetchProducts = async () => {
         try {
           const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
-          setProducts(Array.isArray(response?.data) ? response.data : []);
+          setProducts(Array.isArray(response) ? response : []);
         } catch (err) {
           console.error('Error fetching products:', err);
           setError('Failed to load products. Please try again later.');

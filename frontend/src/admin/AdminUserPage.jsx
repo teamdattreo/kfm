@@ -17,6 +17,8 @@ const AdminUsersPage = () => {
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
 
+  const getAuthToken = () => localStorage.getItem('authToken');
+
   useEffect(() => {
     const token = getAuthToken();
     
@@ -40,13 +42,14 @@ const AdminUsersPage = () => {
         : response?.data || [];
       
       setUsers(userData);
-      setLoading(false);
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || 'Failed to fetch users. Please check your authentication.');
       if (error.status === 401) {
         navigate('/login');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +100,8 @@ const AdminUsersPage = () => {
 
       const response = await api.put(
         API_ENDPOINTS.USERS.UPDATE(editingUser._id),
-        formData
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.success) {
