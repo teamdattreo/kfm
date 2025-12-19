@@ -67,7 +67,7 @@ app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 500
 });
 app.use(limiter);
 
