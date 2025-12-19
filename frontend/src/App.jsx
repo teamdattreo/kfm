@@ -9,7 +9,7 @@ import VerificationSuccess from './pages/VerificationSuccess';
 import VerificationFailed from './pages/VerificationFailed';
 import ExpenseManagement from './admin/ExpenseManagement';
 import Banners from './admin/Banners';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import ContactUs from './pages/contactUs';
 import Addform from './Packages/Addform';
 import PackagesPage from './Packages/PackagesPage';
@@ -55,8 +55,8 @@ function App() {
   }
 
   return (
-<GoogleOAuthProvider clientId="YOUR_CLIENT_ID.apps.googleusercontent.com">  
-      <BrowserRouter>
+<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+<BrowserRouter>
         <Routes>    
 
             <Route path='/' element={<Home />} />
