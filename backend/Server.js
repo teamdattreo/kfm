@@ -197,29 +197,23 @@ import compression from 'compression';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
-import PackageOperation from './controllers/PackageOperation.js'
-import ProductOperation from './controllers/ProductOperation.js'
-import BannerOperation from './controllers/BannerOperation.js'
-import PromotionOperation from './controllers/PromotionOperation.js'
 import { fileURLToPath } from 'url';
 
-import ExpenseController from './controllers/ExpenseController.js'
-import UserOperations from './controllers/UserOperations.js'
-import BannersOperations from './controllers/BannersOperations.js'
-import BannersUI from './controllers/BannersUI.js'
-import {
-  createWeddingBooking,
-  getWeddingBookings,
-  getUserBookings,
-  getWeddingBookingById,
-  updateWeddingBookingById,
-  deleteWeddingBooking
-} from './controllers/weddingBookingController.js';
+// Import controllers
+import PackageOperation from './controllers/PackageOperation.js';
+import ProductOperation from './controllers/ProductOperation.js';
+import BannerOperation from './controllers/BannerOperation.js';
+import PromotionOperation from './controllers/PromotionOperation.js';
+import ExpenseController from './controllers/ExpenseController.js';
+import UserOperations from './controllers/UserOperations.js';
+import BannersOperations from './controllers/BannersOperations.js';
+import BannersUI from './controllers/BannersUI.js';
+import { createWeddingBooking, getWeddingBookings, getUserBookings, getWeddingBookingById, updateWeddingBookingById, deleteWeddingBooking } from './controllers/weddingBookingController.js';
 import * as BirthdayBookingController from './controllers/birthdayBookingController.js';
 import * as PubertyBookingController from './controllers/pubertyBookingController.js';
 
+// Import routes
 import galleryRoutes from './routes/Galleryroutes.js';
-
 
 // Initialize environment variables
 dotenv.config();
@@ -227,7 +221,6 @@ dotenv.config();
 // Constants
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Initialize Express
@@ -254,7 +247,7 @@ app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 app.use(cors({
   origin: NODE_ENV === 'production' 
     ? [process.env.PRODUCTION_URL] 
-    : ['http://localhost:3000', 'http://localhost:5173'],
+    : ['http://localhost:3000', 'http://localhost:5173'], // Allow local dev and production frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -264,34 +257,24 @@ app.use(cors({
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
-
-
+// Static files
 // app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
-
+// Routes
 app.use("/ExpenseController", ExpenseController);
 app.use("/UserOperations", UserOperations);
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use('/BannersOperations', BannersOperations);
 app.use('/BannersUI', BannersUI);
-
-
-
-
-app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
-
-app.use("/PackageOperation",PackageOperation)
-app.use("/ProductOperation",ProductOperation)
-app.use("/Banner",BannerOperation)
+app.use("/PackageOperation", PackageOperation);
+app.use("/ProductOperation", ProductOperation);
+app.use("/Banner", BannerOperation);
 app.use('/gallery', galleryRoutes);
-app.use("/promotions",PromotionOperation)
+app.use("/promotions", PromotionOperation);
+
 // Wedding Booking Routes
 app.post('/weddingBooking', createWeddingBooking);
 app.get('/weddingBooking', getWeddingBookings);
-app.get('/weddingBooking/user/:userId', getUserBookings); // Changed this line
+app.get('/weddingBooking/user/:userId', getUserBookings);
 app.get('/weddingBooking/:id', getWeddingBookingById);
 app.put('/weddingBooking/:id', updateWeddingBookingById);
 app.delete('/weddingBooking/:id', deleteWeddingBooking);
@@ -299,7 +282,7 @@ app.delete('/weddingBooking/:id', deleteWeddingBooking);
 // Birthday Booking Routes
 app.post('/birthdayBooking', BirthdayBookingController.createBirthdayBooking);
 app.get('/birthdayBooking', BirthdayBookingController.getBirthdayBookings);
-app.get('/birthdayBooking/user/:userId', BirthdayBookingController.getUserBirthdayBookings); // Changed this line
+app.get('/birthdayBooking/user/:userId', BirthdayBookingController.getUserBirthdayBookings);
 app.get('/birthdayBooking/:id', BirthdayBookingController.getBirthdayBookingById);
 app.put('/birthdayBooking/:id', BirthdayBookingController.updateBirthdayBookingById);
 app.delete('/birthdayBooking/:id', BirthdayBookingController.deleteBirthdayBooking);
@@ -307,23 +290,20 @@ app.delete('/birthdayBooking/:id', BirthdayBookingController.deleteBirthdayBooki
 // Puberty Booking Routes
 app.post('/pubertyBooking', PubertyBookingController.createPubertyBooking);
 app.get('/pubertyBooking', PubertyBookingController.getPubertyBookings);
-app.get('/pubertyBooking/user/:userId', PubertyBookingController.getUserPubertyBookings); // Changed this line
+app.get('/pubertyBooking/user/:userId', PubertyBookingController.getUserPubertyBookings);
 app.get('/pubertyBooking/:id', PubertyBookingController.getPubertyBookingById);
 app.put('/pubertyBooking/:id', PubertyBookingController.updatePubertyBookingById);
 app.delete('/pubertyBooking/:id', PubertyBookingController.deletePubertyBooking);
 
+// Health Check
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
-// 404 Handler
+// 404 Handler (for undefined routes)
 app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
 });
 
-// Error handler
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({ message: 'Something went wrong!' });
-// });
-
+// Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
@@ -333,36 +313,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Database connection
-// mongoose.connect(process.env.DB)
-//   .then(() => console.log('✅ Connected to MongoDB'))
-//   .catch(err => {
-//     console.error('❌ MongoDB connection error:', err);
-//     process.exit(1);
-//   });
-
-// // Start server
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
-// });
-
-
-
-
-
-
-
-
-
+// Database connection (MongoDB)
 mongoose.connect(process.env.db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
-.then(() => console.log("Connected to MongoDB"))
-.catch(err => console.log("MongoDB connection error:", err));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.log("MongoDB connection error:", err));
 
-
+// Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
