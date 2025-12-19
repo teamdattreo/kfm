@@ -16,7 +16,8 @@ const Home = () => {
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const data = await api.get(API_ENDPOINTS.BANNERS.CURRENT);
+        const data = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
+
         if (data.imageUrl) {
           setBannerUrl(data.imageUrl);
         } else {

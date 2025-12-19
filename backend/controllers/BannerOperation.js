@@ -1,166 +1,4 @@
-// import express from "express";
-// import Banner from "../models/Banner.js";
-// import { check, validationResult } from 'express-validator';
 
-// const router = express.Router();
-
-// // CORS middleware
-// router.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//   next();
-// });
-
-// // // Handle OPTIONS requests
-// // router.options('*', (req, res) => {
-// //   res.sendStatus(200);
-// // });
-
-// // Get active banners
-// router.get('/active', async (req, res) => {
-//   try {
-//     const now = new Date();
-//     const banners = await Banner.find({
-//       isActive: true,
-//       publishDate: { $lte: now }
-//     }).sort({ publishDate: -1 });
-    
-//     // Return the array directly since frontend expects an array
-//     res.json(banners);
-//   } catch (err) {
-//     console.error('Error fetching active banners:', err);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Failed to fetch active banners',
-//       error: err.message
-//     });
-//   }
-// });
-
-// // Create new banner
-// router.post('/', 
-//   [
-//     check('imageUrl').notEmpty().withMessage('Image URL is required')
-//       .withMessage('Valid URL is required'),
-//     check('publishDate').notEmpty().withMessage('Publish date is required')
-//       .isISO8601().withMessage('Valid date is required'),
-//     // check('expireDate').optional()
-//     //   .isISO8601().withMessage('Valid date is required')
-//   ],
-//   async (req, res) => {
-//     try {
-//       const errors = validationResult(req);
-//       if (!errors.isEmpty()) {
-//         return res.status(400).json({ 
-//           success: false,
-//           errors: errors.array() 
-//         });
-//       }
-
-//       const { imageUrl, publishDate} = req.body;
-      
-//       const banner = new Banner({
-//         imageUrl,
-//         publishDate: new Date(publishDate),
-//         //expireDate: expireDate ? new Date(expireDate) : null
-//       });
-
-//       await banner.save();
-
-//       return res.status(201).json({
-//         success: true,
-//         message: 'Banner created successfully',
-//         data: banner
-//       });
-
-//     } catch (err) {
-//       console.error('Error creating banner:', err);
-//       return res.status(500).json({ 
-//         success: false,
-//         message: 'Server error',
-//         error: err.message 
-//       });
-//     }
-//   }
-// );
-
-// // Get all banners (admin only)
-// router.get('/', async (req, res) => {
-//   try {
-//     const banners = await Banner.find().sort({ createdAt: -1 });
-//     res.json(banners);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-
-// router.get('/:id', async (req, res) => {
-//   try {
-//     const banner = await Banner.findById(req.params.id);
-//     if (!banner) {
-//       return res.status(404).json({ message: 'Banner not found' });
-//     }
-//     res.json(banner);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
-
-
-// // Update banner
-// router.put('/:id', [
-//     check('imageUrl', 'Image URL is required').optional().not().isEmpty(),
-//     check('publishDate', 'Valid date is required').optional().isISO8601(),
-//   ],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-//   try {
-//     const updatedBanner = await Banner.findByIdAndUpdate(
-//       req.params.id,
-//       req.body,
-//       { new: true } 
-//     );
-    
-//     if (!updatedBanner) {
-//       return res.status(404).json({ message: 'Banner not found' });
-//     }
-    
-//     res.json({
-//       success: true,
-//       data: updatedBanner
-//     });
-//   } catch (error) {
-//     res.status(500).json({ 
-//       success: false,
-//       message: error.message 
-//     });
-//   }
-// });
-
-// // Delete banner
-// router.delete('/:id', async (req, res) => {
-//   try {
-//     const banner = await Banner.findByIdAndDelete(req.params.id);
-
-//     if (!banner) {
-//       return res.status(404).json({ message: 'Banner not found' });
-//     }
-
-//     res.json({ message: 'Banner removed' });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// export default router;
 
 import express from "express";
 import multer from 'multer';
@@ -215,12 +53,12 @@ const upload = multer({
 });
 
 // CORS middleware
-router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+// router.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   next();
+// });
 
 // Get active banners
 router.get('/active', async (req, res) => {
@@ -425,5 +263,31 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-
+// Get active banner
+router.get('/active', async (req, res) => {
+  try {
+    const activeBanner = await Banner.findOne({ isActive: true })
+      .sort({ publishDate: -1 })
+      .limit(1);
+    
+    if (!activeBanner) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'No active banner found' 
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: activeBanner
+    });
+  } catch (err) {
+    console.error('Error fetching active banner:', err);
+    res.status(500).json({ 
+      success: false,
+      message: 'Server error',
+      error: err.message 
+    });
+  }
+});
 export default router;

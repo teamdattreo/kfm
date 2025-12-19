@@ -32,9 +32,8 @@ let currentBannerUrl = '';
 
 
 
-  ///////////////////////////////
-
-  router.post('/upload1', upload.single('image'), async (req, res) => {
+// Upload banner image
+router.post('/upload1', upload.single('image'), async (req, res) => {
     try {
       console.log('Upload request received');
       
