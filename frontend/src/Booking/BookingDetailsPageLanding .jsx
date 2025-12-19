@@ -64,7 +64,7 @@ const AdminBookingPage = () => {
       const endpointMap = {
         'weddingBooking': API_ENDPOINTS.BOOKINGS.UPDATE_WEDDING(bookingId),
         'birthdayBooking': API_ENDPOINTS.BOOKINGS.UPDATE_BIRTHDAY(bookingId),
-        'pubertyBooking': API_ENDPOINTS.BOOKINGS.UPDATE_PROPERTY(bookingId)
+        'pubertyBooking': API_ENDPOINTS.BOOKINGS.UPDATE_PUBERTY(bookingId)
       };
       await api.put(endpointMap[endpoint], { status: newStatus });
       // Update local state

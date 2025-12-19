@@ -95,7 +95,7 @@ const PubertyBookingForm = () => {
         userId
       };
 
-      const response = await api.post(API_ENDPOINTS.BOOKINGS.CREATE_PROPERTY, bookingData);
+      const response = await api.post(API_ENDPOINTS.BOOKINGS.CREATE_PUBERTY, bookingData);
       alert("Puberty booking submitted successfully!");
       navigate('/BookingHistory');
     } catch (error) {

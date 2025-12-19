@@ -23,7 +23,7 @@ const UserBookingsPage = () => {
         const [weddings, birthdays, puberties] = await Promise.all([
           api.get(API_ENDPOINTS.BOOKINGS.USER_WEDDING(userId)),
           api.get(API_ENDPOINTS.BOOKINGS.USER_BIRTHDAY(userId)),
-          api.get(API_ENDPOINTS.BOOKINGS.USER_PROPERTY(userId))
+          api.get(API_ENDPOINTS.BOOKINGS.USER_PUBERTY(userId))
         ]);
 
         // Combine all bookings with their types
@@ -77,7 +77,7 @@ const UserBookingsPage = () => {
       const endpointMap = {
         'weddingBooking': API_ENDPOINTS.BOOKINGS.DELETE_WEDDING(bookingId),
         'birthdayBooking': API_ENDPOINTS.BOOKINGS.DELETE_BIRTHDAY(bookingId),
-        'pubertyBooking': API_ENDPOINTS.BOOKINGS.DELETE_PROPERTY(bookingId)
+        'pubertyBooking': API_ENDPOINTS.BOOKINGS.DELETE_PUBERTY(bookingId)
       };
       await api.delete(endpointMap[endpoint]);
       setBookings(bookings.filter(booking => booking._id !== bookingId));

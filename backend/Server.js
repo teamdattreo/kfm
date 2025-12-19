@@ -79,6 +79,7 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use('/PackageOperation', PackageOperation);
 app.use('/ProductOperation', ProductOperation);
 app.use('/Banner', BannerOperation);
+app.use('/promotions', PromotionOperation);
 app.use('/ExpenseController', ExpenseController);
 app.use('/UserOperations', UserOperations);
 app.use('/BannersOperations', BannersOperations);

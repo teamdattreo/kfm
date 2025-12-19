@@ -25,7 +25,7 @@ const UpdateBookingPage = () => {
             response = await api.get(API_ENDPOINTS.BOOKINGS.GET_BIRTHDAY(bookingId));
             break;
           case 'puberty':
-            response = await api.get(API_ENDPOINTS.BOOKINGS.GET_PROPERTY(bookingId));
+            response = await api.get(API_ENDPOINTS.BOOKINGS.GET_PUBERTY(bookingId));
             break;
           default:
             throw new Error('Invalid event type');
@@ -47,16 +47,16 @@ const UpdateBookingPage = () => {
 
     try {
       let response;
-      switch (eventType) {
-        case 'wedding':
-          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_WEDDING(bookingId), booking);
-          break;
-        case 'birthday':
-          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_BIRTHDAY(bookingId), booking);
-          break;
-        case 'puberty':
-          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_PROPERTY(bookingId), booking);
-          break;
+        switch (eventType) {
+          case 'wedding':
+            response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_WEDDING(bookingId), booking);
+            break;
+          case 'birthday':
+            response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_BIRTHDAY(bookingId), booking);
+            break;
+          case 'puberty':
+            response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_PUBERTY(bookingId), booking);
+            break;
         default:
           throw new Error('Invalid event type');
       }
