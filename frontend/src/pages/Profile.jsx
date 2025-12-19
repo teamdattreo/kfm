@@ -253,7 +253,133 @@ const Profile = () => {
             </div>
           </div>
 
+          {/* Profile Body */}
+          <div className="p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left column: avatar + quick stats */}
+              <div className="lg:col-span-1">
+                <div className="bg-gray-900/60 border border-gray-700 rounded-2xl p-6">
+                  <div className="flex items-center justify-center">
+                    <div className="relative">
+                      {previewImage || profileData.profileImage ? (
+                        <img
+                          src={previewImage || profileData.profileImage}
+                          alt="Profile"
+                          className="h-28 w-28 rounded-full object-cover ring-2 ring-amber-400/60"
+                        />
+                      ) : (
+                        <div className="h-28 w-28 rounded-full bg-gradient-to-br from-amber-400/30 via-gray-800 to-black flex items-center justify-center text-2xl font-semibold text-amber-200 ring-2 ring-amber-400/60">
+                          {profileData.name?.trim()?.[0] || 'K'}
+                        </div>
+                      )}
+                      {isEditing && (
+                        <label className="absolute -bottom-2 -right-2 h-9 w-9 rounded-full bg-amber-500 text-black flex items-center justify-center cursor-pointer shadow-lg">
+                          <FiCamera className="text-lg" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageChange}
+                          />
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-4 text-center">
+                    <h3 className="text-lg font-semibold text-white">{profileData.name || 'Your Name'}</h3>
+                    <p className="text-sm text-gray-400">{profileData.email || 'your@email.com'}</p>
+                  </div>
+                  {selectedImage && isEditing && (
+                    <button
+                      type="button"
+                      onClick={uploadProfileImage}
+                      disabled={imageLoading}
+                      className="mt-4 w-full rounded-lg bg-gray-800 border border-gray-700 text-amber-200 py-2 hover:bg-gray-700 transition-colors disabled:opacity-60"
+                    >
+                      {imageLoading ? 'Uploading...' : 'Save Photo'}
+                    </button>
+                  )}
+                </div>
+              </div>
 
+              {/* Right column: form */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-gray-400">Name</label>
+                    <input
+                      type="text"
+                      value={profileData.name}
+                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      disabled={!isEditing}
+                      className={`mt-2 w-full rounded-lg border ${validationErrors.name ? 'border-red-500' : 'border-gray-700'} bg-gray-900/70 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400/40`}
+                      placeholder="Your name"
+                    />
+                    {validationErrors.name && (
+                      <p className="mt-1 text-xs text-red-400">{validationErrors.name}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-gray-400">Email</label>
+                    <input
+                      type="email"
+                      value={profileData.email}
+                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                      disabled={!isEditing}
+                      className={`mt-2 w-full rounded-lg border ${validationErrors.email ? 'border-red-500' : 'border-gray-700'} bg-gray-900/70 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400/40`}
+                      placeholder="you@example.com"
+                    />
+                    {validationErrors.email && (
+                      <p className="mt-1 text-xs text-red-400">{validationErrors.email}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-gray-400">Mobile</label>
+                    <input
+                      type="tel"
+                      value={profileData.mobile}
+                      onChange={(e) => setProfileData({ ...profileData, mobile: e.target.value })}
+                      disabled={!isEditing}
+                      className={`mt-2 w-full rounded-lg border ${validationErrors.mobile ? 'border-red-500' : 'border-gray-700'} bg-gray-900/70 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400/40`}
+                      placeholder="07X XXX XXXX"
+                    />
+                    {validationErrors.mobile && (
+                      <p className="mt-1 text-xs text-red-400">{validationErrors.mobile}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-gray-400">Address</label>
+                    <input
+                      type="text"
+                      value={profileData.address}
+                      onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
+                      disabled={!isEditing}
+                      className={`mt-2 w-full rounded-lg border ${validationErrors.address ? 'border-red-500' : 'border-gray-700'} bg-gray-900/70 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400/40`}
+                      placeholder="Street, City"
+                    />
+                    {validationErrors.address && (
+                      <p className="mt-1 text-xs text-red-400">{validationErrors.address}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-gray-700 pt-6">
+                  <div className="text-xs text-gray-500">
+                    Profile updates are saved securely to your account.
+                  </div>
+                  {isEditing && (
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="rounded-lg bg-amber-500 px-6 py-2 text-black font-semibold hover:bg-amber-600 transition-colors disabled:opacity-60"
+                    >
+                      {loading ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
