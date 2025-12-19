@@ -252,13 +252,14 @@ app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 // CORS
 app.use(cors({
-  origin: NODE_ENV === 'production' 
-    ? [process.env.PRODUCTION_URL] 
-    : ['http://localhost:3000', 'http://localhost:5173'],
+  origin: NODE_ENV === 'production' ? [process.env.PRODUCTION_URL] : ['http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
 }));
+
+app.options('*', cors());  // Ensure preflight request is handled
+
 
 // Body parsers
 app.use(express.json({ limit: '100mb' }));
