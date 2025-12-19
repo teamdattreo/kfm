@@ -55,7 +55,11 @@ app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 
 // Standard middleware
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' }
+  })
+);
 app.disable('x-powered-by');
 app.use(compression());
 app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));

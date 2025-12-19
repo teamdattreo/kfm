@@ -281,8 +281,8 @@ export const API_ENDPOINTS = {
     CURRENT: `${API_BASE_URL}/BannersOperations/current`,
     UPLOAD: `${API_BASE_URL}/Banner`,
     ALL: `${API_BASE_URL}/Banner`,
-    SINGLE: (id) => `${API_BASE_URL}/Banner/${id}`,
-    ACTIVE: `${API_BASE_URL}/Banner/active`,
+    SINGLE: (id) => `${API_BASE_URL}/BannersOperations/${id}`,
+    ACTIVE: `${API_BASE_URL}/BannersOperations/active`,
   },
   
 
