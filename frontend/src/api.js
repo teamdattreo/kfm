@@ -295,7 +295,7 @@ export const API_ENDPOINTS = {
     ALL: `${API_BASE_URL}/UserOperations/getAllUsers`,
     UPDATE: (userId) => `${API_BASE_URL}/UserOperations/update/${userId}`,
     DELETE: (userId) => `${API_BASE_URL}/UserOperations/deleteUser/${userId}`,
-    PROFILE: `${API_BASE_URL}/UserOperations/profile`,
+    PROFILE: `${API_BASE_URL}/UserOperations/getUser`,
     UPDATE_PROFILE: `${API_BASE_URL}/UserOperations/update-profile`,
   },
 
