@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import Header from '../components/Header';
 import { FiHome } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -95,7 +95,7 @@ const PubertyBookingForm = () => {
         userId
       };
 
-      const response = await axios.post('http://localhost:4000/pubertyBooking', bookingData);
+      const response = await api.post(API_ENDPOINTS.BOOKINGS.CREATE_PROPERTY, bookingData);
       alert("Puberty booking submitted successfully!");
       navigate('/BookingHistory');
     } catch (error) {

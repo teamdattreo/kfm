@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const EditPackagePage = () => {
@@ -19,19 +19,12 @@ const EditPackagePage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Get auth token from localStorage
-  const getAuthToken = () => {
-    return localStorage.getItem('authToken');
-  };
+  // Auth token is automatically handled by the api utility
 
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/PackageOperation/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
-          }
-        });
+        const response = await api.get(API_ENDPOINTS.PACKAGES.GET_BY_ID(id));
         
         console.log('Package fetch response:', response.data);
 
@@ -100,17 +93,12 @@ const EditPackagePage = () => {
         packageData.type = newType;
       }
 
-      const response = await axios.put(
-        `http://localhost:4000/PackageOperation/${id}`,
+      const response = await api.put(
+        API_ENDPOINTS.PACKAGES.UPDATE(id),
         {
           name: packageData.name,
           descriptionPoints: packageData.descriptionPoints,
           type: packageData.type
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
-          }
         }
       );
 

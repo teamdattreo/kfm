@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 
 const Promotions = () => {
   const [promotions, setPromotions] = useState([]);
@@ -11,9 +11,8 @@ const Promotions = () => {
   useEffect(() => {
     const fetchPromotions = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/promotions');
-        const data = Array.isArray(response?.data) ? response.data : [];
-        setPromotions(data); 
+        const response = await api.get(API_ENDPOINTS.PROMOTIONS.GET_ALL);
+        setPromotions(Array.isArray(response?.data) ? response.data : []);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load promotions');
         console.error('Error fetching promotions:', err);

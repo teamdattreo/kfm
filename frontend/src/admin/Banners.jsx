@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_ENDPOINTS, api } from '../api';
 
 const Banners = () => {
   const [file, setFile] = useState(null);
@@ -27,21 +28,15 @@ const Banners = () => {
     try {
       const formData = new FormData();
       formData.append('image', file);
-  
-      const response = await fetch('http://localhost:4000/BannersOperations/upload', {
-        method: 'POST',
-        body: formData
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        console.error('Backend error response:', data);
-        throw new Error(data.error || `Upload failed (Status: ${response.status})`);
+
+      const data = await api.post(API_ENDPOINTS.BANNERS.UPLOAD, formData);
+
+      if (!data || !data.imageUrl) {
+        throw new Error('Upload failed: Invalid response from server');
       }
   
       setMessage('Banner updated successfully!');
-      console.log('Uploaded URL:', data.url);
+      console.log('Uploaded URL:', data.imageUrl);
   
     } catch (error) {
       console.error('Full error:', error);

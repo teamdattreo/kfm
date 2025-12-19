@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { API_ENDPOINTS, api } from '../api';
 import AdminGalleryUpload from "./AdminGalleryUpload";
 
 const AdminGalleryTable = () => {
@@ -10,7 +10,7 @@ const AdminGalleryTable = () => {
 
   const fetchGallery = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/gallery");
+      const res = await api.get(API_ENDPOINTS.GALLERY.GET_ALL);
       setImages(res.data);
     } catch (err) {
       console.error("Error fetching gallery:", err);
@@ -25,7 +25,7 @@ const AdminGalleryTable = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this image?")) return;
     try {
-      await axios.delete(`http://localhost:4000/gallery/${id}`);
+      await api.delete(API_ENDPOINTS.GALLERY.DELETE(id));
       setMessage("Image deleted successfully");
       fetchGallery();
     } catch (err) {
@@ -44,7 +44,7 @@ const AdminGalleryTable = () => {
     try {
       const formattedCategory =
         editedCategory.charAt(0).toUpperCase() + editedCategory.slice(1).toLowerCase();
-      await axios.put(`http://localhost:4000/gallery/${id}`, {
+      await api.put(API_ENDPOINTS.GALLERY.UPDATE(id), {
         category: formattedCategory,
       });
       setMessage("Category updated successfully");

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 
 const EditBanner = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const EditBanner = () => {
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/Banner/${id}`);
+        const response = await api.get(API_ENDPOINTS.BANNERS.GET_BY_ID(id));
         setFormData({
           publishDate: response.data.publishDate.split('T')[0],
           isActive: response.data.isActive
@@ -87,7 +87,7 @@ const EditBanner = () => {
       formDataToSend.append('publishDate', formData.publishDate);
       formDataToSend.append('isActive', formData.isActive);
 
-      const response = await axios.put(`http://localhost:4000/Banner/${id}`, formDataToSend, {
+      const response = await api.put(API_ENDPOINTS.BANNERS.UPDATE(id), formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

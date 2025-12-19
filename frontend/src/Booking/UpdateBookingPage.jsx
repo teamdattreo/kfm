@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateBookingPage = () => {
@@ -10,10 +10,6 @@ const UpdateBookingPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  // Get auth token from localStorage
-  const getAuthToken = () => {
-    return localStorage.getItem('authToken');
-  };
 
   // Fetch booking details to be updated
   useEffect(() => {
@@ -23,19 +19,13 @@ const UpdateBookingPage = () => {
         let response;
         switch (eventType) {
           case 'wedding':
-            response = await axios.get(`http://localhost:4000/weddingBooking/${bookingId}`, {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.GET_WEDDING(bookingId));
             break;
           case 'birthday':
-            response = await axios.get(`http://localhost:4000/birthdayBooking/${bookingId}`, {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.GET_BIRTHDAY(bookingId));
             break;
           case 'puberty':
-            response = await axios.get(`http://localhost:4000/pubertyBooking/${bookingId}`, {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.GET_PROPERTY(bookingId));
             break;
           default:
             throw new Error('Invalid event type');
@@ -59,19 +49,13 @@ const UpdateBookingPage = () => {
       let response;
       switch (eventType) {
         case 'wedding':
-          response = await axios.put(`http://localhost:4000/weddingBooking/${bookingId}`, booking, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_WEDDING(bookingId), booking);
           break;
         case 'birthday':
-          response = await axios.put(`http://localhost:4000/birthdayBooking/${bookingId}`, booking, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_BIRTHDAY(bookingId), booking);
           break;
         case 'puberty':
-          response = await axios.put(`http://localhost:4000/pubertyBooking/${bookingId}`, booking, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.put(API_ENDPOINTS.BOOKINGS.UPDATE_PROPERTY(bookingId), booking);
           break;
         default:
           throw new Error('Invalid event type');

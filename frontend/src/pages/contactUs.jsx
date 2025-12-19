@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 
 const ContactUs = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const ContactUs = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/PackageOperation');
+        const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
         setAllPackages(Array.isArray(response?.data) ? response.data : []);
       } catch (err) {
         console.error('Error fetching packages:', err);

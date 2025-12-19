@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import jsPDF from 'jspdf';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,8 +37,8 @@ const ExpenseManagement = () => {
 
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/ExpenseController/getpay');
-        setExpenses(response.data);
+        const response = await api.get(API_ENDPOINTS.EXPENSES.ALL);
+        setExpenses(Array.isArray(response) ? response : []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching expenses:', error);
@@ -72,15 +72,15 @@ const ExpenseManagement = () => {
       };
 
       if (editingId) {
-        await axios.put(`http://localhost:4000/ExpenseController/updatepay/${editingId}`, payload);
+        await api.put(API_ENDPOINTS.EXPENSES.UPDATE(editingId), payload);
         setMessage('Expense updated successfully');
       } else {
-        await axios.post('http://localhost:4000/ExpenseController/Pay', payload);
+        await api.post(API_ENDPOINTS.EXPENSES.CREATE, payload);
         setMessage('Expense added successfully');
       }
 
       // Refresh data
-      const response = await axios.get('http://localhost:4000/ExpenseController/getpay');
+      const response = await api.get(API_ENDPOINTS.EXPENSES.ALL);
       setExpenses(response.data);
       resetForm();
     } catch (error) {
@@ -123,7 +123,7 @@ const ExpenseManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
       try {
-        await axios.delete(`http://localhost:4000/ExpenseController/deletePay/${id}`);
+        await api.delete(API_ENDPOINTS.EXPENSES.DELETE(id));
         setExpenses(expenses.filter(exp => exp._id !== id));
         setMessage('Expense deleted successfully');
       } catch (error) {

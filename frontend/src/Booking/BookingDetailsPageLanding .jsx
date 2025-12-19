@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import Header from '../components/Header';
 
 const AdminBookingPage = () => {
@@ -15,13 +15,13 @@ const AdminBookingPage = () => {
       let response;
       switch (type) {
         case 'birthday':
-          response = await axios.get('http://localhost:4000/birthdayBooking');
+          response = await api.get(API_ENDPOINTS.BOOKINGS.BIRTHDAY);
           break;
         case 'puberty':
-          response = await axios.get('http://localhost:4000/pubertyBooking');
+          response = await api.get(API_ENDPOINTS.BOOKINGS.PUBERTY);
           break;
         case 'wedding':
-          response = await axios.get('http://localhost:4000/weddingBooking');
+          response = await api.get(API_ENDPOINTS.BOOKINGS.WEDDING);
           break;
         default:
           response = { data: [] };
@@ -61,7 +61,12 @@ const AdminBookingPage = () => {
           return;
       }
 
-      await axios.put(`http://localhost:4000/${endpoint}/${bookingId}`, { status: newStatus });
+      const endpointMap = {
+        'weddingBooking': API_ENDPOINTS.BOOKINGS.UPDATE_WEDDING(bookingId),
+        'birthdayBooking': API_ENDPOINTS.BOOKINGS.UPDATE_BIRTHDAY(bookingId),
+        'pubertyBooking': API_ENDPOINTS.BOOKINGS.UPDATE_PROPERTY(bookingId)
+      };
+      await api.put(endpointMap[endpoint], { status: newStatus });
       // Update local state
       setBookingsData(bookingsData.map(booking => 
         booking._id === bookingId ? { ...booking, status: newStatus } : booking

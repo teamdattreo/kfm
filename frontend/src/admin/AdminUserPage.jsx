@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS, api } from '../api';
 
 const AdminUsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -18,8 +18,7 @@ const AdminUsersPage = () => {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-
-    const token = localStorage.getItem('authToken');
+    const token = getAuthToken();
     
     if (!token) {
       navigate('/login');
@@ -29,32 +28,23 @@ const AdminUsersPage = () => {
     // If we get here, we have a token
     setAuthChecked(true);
     fetchUsers();
-  }, []);
+  }, [navigate]);
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/UserOperations/getAllUsers', {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      });
-
-      if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
-        throw new Error('Received HTML instead of JSON');
-      }
-
-      const userData = Array.isArray(response.data) 
-        ? response.data 
-        : response.data?.data || [];
+      const response = await api.get(API_ENDPOINTS.USERS.ALL);
+      
+      // Handle both array and object responses
+      const userData = Array.isArray(response) 
+        ? response 
+        : response?.data || [];
       
       setUsers(userData);
       setLoading(false);
     } catch (error) {
       console.error('API Error:', error);
-      setError('Failed to fetch users. Please check your authentication.');
-      if (error.response?.status === 401) {
+      setError(error.message || 'Failed to fetch users. Please check your authentication.');
+      if (error.status === 401) {
         navigate('/login');
       }
     }
@@ -72,15 +62,17 @@ const AdminUsersPage = () => {
   };
 
   const handleDelete = async (userId) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+    
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:4000/UserOperations/deleteUser/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(API_ENDPOINTS.USERS.DELETE(userId));
       setError('');
       fetchUsers();
     } catch (error) {
-      setError('Failed to delete user');
+      console.error('Delete error:', error);
+      setError(error.message || 'Failed to delete user');
     }
   };
 
@@ -93,45 +85,38 @@ const AdminUsersPage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
+    e.preventDefault();
+    setError('');
 
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    const response = await axios.put(
-      `http://localhost:4000/UserOperations/update/${editingUser._id}`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        navigate('/login');
+        return;
       }
-    );
 
-    if (response.data.success) {
-      setIsModalOpen(false);
-      fetchUsers();
-    } else {
-      setError(response.data.message || 'Failed to update user');
+      const response = await api.put(
+        API_ENDPOINTS.USERS.UPDATE(editingUser._id),
+        formData
+      );
+
+      if (response.success) {
+        setIsModalOpen(false);
+        fetchUsers();
+      } else {
+        setError(response.message || 'Failed to update user');
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      if (error.status === 401) {
+        setError('Session expired. Please login again.');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
+        navigate('/login');
+      } else {
+        setError(error.message || 'Failed to update user');
+      }
     }
-  } catch (error) {
-    console.error('Update error:', error);
-    if (error.response?.status === 401) {
-      setError('Session expired. Please login again.');
-      localStorage.removeItem('token');
-      navigate('/login');
-    } else {
-      setError(error.response?.data?.message || 
-              error.response?.data?.error || 
-              'Failed to update user');
-    }
-  }
 };
 
   return (

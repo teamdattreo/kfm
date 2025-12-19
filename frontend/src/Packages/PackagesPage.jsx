@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,10 +10,7 @@ const PackagesPage = () => {
   const [authChecked, setAuthChecked] = useState(false);
    const navigate = useNavigate();
    
-  // Get auth token from localStorage
-  const getAuthToken = () => {
-    return localStorage.getItem('authToken');
-  };
+  // Auth token is automatically handled by the api utility
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -24,11 +21,7 @@ const PackagesPage = () => {
     setAuthChecked(true);
     const fetchPackages = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/PackageOperation', {
-          headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
-          }
-        });
+        const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
         
         // Ensure we always set an array, even if response.data is null/undefined
         setPackages(Array.isArray(response?.data) ? response.data : []);
@@ -47,11 +40,7 @@ const PackagesPage = () => {
 
   const deletePackage = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/PackageOperation/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
-        }
-      });
+      await api.delete(API_ENDPOINTS.PACKAGES.DELETE(id));
       setPackages(packages.filter(pkg => pkg._id !== id));
     } catch (err) {
       console.error('Error deleting package:', err);

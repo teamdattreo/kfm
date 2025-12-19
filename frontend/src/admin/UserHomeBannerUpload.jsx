@@ -1,5 +1,6 @@
 // BannerUpload.jsx
 import React, { useState } from 'react';
+import { API_ENDPOINTS, api } from '../api';
 
 const UserHomeBannerUpload = () => {
   const [file, setFile] = useState(null);
@@ -27,16 +28,7 @@ const UserHomeBannerUpload = () => {
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await fetch('http://localhost:4000/BannersUI/upload1', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload failed');
-      }
+      const data = await api.post(API_ENDPOINTS.BANNERS_UI.UPLOAD, formData);
 
       setMessage('Banner updated successfully!');
       setFile(null); // Reset file input after successful upload
