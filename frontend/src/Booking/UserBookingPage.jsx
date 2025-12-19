@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import Header from '../components/Header';
 
 const UserBookingsPage = () => {
@@ -21,9 +21,9 @@ const UserBookingsPage = () => {
 
         // Fetch all booking types in parallel
         const [weddings, birthdays, puberties] = await Promise.all([
-          axios.get(`http://localhost:4000/weddingBooking/user/${userId}`),
-          axios.get(`http://localhost:4000/birthdayBooking/user/${userId}`),
-          axios.get(`http://localhost:4000/pubertyBooking/user/${userId}`)
+          api.get(API_ENDPOINTS.BOOKINGS.USER_WEDDING(userId)),
+          api.get(API_ENDPOINTS.BOOKINGS.USER_BIRTHDAY(userId)),
+          api.get(API_ENDPOINTS.BOOKINGS.USER_PROPERTY(userId))
         ]);
 
         // Combine all bookings with their types
@@ -74,7 +74,12 @@ const UserBookingsPage = () => {
           throw new Error('Invalid booking type');
       }
 
-      await axios.delete(`http://localhost:4000/${endpoint}/${bookingId}`);
+      const endpointMap = {
+        'weddingBooking': API_ENDPOINTS.BOOKINGS.DELETE_WEDDING(bookingId),
+        'birthdayBooking': API_ENDPOINTS.BOOKINGS.DELETE_BIRTHDAY(bookingId),
+        'pubertyBooking': API_ENDPOINTS.BOOKINGS.DELETE_PROPERTY(bookingId)
+      };
+      await api.delete(endpointMap[endpoint]);
       setBookings(bookings.filter(booking => booking._id !== bookingId));
       alert('Booking deleted successfully');
     } catch (err) {

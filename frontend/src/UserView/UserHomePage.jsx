@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Events from './Events';
+import { API_ENDPOINTS, api } from '../api';
 import BannerShowPage from '../Banner/BannerShowPage';
 import Packages from '../Packages/ClientPackagesPage';
 import logo from '../assets/KFM_Logo.png';
@@ -58,11 +59,7 @@ const UserHomePage = () => {
       try {
         setLoading(true);
         setError(null);
-        const resp = await fetch('http://localhost:4000/BannersUI/current1', {
-          headers: { Accept: 'application/json' },
-        });
-        if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
-        const data = await resp.json();
+        const data = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
         setBannerUrl(data.imageUrl || '/default-banner.jpg');
       } catch (err) {
         console.error('Banner fetch error:', err);

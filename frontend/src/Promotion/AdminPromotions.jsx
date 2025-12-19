@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { Link } from 'react-router-dom';
@@ -30,7 +30,7 @@ const AdminPromotions = () => {
 
   const fetchPromotions = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/promotions');
+      const response = await api.get(API_ENDPOINTS.PROMOTIONS.GET_ALL);
       setPromotions(Array.isArray(response?.data) ? response.data : []);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load promotions');
@@ -49,7 +49,7 @@ const AdminPromotions = () => {
           label: 'Yes',
           onClick: async () => {
             try {
-              await axios.delete(`http://localhost:4000/promotions/${promotionId}`);
+              await api.delete(API_ENDPOINTS.PROMOTIONS.DELETE(promotionId));
               setPromotions(promotions.filter(promo => promo._id !== promotionId));
             } catch (err) {
               setError('Failed to delete promotion');

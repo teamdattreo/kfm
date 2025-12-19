@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 
@@ -31,7 +31,7 @@ const ClientProductsPage = () => {
     if (isAuthenticated) {
       const fetchProducts = async () => {
         try {
-          const response = await axios.get('http://localhost:4000/ProductOperation');
+          const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
           setProducts(Array.isArray(response?.data) ? response.data : []);
         } catch (err) {
           console.error('Error fetching products:', err);

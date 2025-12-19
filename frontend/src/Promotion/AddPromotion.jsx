@@ -1,7 +1,7 @@
 import { useState, useRef,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdvancedImage } from '@cloudinary/react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 
 const AddPromotion = () => {
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ const AddPromotion = () => {
       formData.append('description', description);
 
       // Upload to backend API
-      const response = await axios.post('http://localhost:4000/promotions', formData, {
+      const response = await api.post(API_ENDPOINTS.PROMOTIONS.CREATE, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

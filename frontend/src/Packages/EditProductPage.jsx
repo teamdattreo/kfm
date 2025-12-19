@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const EditProductPage = () => {
@@ -17,19 +17,12 @@ const EditProductPage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Get auth token from localStorage
-  const getAuthToken = () => {
-    return localStorage.getItem('authToken');
-  };
+  // Auth token is automatically handled by the api utility
 
   useEffect(() => {
   const fetchProduct = async () => {
   try {
-    const response = await axios.get(`http://localhost:4000/ProductOperation/${id}`, {
-      headers: {
-        'Authorization': `Bearer ${getAuthToken()}`
-      }
-    });
+    const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_BY_ID(id));
 
     console.log('Product fetch response:', response.data);
 
@@ -125,21 +118,17 @@ const EditProductPage = () => {
   formData.append('colors', JSON.stringify(productData.colors));
   formData.append('sizes', JSON.stringify(productData.sizes));
 
-  await axios.put(`http://localhost:4000/ProductOperation/${id}`, formData, {
+  await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), formData, {
     headers: {
-      'Authorization': `Bearer ${getAuthToken()}`
+      'Content-Type': 'multipart/form-data'
     }
   });
 } else {
-  await axios.put(`http://localhost:4000/ProductOperation/${id}`, {
+  await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), {
     name: productData.name,
     code: productData.code,
     colors: productData.colors,
     sizes: productData.sizes
-  }, {
-    headers: {
-      'Authorization': `Bearer ${getAuthToken()}`
-    }
   });
 }
 

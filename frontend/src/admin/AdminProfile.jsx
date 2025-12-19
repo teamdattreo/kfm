@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { 
   FaUser, FaBoxOpen, FaUsers, 
   FaCalendarCheck, FaTags, FaImages,
@@ -9,7 +9,6 @@ import {
 import { FiMenu, FiX } from 'react-icons/fi';
 import ExpenseManagement from './ExpenseManagement';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 const AdminProfile = () => {
   const [admin, setAdmin] = useState({ 
@@ -67,7 +66,7 @@ const AdminProfile = () => {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await axios.get(`${API_BASE_URL}/UserOperations/getUser`, {
+      const response = await api.get(API_ENDPOINTS.USERS.PROFILE, {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

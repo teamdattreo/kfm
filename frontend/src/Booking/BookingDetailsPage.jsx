@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const BookingDetailsPage = () => {
@@ -11,10 +11,6 @@ const BookingDetailsPage = () => {
 
   const navigate = useNavigate();
 
-  // Get auth token from localStorage
-  const getAuthToken = () => {
-    return localStorage.getItem('authToken');
-  };
 
   // Fetch all bookings for the selected event type
   useEffect(() => {
@@ -33,19 +29,13 @@ const BookingDetailsPage = () => {
         // Fetch bookings based on event type
         switch (eventType) {
           case 'wedding':
-            response = await axios.get('http://localhost:4000/weddingBooking', {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.WEDDING);
             break;
           case 'birthday':
-            response = await axios.get('http://localhost:4000/birthdayBooking', {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.BIRTHDAY);
             break;
           case 'puberty':
-            response = await axios.get('http://localhost:4000/pubertyBooking', {
-              headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-            });
+            response = await api.get(API_ENDPOINTS.BOOKINGS.PUBERTY);
             break;
           default:
             throw new Error('Invalid event type');
@@ -73,19 +63,13 @@ const BookingDetailsPage = () => {
       // Based on event type, choose the correct API endpoint for delete
       switch (eventType) {
         case 'wedding':
-          response = await axios.delete(`http://localhost:4000/weddingBooking/${bookingId}`, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.delete(API_ENDPOINTS.BOOKINGS.DELETE_WEDDING(bookingId));
           break;
         case 'birthday':
-          response = await axios.delete(`http://localhost:4000/birthdayBooking/${bookingId}`, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.delete(API_ENDPOINTS.BOOKINGS.DELETE_BIRTHDAY(bookingId));
           break;
         case 'puberty':
-          response = await axios.delete(`http://localhost:4000/pubertyBooking/${bookingId}`, {
-            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-          });
+          response = await api.delete(API_ENDPOINTS.BOOKINGS.DELETE_PUBERTY(bookingId));
           break;
         default:
           throw new Error('Invalid event type');

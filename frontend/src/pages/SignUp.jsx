@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import SignUpImage from '../assets/signup1.jpg';
 import { useNavigate } from 'react-router-dom';
 
@@ -158,7 +158,7 @@ const SignUp = () => {
         authProvider: formData.authProvider
       };
 
-      const response = await axios.post('http://localhost:4000/UserOperations/register', payload);
+      const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, payload);
       
       if (response.data.message.includes('verification')) {
         setRegisteredEmail(formData.email);
@@ -180,7 +180,7 @@ const SignUp = () => {
   const handleResendVerification = async () => {
     try {
       setIsSubmitting(true);
-      await axios.post('http://localhost:4000/UserOperations/resend-verification', {
+      await api.post(API_ENDPOINTS.AUTH.RESEND_VERIFICATION, {
         email: registeredEmail
       });
       setResendCooldown(30); // Reset cooldown

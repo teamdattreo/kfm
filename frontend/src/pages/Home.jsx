@@ -6,6 +6,7 @@ import photo2 from '../assets/Sony_FX3.png';
 import Portfolio from '../Portfolio/Portfolio';
 import HeaderHome from '../components/HeaderHome';
 import logo from '../assets/KFM_Logo.png';
+import { API_ENDPOINTS, api } from '../api';
 
 const Home = () => {
   const [bannerUrl, setBannerUrl] = useState('/default-banner.jpg');
@@ -15,18 +16,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const response = await fetch('http://localhost:4000/BannersOperations/current', {
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          const errorData = await response.text();
-          throw new Error(`HTTP ${response.status}: ${errorData}`);
-        }
-
-        const data = await response.json();
+        const data = await api.get(API_ENDPOINTS.BANNERS.CURRENT);
         if (data.imageUrl) {
           setBannerUrl(data.imageUrl);
         } else {

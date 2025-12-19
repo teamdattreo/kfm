@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import { jwtDecode } from 'jwt-decode';
 import { GoogleLogin } from '@react-oauth/google';
 import LoginImage from '../assets/login.jpg';
@@ -76,8 +76,8 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post(
-        'http://localhost:4000/UserOperations/login',
+      const response = await api.post(
+        API_ENDPOINTS.AUTH.LOGIN,
         {
           email: formData.email,
           password: formData.password,
@@ -107,16 +107,26 @@ const Login = () => {
       setIsSubmitting(true);
       setError('');
 
-      const response = await axios.post(
-        'http://localhost:4000/UserOperations/login',
-        {
-          email: decoded.email,
-          authProvider: 'google'
-        },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
+      // const response = await axios.post(
+      //   'http://localhost:4000/UserOperations/login',
+      //   {
+      //     email: decoded.email,
+      //     authProvider: 'google'
+      //   },
+      //   {
+      //     headers: { 'Content-Type': 'application/json' }
+      //   }
+      // );
+      const response = await api.post(
+  API_ENDPOINTS.AUTH.LOGIN,
+  {
+    email: decoded.email,
+    authProvider: 'google'
+  },
+  {
+    headers: { 'Content-Type': 'application/json' }
+  }
+);
 
       if (response.data?.token) {
         handleLoginSuccess(response.data);

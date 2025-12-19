@@ -1,109 +1,6 @@
-// import React, { useState } from "react";
-// import axios from "axios";
 
-// const AdminGalleryUpload = () => {
-//   const [image, setImage] = useState(null);
-//   const [category, setCategory] = useState("");
-//   const [previewUrl, setPreviewUrl] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     setImage(file);
-//     if (file) setPreviewUrl(URL.createObjectURL(file));
-//     else setPreviewUrl(null);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!image || !category) {
-//       alert("Both image and category are required.");
-//       return;
-//     }
-
-//     const formData = new FormData();
-//     formData.append("image", image);
-
-//     // Capitalize category to match schema
-//     const formattedCategory =
-//       category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-//     formData.append("category", formattedCategory);
-
-//     try {
-//       setLoading(true);
-//       console.log("📤 Uploading:", { image, formattedCategory });
-//       await axios.post("http://localhost:4000/gallery/upload", formData);
-//       alert("Image uploaded successfully!");
-//       setImage(null);
-//       setCategory("");
-//       setPreviewUrl(null);
-//     } catch (err) {
-//       console.error("🔥 Upload failed:", err.response?.data || err.message);
-//       alert("Upload failed: " + (err.response?.data?.message || err.message));
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="bg-white max-w-md mx-auto p-6 rounded-md shadow-md mt-10 font-sans">
-//       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-//         Upload Image to <span className="text-yellow-500">Gallery</span>
-//       </h2>
-
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         {/* File Input */}
-//         <div>
-//           <label className="block font-medium text-gray-700 mb-1">Select Image</label>
-//           <input
-//             type="file"
-//             accept="image/*"
-//             onChange={handleImageChange}
-//             className="block w-full text-sm text-gray-700 border border-gray-300 rounded-md p-2"
-//           />
-//         </div>
-
-//         {/* Preview */}
-//         {previewUrl && (
-//           <img
-//             src={previewUrl}
-//             alt="Preview"
-//             className="w-full h-48 object-cover rounded-md"
-//           />
-//         )}
-
-//         {/* Category */}
-//         <div>
-//           <label className="block font-medium text-gray-700 mb-1">Category</label>
-//           <select
-//             value={category}
-//             onChange={(e) => setCategory(e.target.value)}
-//             className="block w-full border border-gray-300 rounded-md p-2 text-sm"
-//           >
-//             <option value="">-- Select --</option>
-//             <option value="wedding">Wedding</option>
-//             <option value="birthday">Birthday</option>
-//             <option value="portrait">Portrait</option>
-//             <option value="shots">Shots</option>
-//           </select>
-//         </div>
-
-//         <button
-//           type="submit"
-//           disabled={loading}
-//           className="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600"
-//         >
-//           {loading ? "Uploading..." : "Upload"}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AdminGalleryUpload;
 import React, { useState } from "react";
-import axios from "axios";
+import { API_ENDPOINTS, api } from '../api';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -171,7 +68,11 @@ const AdminGalleryUpload = () => {
       setLoading(true);
       setMessage("");
       console.log("📤 Uploading:", { image, formattedCategory });
-      await axios.post("http://localhost:4000/gallery/upload", formData);
+      await api.post(API_ENDPOINTS.GALLERY.UPLOAD, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       setMessage("Image uploaded successfully!");
       setImage(null);
       setCategory("");

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { API_ENDPOINTS, api } from '../api';
 import Banners from '../admin/Banners';
 import UserHomeBannerUpload from '../admin/UserHomeBannerUpload';
 
@@ -37,10 +37,11 @@ const AdminBannerPage = () => {
 
   const fetchBanners = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/Banner');
-      setBanners(response.data);
+      const response = await api.get(API_ENDPOINTS.BANNERS.ALL);
+      setBanners(Array.isArray(response) ? response : []);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load banners');
+      console.error('Error fetching banners:', err);
+      setError(err.message || 'Failed to load banners');
     } finally {
       setLoading(false);
     }
@@ -49,24 +50,26 @@ const AdminBannerPage = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this banner? This will also remove the image from Cloudinary.')) {
       try {
-        await axios.delete(`http://localhost:4000/Banner/${id}`);
-        fetchBanners();
+        await api.delete(API_ENDPOINTS.BANNERS.SINGLE(id));
+        setBanners(banners.filter(banner => banner._id !== id));
       } catch (err) {
-        setError(err.response?.data?.message || 'Delete failed');
+        console.error('Error deleting banner:', err);
+        setError(err.message || 'Failed to delete banner');
       }
     }
   };
 
-  const toggleBannerStatus = async (id, currentStatus) => {
-    try {
-      await axios.put(`http://localhost:4000/Banner/${id}`, {
-        isActive: !currentStatus
-      });
-      fetchBanners();
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update banner status');
-    }
-  };
+const toggleBannerStatus = async (id, currentStatus) => {
+  try {
+    await api.put(API_ENDPOINTS.BANNERS.SINGLE(id), {
+      isActive: !currentStatus
+    });
+    fetchBanners();
+  } catch (err) {
+    console.error('Error updating banner status:', err);
+    setError(err.message || 'Failed to update banner status');
+  }
+};
 
   const filteredBanners = banners.filter(banner => {
     if (activeFilter === 'all') return true;
