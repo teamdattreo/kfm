@@ -1,8 +1,6 @@
 import express from "express";
-import cors from 'cors';
 import ExpenseModel from '../models/Expense.js'
 const router = express.Router();
-router.use(cors());
 
 
 

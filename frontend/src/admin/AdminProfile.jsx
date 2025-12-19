@@ -74,11 +74,11 @@ const AdminProfile = () => {
         timeout: 10000
       });
 
-      if (!response.data?.success) {
-        throw new Error(response.data?.message || 'Invalid response format');
+      if (!response?.success) {
+        throw new Error(response?.message || 'Invalid response format');
       }
 
-      const { _id, name, email, mobile, address } = response.data.data;
+      const { _id, name, email, mobile, address } = response.data;
       setAdmin(prev => ({
         ...prev,
         _id: _id || '',
@@ -89,9 +89,9 @@ const AdminProfile = () => {
       }));
 
     } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to load profile';
+      const errorMessage = err.data?.message || err.message || 'Failed to load profile';
       setError(errorMessage);
-      if (err.response?.status === 401) {
+      if (err.status === 401) {
         handleLogout();
       }
       console.error('Profile fetch error:', err);
@@ -118,32 +118,30 @@ const AdminProfile = () => {
   const handleSaveChanges = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.put(
-        `${API_BASE_URL}/UserOperations/updateUser/${admin._id}`,
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+      const response = await api.put(
+        API_ENDPOINTS.USERS.UPDATE(admin._id),
         {
           name: admin.name,
           email: admin.email,
           mobile: admin.phone,
           address: admin.address
         },
-        {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.data.success) {
+      if (response?.success) {
         setSuccessMessage('Profile updated successfully');
         setIsEditing(false);
         setTimeout(() => setSuccessMessage(''), 3000);
         fetchProfile();
       } else {
-        throw new Error(response.data.message || 'Update failed');
+        throw new Error(response?.message || 'Update failed');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile');
+      setError(err.data?.message || err.message || 'Failed to update profile');
       setTimeout(() => setError(''), 3000);
     }
   }, [admin, fetchProfile]);
