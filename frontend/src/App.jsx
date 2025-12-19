@@ -55,7 +55,7 @@ function App() {
   }
 
   return (
-    <GoogleOAuthProvider clientId={googleClientId}>
+<GoogleOAuthProvider clientId="YOUR_CLIENT_ID.apps.googleusercontent.com">  
       <BrowserRouter>
         <Routes>    
 

@@ -260,7 +260,7 @@ const Login = () => {
     <GoogleLogin
       onSuccess={handleGoogleSuccess}
       onError={handleGoogleError}
-      useOneTap
+   
       theme="filled_white"
       size="large"
       text="signin_with"
