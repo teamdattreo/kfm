@@ -24,8 +24,9 @@ const BannerShowPage = () => {
     setAuthChecked(true);
     const fetchBanners = async () => {
       try {
-        const response = await api.get(API_ENDPOINTS.BANNERS.ACTIVE);
-        const bannersData = Array.isArray(response.data) ? response.data : [];
+        const response = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
+        const imageUrl = response?.imageUrl;
+        const bannersData = imageUrl ? [{ _id: 'current', imageUrl }] : [];
         setBanners(bannersData);
       } catch (err) {
         console.error('Error fetching banners:', err);

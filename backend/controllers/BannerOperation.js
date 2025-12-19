@@ -63,12 +63,10 @@ const upload = multer({
 // Get active banners
 router.get('/active', async (req, res) => {
   try {
-    const now = new Date();
     const banners = await Banner.find({
-      isActive: true,
-      publishDate: { $lte: now }
+      isActive: true
     }).sort({ publishDate: -1 });
-    
+
     res.json(banners);
   } catch (err) {
     console.error('Error fetching active banners:', err);
@@ -263,31 +261,4 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-// Get active banner
-router.get('/active', async (req, res) => {
-  try {
-    const activeBanner = await Banner.findOne({ isActive: true })
-      .sort({ publishDate: -1 })
-      .limit(1);
-    
-    if (!activeBanner) {
-      return res.status(404).json({ 
-        success: false,
-        message: 'No active banner found' 
-      });
-    }
-    
-    res.json({
-      success: true,
-      data: activeBanner
-    });
-  } catch (err) {
-    console.error('Error fetching active banner:', err);
-    res.status(500).json({ 
-      success: false,
-      message: 'Server error',
-      error: err.message 
-    });
-  }
-});
 export default router;
