@@ -89,13 +89,13 @@ const Login = () => {
         }
       );
 
-      if (response.data?.token) {
-        handleLoginSuccess(response.data);
+      if (response?.token) {
+        handleLoginSuccess(response);
       } else {
         throw new Error('Invalid response from server');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid login credentials');
+      setError(err.data?.message || err.message || 'Invalid login credentials');
     } finally {
       setIsSubmitting(false);
     }
@@ -118,23 +118,23 @@ const Login = () => {
       //   }
       // );
       const response = await api.post(
-  API_ENDPOINTS.AUTH.LOGIN,
-  {
-    email: decoded.email,
-    authProvider: 'google'
-  },
-  {
-    headers: { 'Content-Type': 'application/json' }
-  }
-);
+        API_ENDPOINTS.AUTH.LOGIN,
+        {
+          email: decoded.email,
+          authProvider: 'google'
+        },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
 
-      if (response.data?.token) {
-        handleLoginSuccess(response.data);
+      if (response?.token) {
+        handleLoginSuccess(response);
       } else {
         throw new Error('Google authentication failed');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Google login failed. Please try again.');
+      setError(err.data?.message || err.message || 'Google login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

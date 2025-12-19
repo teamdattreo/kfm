@@ -159,8 +159,8 @@ const SignUp = () => {
       };
 
       const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, payload);
-      
-      if (response.data.message.includes('verification')) {
+
+      if (response?.message && response.message.includes('verification')) {
         setRegisteredEmail(formData.email);
         setShowVerificationPopup(true);
         setResendCooldown(30); // 30 seconds cooldown
@@ -168,9 +168,9 @@ const SignUp = () => {
         navigate('/login');
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 
+      const errorMessage = error.data?.message ||
                          error.message ||
-                         "Registration failed. Please try again.";
+                         'Registration failed. Please try again.';
       setApiError(errorMessage);
     } finally {
       setIsSubmitting(false);
