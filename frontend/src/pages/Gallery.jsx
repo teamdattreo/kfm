@@ -31,8 +31,9 @@ const GalleryPage = () => {
       const fetchImages = async () => {
         try {
           const res = await api.get(API_ENDPOINTS.GALLERY.GET_ALL);
-          setImages(res.data);
-          setFiltered(res.data);
+          const list = Array.isArray(res) ? res : [];
+          setImages(list);
+          setFiltered(list);
         } catch (err) {
           console.error(err);
         }

@@ -27,10 +27,13 @@ const UserBookingsPage = () => {
         ]);
 
         // Combine all bookings with their types
+        const weddingsList = Array.isArray(weddings) ? weddings : [];
+        const birthdaysList = Array.isArray(birthdays) ? birthdays : [];
+        const pubertiesList = Array.isArray(puberties) ? puberties : [];
         const allBookings = [
-          ...weddings.data.map(b => ({ ...b, type: 'Wedding' })),
-          ...birthdays.data.map(b => ({ ...b, type: 'Birthday' })),
-          ...puberties.data.map(b => ({ ...b, type: 'Puberty' }))
+          ...weddingsList.map(b => ({ ...b, type: 'Wedding' })),
+          ...birthdaysList.map(b => ({ ...b, type: 'Birthday' })),
+          ...pubertiesList.map(b => ({ ...b, type: 'Puberty' }))
         ].sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
 
         setBookings(allBookings);
@@ -42,12 +45,12 @@ const UserBookingsPage = () => {
           status: err.response?.status
         });
         
-        if (err.response?.status === 401) {
+        if (err.status === 401) {
           localStorage.removeItem('authToken');
           localStorage.removeItem('userId');
           navigate('/login');
         } else {
-          setError(err.response?.data?.message || 'Failed to load bookings');
+          setError(err.data?.message || err.message || 'Failed to load bookings');
         }
       } finally {
         setLoading(false);

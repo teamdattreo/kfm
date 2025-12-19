@@ -11,7 +11,7 @@ const AdminGalleryTable = () => {
   const fetchGallery = async () => {
     try {
       const res = await api.get(API_ENDPOINTS.GALLERY.GET_ALL);
-      setImages(res.data);
+      setImages(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error("Error fetching gallery:", err);
       setMessage("Failed to load gallery images");

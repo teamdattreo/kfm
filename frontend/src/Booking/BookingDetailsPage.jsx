@@ -41,9 +41,9 @@ const BookingDetailsPage = () => {
             throw new Error('Invalid event type');
         }
 
-        setBookings(response.data);  // Set all bookings data
+        setBookings(Array.isArray(response) ? response : []);  // Set all bookings data
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch bookings');
+        setError(err.data?.message || err.message || 'Failed to fetch bookings');
       } finally {
         setLoading(false);  // Set loading to false after data is fetched
       }

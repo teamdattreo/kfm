@@ -93,7 +93,7 @@ const ClientPackagesPage = () => {
     const fetchPackages = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
-        const packagesData = Array.isArray(response?.data) ? response.data : [];
+        const packagesData = Array.isArray(response) ? response : [];
         setAllPackages(packagesData);
       } catch (err) {
         console.error('Error fetching packages:', err);

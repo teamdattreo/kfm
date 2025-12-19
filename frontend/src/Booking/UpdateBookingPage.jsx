@@ -30,9 +30,9 @@ const UpdateBookingPage = () => {
           default:
             throw new Error('Invalid event type');
         }
-        setBooking(response.data);
+        setBooking(response);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch booking details');
+      setError(err.data?.message || err.message || 'Failed to fetch booking details');
       } finally {
         setLoading(false);
       }
@@ -66,7 +66,7 @@ const UpdateBookingPage = () => {
       navigate(`/BookingDetailsPage/${eventType}`); // Redirect back to the bookings list
     } catch (err) {
       setIsSubmitting(false);
-      setError(err.response?.data?.message || 'Failed to update booking');
+      setError(err.data?.message || err.message || 'Failed to update booking');
     }
   };
 

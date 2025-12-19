@@ -30,21 +30,21 @@ const Profile = () => {
       const token = localStorage.getItem('authToken');
       try {
         const response = await api.get(API_ENDPOINTS.USERS.PROFILE);
-        if (response.data?.success) {
+        if (response?.success) {
           setProfileData({
-            _id: response.data.data._id,
-            name: response.data.data.name,
-            email: response.data.data.email,
-            address: response.data.data.address,
-            mobile: response.data.data.mobile,
-            profileImage: response.data.data.profileImage || ''
+            _id: response.data._id,
+            name: response.data.name,
+            email: response.data.email,
+            address: response.data.address,
+            mobile: response.data.mobile,
+            profileImage: response.data.profileImage || ''
           });
-          if (response.data.data.profileImage) {
-            setPreviewImage(`${API_ENDPOINTS.USERS.PROFILE_IMAGE(response.data.data.profileImage)}`);
+          if (response.data.profileImage) {
+            setPreviewImage(response.data.profileImage);
           }
         }
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load profile');
+        setError(err.data?.message || err.message || 'Failed to load profile');
       } finally {
         setLoading(false);
       }
