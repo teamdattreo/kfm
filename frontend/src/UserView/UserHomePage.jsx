@@ -55,46 +55,46 @@ const UserHomePage = () => {
     }
     setAuthChecked(true);
 
-    // const fetchBanner = async () => {
-    //   try {
-    //     setLoading(true);
-    //     setError(null);
-    //     const data = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
-    //     setBannerUrl(data.imageUrl || '/default-banner.jpg');
-    //   } catch (err) {
-    //     console.error('Banner fetch error:', err);
-    //     setError(err.message);
-    //     setBannerUrl('/default-banner.jpg');
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    
     const fetchBanner = async () => {
       try {
         setLoading(true);
         setError(null);
-        
-        const response = await fetch('http://localhost:4000/BannersUI/current1', {
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
         setBannerUrl(data.imageUrl || '/default-banner.jpg');
-      } catch (error) {
-        console.error('Banner fetch error:', error);
-        setError(error.message);
+      } catch (err) {
+        console.error('Banner fetch error:', err);
+        setError(err.message);
         setBannerUrl('/default-banner.jpg');
       } finally {
         setLoading(false);
       }
     };
+    
+    // const fetchBanner = async () => {
+    //   try {
+    //     setLoading(true);
+    //     setError(null);
+        
+    //     const response = await fetch('http://localhost:4000/BannersUI/current1', {
+    //       headers: {
+    //         'Accept': 'application/json'
+    //       }
+    //     });
+
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+
+    //     const data = await response.json();
+    //     setBannerUrl(data.imageUrl || '/default-banner.jpg');
+    //   } catch (error) {
+    //     console.error('Banner fetch error:', error);
+    //     setError(error.message);
+    //     setBannerUrl('/default-banner.jpg');
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
     
     
     fetchBanner();
