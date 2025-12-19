@@ -28,8 +28,14 @@ const Profile = () => {
     const fetchProfile = async () => {
       setLoading(true);
       const token = localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
       try {
-        const response = await api.get(API_ENDPOINTS.USERS.PROFILE);
+        const response = await api.get(API_ENDPOINTS.USERS.PROFILE, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         if (response?.success) {
           setProfileData({
             _id: response.data._id,
@@ -66,6 +72,10 @@ const Profile = () => {
 
     setImageLoading(true);
     const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
     const formData = new FormData();
     formData.append('profileImage', selectedImage);
 
@@ -75,21 +85,22 @@ const Profile = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
           }
         }
       );
 
-      if (response.data.success) {
+      if (response?.success) {
         setProfileData(prev => ({
           ...prev,
-          profileImage: response.data.imagePath
+          profileImage: response.data?.imagePath || prev.profileImage
         }));
         setSuccessMessage('Profile image updated successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Image upload failed');
+      setError(err.data?.message || err.message || 'Image upload failed');
       setTimeout(() => setError(''), 3000);
     } finally {
       setImageLoading(false);
@@ -122,18 +133,22 @@ const Profile = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.put(
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+      const response = await api.put(
         API_ENDPOINTS.USERS.UPDATE(profileData._id),
         profileData,
-        { headers: { 'Authorization': `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (response.data.success) {
+      if (response?.success) {
         setSuccessMessage('Profile updated successfully!');
         setIsEditing(false);
         setTimeout(() => setSuccessMessage(''), 3000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Update failed');
+      setError(err.data?.message || err.message || 'Update failed');
       setTimeout(() => setError(''), 3000);
     } finally {
       setLoading(false);
