@@ -22,12 +22,12 @@ const PackagesPage = () => {
     const fetchPackages = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
-        
-        // Ensure we always set an array, even if response.data is null/undefined
-        setPackages(Array.isArray(response?.data) ? response.data : []);
+
+        // Ensure we always set an array, even if response is null/undefined
+        setPackages(Array.isArray(response) ? response : []);
       } catch (err) {
         console.error('Error fetching packages:', err);
-        setError(err.response?.data?.message || 'Failed to fetch packages');
+        setError(err.data?.message || err.message || 'Failed to fetch packages');
         // Set empty array on error to prevent map errors
         setPackages([]);
       } finally {
