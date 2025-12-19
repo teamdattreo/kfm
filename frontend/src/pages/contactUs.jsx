@@ -18,7 +18,7 @@ const ContactUs = () => {
     const fetchPackages = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
-        setAllPackages(Array.isArray(response?.data) ? response.data : []);
+        setAllPackages(Array.isArray(response) ? response : []);
       } catch (err) {
         console.error('Error fetching packages:', err);
         setAllPackages([]);
