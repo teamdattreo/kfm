@@ -6,7 +6,7 @@ import Events from './Events';
 import { API_ENDPOINTS, api } from '../api';
 import BannerShowPage from '../Banner/BannerShowPage';
 import Packages from '../Packages/ClientPackagesPage';
-import logo from '../assets/KFM_Logo2.png';
+import logo from '../assets/KFM_Logo2.PNG';
 import introVideo from '../assets/KFM Intro.mp4'; // Consider renaming to KFM_Intro.mp4
 import { Link } from 'react-router-dom';
 
