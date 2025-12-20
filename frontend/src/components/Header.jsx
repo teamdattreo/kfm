@@ -70,7 +70,7 @@ const Navbar = () => {
               <Link to="/Portfolio" className="hover:text-[#FFCF40]">About Us</Link>
             </li>
             <li>
-              <Link to="/Products" className="hover:text-[#FFCF40]">Sale</Link>
+              <Link to="/Products" className="hover:text-[#FFCF40]">Sales</Link>
             </li>
           </ul>
 
