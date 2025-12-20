@@ -120,14 +120,21 @@ const ClientPackagesPage = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-amber-900/20 via-black/70 to-amber-900/20">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h1 className="text-white text-5xl font-bold mb-4">
-            The Perfect Package for Your <span className="text-amber-400">Precious</span> Moments
+    <div className="relative min-h-screen bg-[#0b0b0b] text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#1a1a1a,transparent_60%)]"></div>
+      <div className="absolute -top-24 right-10 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl"></div>
+      <div className="absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl"></div>
+
+      <div className="relative container mx-auto px-4 py-16">
+        <div className="text-center mb-14 max-w-3xl mx-auto">
+          <p className="text-xs uppercase tracking-[0.35em] text-amber-300/70 mb-3">
+            Curated Packages
+          </p>
+          <h1 className="text-white text-4xl md:text-5xl font-semibold mb-4 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+            The Perfect Package for Your Precious Moments
           </h1>
-          <p className="text-gray-400 font-light tracking-wider leading-relaxed">
-            Choose from our carefully crafted packages to frame your memories in timeless style
+          <p className="text-gray-300 font-light tracking-wide leading-relaxed">
+            Choose from our carefully crafted packages to frame your memories in timeless style.
           </p>
         </div>
 
@@ -144,15 +151,19 @@ const ClientPackagesPage = () => {
             return (
               <div
                 key={pkg._id}
-                className={`bg-gradient-to-br ${colors.bgFrom} ${colors.bgTo} rounded-xl overflow-hidden shadow-lg transition-transform transform hover:scale-[1.03] cursor-pointer`}
+                className={`group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br ${colors.bgFrom} ${colors.bgTo} shadow-[0_18px_55px_-35px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-amber-300/60 cursor-pointer`}
                 onClick={() => setSelectedPackage({ ...pkg, colors })}
               >
-                <div className="p-6 text-center">
-                  <div className={`h-12 w-12 mx-auto mb-4 flex items-center justify-center ${colors.iconBg} rounded-full`}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-80"></div>
+                <div className="relative p-7 text-center">
+                  <div className={`h-12 w-12 mx-auto mb-4 flex items-center justify-center ${colors.iconBg} rounded-full shadow-md`}>
                     {colors.icon}
                   </div>
-                  <h4 className={`${colors.titleColor} text-2xl font-bold mb-2`}>{packageType}</h4>
+                  <h4 className={`${colors.titleColor} text-2xl font-semibold mb-2`}>{packageType}</h4>
                   <p className={`${colors.textColor} text-sm`}>{pkg.name}</p>
+                  <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-black/70 bg-white/60 px-3 py-1 rounded-full">
+                    View Details
+                  </div>
                 </div>
               </div>
             );
@@ -170,13 +181,13 @@ const ClientPackagesPage = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className={`bg-white rounded-2xl max-w-md w-full p-6 relative`}
+              className="bg-[#111111] text-white rounded-2xl max-w-md w-full p-6 relative border border-white/10 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.9)]"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
             >
               <button
-                className="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-xl"
+                className="absolute top-3 right-3 text-gray-400 hover:text-amber-300 text-2xl"
                 onClick={() => setSelectedPackage(null)}
               >
                 ×
@@ -186,13 +197,13 @@ const ClientPackagesPage = () => {
                 <div className={`h-12 w-12 mx-auto mb-4 flex items-center justify-center ${selectedPackage.colors.iconBg} rounded-full`}>
                   {selectedPackage.colors.icon}
                 </div>
-                <h2 className="text-2xl font-bold mb-2 text-black">{selectedPackage.name}</h2>
-                <h4 className="text-gray-500 text-sm mb-4">{selectedPackage.type}</h4>
+                <h2 className="text-2xl font-semibold mb-2">{selectedPackage.name}</h2>
+                <h4 className="text-sm text-amber-300/80 mb-4">{selectedPackage.type}</h4>
               </div>
 
               <div className="mb-4">
-                <h5 className="font-semibold mb-2 text-black">What's Included:</h5>
-                <ul className="list-disc list-inside space-y-1 text-gray-00 text-sm text-black">
+                <h5 className="font-semibold mb-2">What's Included:</h5>
+                <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
                   {selectedPackage.descriptionPoints?.map((point, index) => (
                     <li key={index}>{point}</li>
                   ))}
@@ -201,7 +212,7 @@ const ClientPackagesPage = () => {
 
               <button
                 onClick={handleContactClick}
-                className={`w-full py-2 px-4 ${selectedPackage.colors.iconBg} text-white rounded-lg mt-4 hover:bg-opacity-90`}
+                className={`w-full py-2.5 px-4 ${selectedPackage.colors.iconBg} text-white rounded-lg mt-4 hover:opacity-90`}
               >
                 Contact Us About This Package
               </button>
