@@ -189,13 +189,7 @@ const Navbar = () => {
                       >
                         Profile
                       </Link>
-                      <Link
-                        to="/settings"
-                        onClick={closeMobile}
-                        className="rounded-full bg-white/10 px-3 py-1 text-sm text-white hover:bg-white/20"
-                      >
-                        Settings
-                      </Link>
+
                       <button
                         onClick={handleLogout}
                         className="rounded-full bg-amber-400 px-3 py-1 text-sm text-black hover:bg-amber-500"
