@@ -6,6 +6,7 @@ import Header from '../components/Header';
 const UserBookingsPage = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
+  const [packageMap, setPackageMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,17 +20,24 @@ const UserBookingsPage = () => {
           return;
         }
 
-        // Fetch all booking types in parallel
-        const [weddings, birthdays, puberties] = await Promise.all([
+        // Fetch all booking types and packages in parallel
+        const [weddings, birthdays, puberties, packages] = await Promise.all([
           api.get(API_ENDPOINTS.BOOKINGS.USER_WEDDING(userId)),
           api.get(API_ENDPOINTS.BOOKINGS.USER_BIRTHDAY(userId)),
-          api.get(API_ENDPOINTS.BOOKINGS.USER_PUBERTY(userId))
+          api.get(API_ENDPOINTS.BOOKINGS.USER_PUBERTY(userId)),
+          api.get(API_ENDPOINTS.PACKAGES.GET_ALL)
         ]);
 
         // Combine all bookings with their types
         const weddingsList = Array.isArray(weddings) ? weddings : [];
         const birthdaysList = Array.isArray(birthdays) ? birthdays : [];
         const pubertiesList = Array.isArray(puberties) ? puberties : [];
+        const packagesList = Array.isArray(packages) ? packages : [];
+        const nextPackageMap = packagesList.reduce((acc, pkg) => {
+          if (pkg?._id) acc[pkg._id] = pkg.name || pkg.type || pkg._id;
+          return acc;
+        }, {});
+        setPackageMap(nextPackageMap);
         const allBookings = [
           ...weddingsList.map(b => ({ ...b, type: 'Wedding' })),
           ...birthdaysList.map(b => ({ ...b, type: 'Birthday' })),
@@ -118,10 +126,11 @@ const UserBookingsPage = () => {
   };
 
   const getBookingDetails = (booking) => {
+    const packageLabel = packageMap[booking.package] || booking.package;
     const details = [
       { label: 'Type', value: booking.type },
       { label: 'Date', value: new Date(booking.eventDate).toLocaleDateString() },
-      { label: 'Package', value: booking.package },
+      { label: 'Package', value: packageLabel },
       { 
         label: 'Status', 
         value: (
