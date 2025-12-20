@@ -92,7 +92,7 @@ const Footer = () => {
 
   {/* Bottom border and copyright */}
   <div className="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-    © {new Date().getFullYear()} Studio KFM. All rights reserved.
+    © {new Date().getFullYear()} DATTREO. All rights reserved.
   </div>
 
   {/* Background elements */}

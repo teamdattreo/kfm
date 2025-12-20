@@ -1,660 +1,999 @@
-import React from 'react'
-import Header from '../components/Header'
-import bghome from '../assets/aboutus.jpg'
-import { useState } from 'react'
-import featureIcon from '../assets/dilojan.png'; // replace with your actual image path
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import fallbackHero from "../assets/bghome.jpg";
+import fallbackContact from "../assets/portfolio.jpg";
+import kfm5 from "./Images/kfm5.jpg";
+import kfm8 from "./Images/kfm8.jpg";
+import kfm12 from "./Images/kfm12.jpg";
+import kfm9 from "./Images/kfm9.jpg";
+import kfm7 from "./Images/kfm7.jpg";
+import kfm4 from "./Images/kfm4.jpg";
+import kfmlogo from "./Images/kfmlogo.jpg";
+import kfm from "./Images/kfm.webp"
+import kfm14 from "./Images/kfm14.jpg";
+import kfm6 from "./Images/kfm6.jpg";
+import kfm2 from "./Images/kfm2.jpg";
+import kfm16 from "./Images/kfm16.jpg";
+import kfm18 from "./Images/kfm18.jpg";
+import kfm19 from "./Images/kfm19.jpg";
+import kfm15 from "./Images/kfm15.jpg";
+import kfm11 from "./Images/kfm11.jpg";
+import Header from "../Components/Header";
 
 
-const Portfolio = () => {
-  const [bannerUrl, setBannerUrl] = useState(bghome);
 
-  const handleBannerChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setBannerUrl(event.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
+
+/**
+ * Studio Photography Portfolio (Hero + cinematic scrolling)
+ * - TailwindCSS expected
+ * - Replace image URLs with your own work
+ */
+
+const work = [
+  {
+    title: "Noir Portraits",
+    // meta: "35mm • Studio • 2025",
+    src: kfm5,
+  },
+  {
+    title: "Chrome & Silk",
+    // meta: "Editorial • 2025",
+    src: kfm8,
+  },
+  {
+    title: "Quiet Light",
+    // meta: "Still Life • 2024",
+    src: kfm12,
+  },
+  {
+    title: "Afterglow",
+    // meta: "Fashion • 2025",
+    src: kfm9,
+  },
+];
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReduced(!!mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+  return reduced;
+}
+
+function useScrollProgress(ref) {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      const v = max <= 0 ? 0 : el.scrollTop / max;
+      setP(Math.max(0, Math.min(1, v)));
+    };
+
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [ref]);
+  return p;
+}
+
+function cn(...xs) {
+  return xs.filter(Boolean).join(" ");
+}
+
+export default function Portfolio() {
+  const prefersReduced = usePrefersReducedMotion();
+  const scrollerRef = useRef(null);
+  const progress = useScrollProgress(scrollerRef);
+
+  const year = useMemo(() => new Date().getFullYear(), []);
+
+  // A tiny cinematic “lens breathing” feel (disabled for reduced motion)
+  useEffect(() => {
+    if (prefersReduced) return;
+    const root = scrollerRef.current;
+    if (!root) return;
+
+    let raf = 0;
+    const tick = () => {
+      const t = performance.now() * 0.001;
+      root.style.setProperty("--breath", String(1 + Math.sin(t * 0.6) * 0.006));
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [prefersReduced]);
 
   return (
-    <div className="relative">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 z-50">
+    <div
+      className="portfolio-theme min-h-screen bg-black text-white"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${kfm7})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+       <div className="fixed top-0 left-0 right-0 z-50">
         <Header />
       </div>
+      {/* Top progress rail */}
+      <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
+        <div
+          className="h-full bg-[#d4af37]"
+          style={{ width: `${Math.round(progress * 100)}%` }}
+        />
+      </div>
 
-      {/* Section 1 - Hero Split Screen */}
-      <div className="relative w-full h-screen flex flex-col overflow-hidden bg-black">
-  {/* Top Half - Image */}
-  <div className="w-full h-[60%] relative">
-    {bannerUrl ? (
-      <div 
-        className="w-full h-full bg-cover bg-center"
-        style={{ backgroundImage: `url(${bannerUrl})` }}
-      />
-    ) : (
-      <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-        <span className="text-white">No Banner Selected</span>
-      </div>
-    )}
-    {/* Subtle vignette effect */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
-  </div>
+      {/* Sticky micro-nav */}
+      {/* <header className="fixed left-0 top-1 z-40 w-full">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-2">
 
-  {/* Bottom Half - Content */}
-  <div className="w-full h-[40%] bg-black relative">
-    <div className="h-full flex flex-col items-center justify-center p-6 relative z-10">
-      <div className="text-center mb-4">
-        <p className="text-white text-2xl font-light mb-1">
-          Capturing Your
-        </p>
-        <p className="text-amber-400 text-3xl font-semibold">
-          Precious Moments
-        </p>
-      </div>
-      
-      {/* Social links/contact */}
-      <div className="flex space-x-4 mt-4">
-        {['instagram', 'facebook', 'pinterest'].map((social) => (
-          <a key={social} href="#" className="text-gray-400 hover:text-amber-400 transition-colors">
-            <span className="sr-only">{social}</span>
-            {/* Replace with actual icons */}
-            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
-          </a>
-        ))}
-      </div>
-      
-      {/* Decorative elements */}
-      <div className="absolute bottom-8 left-8 opacity-20">
-        <div className="w-16 h-16 border border-amber-400 rounded-full"></div>
-      </div>
-      <div className="absolute top-8 right-8 opacity-20">
-        <div className="w-10 h-10 border border-white rounded-full"></div>
-      </div>
-    </div>
-    
-    {/* Gradient divider */}
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
-    
-    {/* Subtle grid pattern */}
-    <div className="absolute inset-0 opacity-10" style={{
-      backgroundImage: 'linear-gradient(to right, gray 1px, transparent 1px), linear-gradient(to bottom, gray 1px, transparent 1px)',
-      backgroundSize: '20px 20px'
-    }}></div>
-  </div>
-  
-  {/* Centered Circle with Logo */}
-  <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-    <div className="relative">
-      <div className="w-28 h-28 rounded-full border-4 border-white bg-black flex items-center justify-center shadow-xl hover:shadow-amber-400/30 transition-all duration-300">
-        <div className="text-center">
-          <div className="text-xl font-extrabold">
-            <span style={{ color: '#FFCF40' }}>KFM</span>
+            <span className="font-sans text-lg tracking-wide">STUDIO KFM</span>
           </div>
-          <div className="text-xs text-white mt-1">STUDIO</div>
-        </div>
-      </div>
-      {/* Glow effect */}
-      <div className="absolute inset-0 rounded-full bg-amber-400 opacity-0 hover:opacity-20 blur-md transition-opacity duration-300 -z-10"></div>
-    </div>
-  </div>
-  
-  {/* Decorative floating dots */}
-  <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-amber-400 rounded-full opacity-70"></div>
-  <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-white rounded-full opacity-50"></div>
-</div>
 
-      {/* Section 2 - Portfolio */}
-      <div className="bg-black py-20 px-4 sm:px-6 lg:px-8 relative z-0">
-        <div className="max-w-6xl mx-auto">
-          {/* Portfolio Header */}
-          <div className="text-center mb-16">
-            <div className="text-center mb-12 max-w-3xl mx-auto">
-              <div className="relative inline-block">
-                <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-                  The Perfect Package for Your <span className="text-amber-400">Precious</span> Moments
-                </h1>
-                <div className="absolute bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent"></div>
+          <nav className="hidden items-center gap-5 text-sm text-white/70 md:flex">
+            <a className="hover:text-[#d4af37]" href="#work">Work</a>
+            <a className="hover:text-[#d4af37]" href="#services">Services</a>
+            <a className="hover:text-[#d4af37]" href="#testimonials">Testimonials</a>
+            <a className="hover:text-[#d4af37]" href="#contact">Contact</a>
+          </nav>
+
+          <a
+            href="#contact"
+            className="rounded-full border border-[#d4af37]/40 bg-black/40 px-4 py-2 text-sm text-[#f5f2ea] backdrop-blur-md hover:bg-black/60"
+          >
+            Book a Session
+          </a>
+        </div>
+      </header> */}
+
+      {/* Scroll container (cinematic journey) */}
+      <main
+        ref={scrollerRef}
+        className={cn(
+          "h-screen overflow-y-auto overscroll-contain",
+          "[scrollbar-width:none] [-ms-overflow-style:none]",
+          "scroll-smooth"
+        )}
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        <style>{`
+          .blink-gold{
+            animation: blinkGold 1.6s ease-in-out infinite;
+          }
+          @keyframes blinkGold{
+            0%, 100% { box-shadow: 0 0 0 rgba(212,175,55,0); color: #f5f2ea; }
+            50% { box-shadow: 0 0 18px rgba(212,175,55,0.6); color: #d4af37; }
+          }
+          .work-slideshow{
+            position: relative;
+            overflow: hidden;
+          }
+          .work-slideshow img{
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: slideFade 12s infinite;
+          }
+          .work-slideshow img:nth-child(1){ animation-delay: 0s; }
+          .work-slideshow img:nth-child(2){ animation-delay: 4s; }
+          .work-slideshow img:nth-child(3){ animation-delay: 8s; }
+          @keyframes slideFade{
+            0% { opacity: 0; }
+            8% { opacity: 1; }
+            30% { opacity: 1; }
+            38% { opacity: 0; }
+            100% { opacity: 0; }
+          }
+          @media (prefers-reduced-motion: reduce){
+            .blink-gold{ animation: none; }
+            .work-slideshow img{ animation: none; opacity: 1; position: static; }
+          }
+        `}</style>
+        {/* <style>{`
+          main::-webkit-scrollbar{display:none;}
+          :root{ --breath: 1; }
+          .gridlines{
+            background-image:
+              linear-gradient(to right, rgba(212,175,55,.18) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(212,175,55,.18) 1px, transparent 1px);
+            background-size: 88px 88px;
+          }
+          .hairline{
+            box-shadow: none;
+            border: 1px solid rgba(255,255,255,.08);
+          }
+          .filmgrain{
+            background-image: url('data:image/svg+xml;utf8,\
+              <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180">\
+                <filter id="n">\
+                  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>\
+                  <feColorMatrix type="saturate" values="0"/>\
+                </filter>\
+                <rect width="100%" height="100%" filter="url(%23n)" opacity="0.12"/>\
+              </svg>');
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+          }
+          .snapY{ scroll-snap-type: y mandatory; }
+          .snapStart{ scroll-snap-align: start; }
+          .breath{ transform: scale(var(--breath)); }
+          .portfolio-theme .text-zinc-900{ color: #f5f2ea; }
+          .portfolio-theme .text-zinc-700{ color: rgba(229,231,235,.82); }
+          .portfolio-theme .text-zinc-600{ color: rgba(209,213,219,.72); }
+          .portfolio-theme .bg-zinc-900{ background-color: #0b0b0b; }
+          .portfolio-theme .bg-zinc-900\/5{ background-color: transparent; }
+          .portfolio-theme .bg-zinc-900\/10{ background-color: transparent; }
+          .portfolio-theme .bg-zinc-900\/40{ background-color: rgba(0,0,0,.6); }
+          .portfolio-theme .bg-white\/70{ background-color: rgba(212,175,55,.18); }
+          .portfolio-theme .bg-white\/55{ background-color: transparent; }
+          .portfolio-theme .bg-white\/40{ background-color: transparent; }
+          .portfolio-theme .bg-white{ background-color: #121212; }
+          .portfolio-theme .border-zinc-900\/20{ border-color: rgba(255,255,255,.12); }
+          .portfolio-theme .border-zinc-900\/15{ border-color: rgba(255,255,255,.1); }
+          .portfolio-theme .border-zinc-900\/10{ border-color: rgba(255,255,255,.08); }
+          .portfolio-theme .backdrop-blur-md,
+          .portfolio-theme .backdrop-blur-sm{ backdrop-filter: none; }
+          @media (prefers-reduced-motion: reduce){
+            .snapY{ scroll-snap-type: none; }
+          }
+        `}</style> */}
+
+        {/* HERO */}
+        <section className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="absolute inset-0 filmgrain" />
+
+          {/* Iridescence layer removed (missing component) */}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.14]" />
+
+          <div className="relative mx-auto grid max-w-6xl grid-cols-12 gap-4 px-4 pb-10">
+            {/* Left column */}
+            <div className="col-span-12 md:col-span-5">
+              <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-black">
+                      Kalmunai, Srilanka
+                    </p>
+                    <h1 className="mt-3 font-sans text-4xl leading-[1.05] md:text-5xl">
+                      Capture your moment
+                      <span className="block">through our scope.</span>
+                    </h1>
+                  </div>
+                  <div className="hidden md:block">
+
+                  </div>
+                </div>
+
+                <p className="mt-4 max-w-prose text-sm leading-relaxed text-zinc-700">
+                  A studio portfolio built like a cinematic sequence—quiet grids, large typography,
+                  and deliberate motion. Portrait, editorial, and product work with clarity and
+                  texture.
+                </p>
+
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <a
+                    href="#work"
+                    className="rounded-full border border-[#d4af37]/60 bg-black px-5 py-3 text-sm text-[#f5f2ea] hover:bg-black/60 blink-gold"
+                  >
+                    View Gallery
+                  </a>
+                  <a
+                    href="#services"
+                    className="rounded-full border border-[#d4af37]/60 bg-black px-5 py-3 text-sm text-[#f5f2ea] hover:bg-black/60 blink-gold"
+                  >
+                    Services
+                  </a>
+
+                </div>
+              </div>
+
+              {/* Micro-cards */}
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline md:col-span-2">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Services</p>
+                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Studio packages</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-700">
+                    Designed for pace and intention. We’ll build a shot list, set design, and light
+                    plan—then shoot like a sequence.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {["Silver", "Gold", "Platinum"].map((tier) => (
+                      <span
+                        key={tier}
+                        className={`rounded-full px-5 py-2 text-xs uppercase tracking-[0.3em] ${
+                          tier === "Gold"
+                            ? "border border-[#d4af37]/60 bg-black/70 text-[#d4af37]"
+                            : "border border-white/10 bg-black/60 text-white/70"
+                        }`}
+                      >
+                        {tier}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-3xl bg-white/40 p-4 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Process</p>
+                  <p className="mt-2 text-sm text-zinc-700">
+                    Moodboard → Light plan → Shoot → Grade.
+                  </p>
+                </div>
+                <div className="rounded-3xl bg-white/40 p-4 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Delivery</p>
+                  <p className="mt-2 text-sm text-zinc-700">
+                    48–72h preview. Full set in 7–10 days.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="relative z-20 my-10">
-              <div className="absolute inset-0 flex justify-center">
-                <div className="bg-amber-500/20 blur-3xl w-1/2 h-16 rounded-full"></div>
+            {/* Center / Hero visual */}
+            <div className="col-span-12 md:col-span-7">
+              <div className="relative mt-6 overflow-hidden rounded-[2rem] bg-zinc-900/5 hairline">
+                {/* Giant typographic layer */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="breath select-none font-sans text-[22vw] leading-none text-zinc-900/10 md:text-[14vw]">
+                    SCOPE
+                  </div>
+                </div>
+
+                {/* Main image */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden">
+                  <img
+                    className="h-full w-full object-cover opacity-[0.96]"
+                    alt="Hero work"
+                    src={kfm4}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = fallbackHero;
+                    }}
+                  />
+
+                  {/* Floating badges */}
+                  <div className="absolute left-4 top-4 flex items-center gap-2">
+                    <span className="rounded-full border border-[#d4af37]/60 bg-black px-3 py-2 text-xs text-[#f5f2ea] hover:bg-black/60 blink-gold ">
+                      Advanced video capabilities
+                    </span>
+                    <span className="rounded-full border border-[#d4af37]/60 bg-black px-3 py-2 text-xs text-[#f5f2ea] hover:bg-black/60 blink-gold" >
+                      Ultra‑HD clarity
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-4 right-4 flex items-center gap-2">
+
+                  </div>                 
+                </div>
+
+                {/* Footer strip */}
+                <div className="grid grid-cols-12 gap-3 border-t border-zinc-900/10 bg-white/70 px-4 py-3 backdrop-blur">
+
+                  <div className="col-span-12 flex items-center justify-between md:col-span-5">
+                   
+                    <div className="flex items-center gap-2">
+                      <a
+                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
+                        href="@StudioKFM"
+                        aria-label="Instagram"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <svg
+                          xmlns="https://www.instagram.com/studio.kfm?igsh=bGp1Zmhkdmw4ZHh2"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-4 w-4"
+                        >
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                          <path d="M16 11.37a4 4 0 1 1-7.999 1.26A4 4 0 0 1 16 11.37z" />
+                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg>
+                      </a>
+                      <a
+                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
+                        href="https://www.facebook.com/KFMKALMUNAI"
+                        aria-label="Facebook"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-4 w-4"
+                        >
+                          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                        </svg>
+                      </a>
+                      <a
+                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
+                        href="tel:+94770000000"
+                        aria-label="Call"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-4 w-4"
+                        >
+                          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.8.3 1.6.6 2.4a2 2 0 0 1-.5 2.1L8 9a16 16 0 0 0 7 7l.8-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.4.6a2 2 0 0 1 1.7 2.1z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex justify-center px-4">
-                <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 text-gray-900 px-8 py-5 rounded-xl shadow-2xl border border-amber-300/30 transform transition-all duration-500 hover:scale-[1.02] hover:shadow-amber-500/20 hover:shadow-lg max-w-2xl w-full group">
-                  <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-shimmer pointer-events-none"></div>
+              {/* Tiny “index” / stats row */}
+              <div className="mt-4 grid grid-cols-12 gap-4">
+                <div className="col-span-12 overflow-hidden rounded-3xl hairline md:col-span-6">
+                  <div className="relative aspect-[4/3] w-full">
+                    <img
+                      src={kfm12}
+                      alt="Core editorial"
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <p className="mt-2 font-sans text-2xl leading-tight text-white">
+                        High‑performance portraits, editorial, and product—
+                        <span className="text-white/70">for every level.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-span-12 overflow-hidden rounded-3xl hairline md:col-span-6">
+                  <div className="relative aspect-[4/3] w-full">
+                    <img
+                      src={kfm11}
+                      alt="Community moments"
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="flex items-baseline justify-between text-white">
+                        <p className="text-xs uppercase tracking-[0.18em] text-white/70">Community</p>
+                      </div>
+                      <p className="mt-2 text-sm text-white/80">
+                        Clients, collaborators, and creatives who trust the process.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Down hint */}
+              <div className="mt-8 flex items-center gap-3 text-xs text-black">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/60 backdrop-blur hairline">
+                  ↓
+                </span>
+                <span>Scroll for the filmstrip.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="space-y-0">
+        {/* WORK / FILMSTRIP */}
+        <section id="work" className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="relative mx-auto max-w-6xl px-4 pb-16">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 md:col-span-4">
+                <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Gallery</p>
+                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">A cinematic journey</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-700">
+                    Scroll sideways like a contact sheet. Each frame is a chapter—light, texture,
+                    restraint.
+                  </p>
+                  <div className="mt-6 flex items-center gap-2 text-xs text-white/80">
+                    <span className="rounded-full bg-black/70 px-3 py-2 border border-white/10">
+                      Portrait
+                    </span>
+                    <span className="rounded-full bg-black/70 px-3 py-2 border border-white/10">
+                      Editorial
+                    </span>
+                    <span className="rounded-full bg-black/70 px-3 py-2 border border-white/10">
+                      Product
+                    </span>
+                  </div>
+                  <Link
+                    to="/login"
+                    className="mt-6 inline-flex w-fit items-center justify-center rounded-full border border-[#d4af37]/60 bg-black px-5 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#f5f2ea] hover:bg-black/60 blink-gold"
+                  >
+                    Explore More
+                  </Link>
+                </div>
+              </div>
+
+              <div className="col-span-12 md:col-span-8">
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-[2rem] bg-white/40 backdrop-blur-md hairline",
+                    "p-4"
+                  )}
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs uppercase tracking-[0.18em] text-black">Gallery sheet</p>
+                    <p className="text-xs text-black">Drag • Swipe • Scroll</p>
                   </div>
 
-                  <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-amber-200/20 pointer-events-none transition-all duration-500"></div>
+                  <Filmstrip items={work} />
+                </div>
 
-                  <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-3 text-center">
-                    <span className="text-4xl font-bold tracking-tighter drop-shadow-md">300+</span>
-                    <span className="text-xl font-semibold uppercase tracking-wider text-amber-100 drop-shadow-sm">Successful Orders</span>
-                    <div className="hidden md:block ml-4 h-10 w-px bg-gradient-to-b from-transparent via-amber-300/60 to-transparent"></div>
-                    <span className="text-sm font-medium text-amber-100/90">Trusted by customers worldwide</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SERVICES */}
+        <section id="services" className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="relative mx-auto max-w-6xl px-4 pb-16">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12   md:col-span-5">
+             
+                {/* <div className="mt-5 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-zinc-600">Our Works</p>
+                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Signature Shoots</h2>
+                </div> */}
+                <div className="mt-0 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <h2 className="mt-3 font-sans text-3xl leading-[1.05]">Wedding Shoot</h2>
+                  <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
+                    <div className="work-slideshow h-full w-full">
+                      <img src={kfm2} alt="Wedding shoot 1" loading="lazy" />
+                      <img src={kfm7} alt="Wedding shoot 2" loading="lazy" />
+                      <img src={kfm19} alt="Wedding shoot 3" loading="lazy" />
+                    </div>
                   </div>
+                </div>
+                <div className="mt-5  rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <h2 className="mt-3 font-sans text-3xl leading-[1.05]">Birthday Shoot</h2>
+                  <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
+                    <div className="work-slideshow h-full w-full">
+                      <img src={kfm15} alt="Birthday shoot 1" loading="lazy" />
+                      <img src={kfm9} alt="Birthday shoot 2" loading="lazy" />
+                      <img src={kfm4} alt="Birthday shoot 3" loading="lazy" />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                  <div className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
-                    {[...Array(6)].map((_, i) => (
-                      <div 
-                        key={i}
-                        className="absolute w-1 h-1 bg-white/80 rounded-full animate-float"
-                        style={{
-                          left: `${Math.random() * 100}%`,
-                          top: `${Math.random() * 100}%`,
-                          animationDelay: `${i * 2}s`,
-                          animationDuration: `${10 + Math.random() * 10}s`
-                        }}
-                      ></div>
+              <div className="col-span-12 md:col-span-7">
+                <div className="grid gap-4 md:grid-cols-2 auto-rows-fr">
+                  <ServiceCard
+                    index="01"
+                    title="Wedding"
+                    image={kfm2}
+                    chips={["Photography", "Videography", "Album", "Highlights"]}
+                  />
+                  <ServiceCard
+                    index="02"
+                    title="Birthday"
+                    image={kfm6}
+                    chips={["Candid", "Family", "Decor", "Story Reel"]}
+                  />
+                  <ServiceCard
+                    index="03"
+                    title="Puberty"
+                    image={kfm18}
+                    chips={["Traditional", "Outdoor", "Portraits", "Album"]}
+                  />
+                                    <ServiceCard
+                    index="03"
+                    title="shots"
+                    image={kfm8}
+                    chips={["Traditional", "Outdoor", "Portraits", "Album"]}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        </div>
+
+        {/* TESTIMONIALS */}
+        <section id="testimonials" className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="relative mx-auto max-w-6xl px-4 pb-16">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 md:col-span-4">
+                <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Everything is perfect.</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-700">
+                    From low‑light shots to high‑speed action, this gear never lets me down.
+                  </p>
+                </div>
+                <div className="mt-4 overflow-hidden rounded-3xl hairline">
+                  <div className="relative aspect-[4/5] w-full">
+                    <img
+                      src={kfm14}
+                      alt="Founder"
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <p className="text-xs uppercase tracking-[0.18em] text-white/70">Founder</p>
+                      <p className="mt-1 font-sans text-xl text-white">Dilojan</p>
+                      <p className="mt-2 text-xs text-white/70">
+                        “We craft cinematic stories with calm direction and premium finish.”
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-span-12 md:col-span-8">
+                <TestimonialCard
+                  quote="Founded with a passion for authentic storytelling, Studio KFM began as a vision to capture life's unscripted beauty. What started with a single camera has grown into a celebrated studio specializing in weddings, portraits, and editorial work."
+                  title="Our Studio Story"
+                />
+
+                <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em text-black">Why Choose Us</p>
+                  <h3 className="mt-3 font-sans text-3xl">Our cinematic journey</h3>
+                  <div className="mt-8 grid gap-3 md:grid-cols-3">
+                    {[
+                      {
+                        title: "Story-first",
+                        text: "We design every frame like a film still.",
+                      },
+                      {
+                        title: "Premium finish",
+                        text: "Color science tuned for skin and texture.",
+                      },
+                      {
+                        title: "Calm direction",
+                        text: "Guided poses that feel natural on camera.",
+                      },
+                      {
+                        title: "Story-first",
+                        text: "We design every frame like a film still.",
+                      },
+                      {
+                        title: "Premium finish",
+                        text: "Color science tuned for skin and texture.",
+                      },
+                      {
+                        title: "Calm direction",
+                        text: "Guided poses that feel natural on camera.",
+                      },
+                    ].map((item) => (
+                      <div key={item.title} className="rounded-2xl border border-white/10 bg-black/60 p-4">
+                        <p className="text-xs uppercase tracking-[0.18em] text-white/70">
+                          {item.title}
+                        </p>
+                        <p className="mt-2 text-sm text-white/80">{item.text}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Gallery Grid */}
-          <section className="mb-24">
-  <h2 className="text-3xl font-bold mb-8 text-white">Our Work</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {/* Portfolio Image 1 */}
-    <div key={1} className="group relative overflow-hidden rounded-lg h-64">
-    
-        <img
-          src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/520604721_1344334017697522_197131035733168574_n.jpg?stp=c341.0.1366.1366a_dst-jpg_s640x640_tt6&_nc_cat=109&ccb=1-7&_nc_sid=92e838&_nc_eui2=AeFZAOX2CPYHPEtYAHfFhXdlcy2_-ldjOypzLb_6V2M7Kg2g-jWkmnn2R2zONmSyPnumu08_qvQVp9pzGwF0dOk0&_nc_ohc=OErMQeZafbcQ7kNvwFXppfM&_nc_oc=AdmjBM-zgc0OYE3EIm6p7oj_BiVD_jqC17RuCtN6-JcX6Q26PIwz-ETMvBvAVkO4h0c&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=0NxybhG6QOD2WGF66K_35g&oh=00_AfYBWVzRzp4hx-V6bPiPhYRKvP5j-HVsuR45f3Ayk4lejQ&oe=68E15A4B"
-          alt="Project 1"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      
-    </div>
+        {/* CONTACT */}
+        <section id="contact" className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="absolute inset-0 filmgrain" />
 
-    {/* Portfolio Image 2 */}
-    <div key={2} className="group relative overflow-hidden rounded-lg h-64">
+          <div className="relative mx-auto max-w-6xl px-4 pb-20">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 md:col-span-6">
+                <div className="overflow-hidden rounded-[2rem] hairline">
+                  <div className="relative aspect-[16/11]">
+                    <img
+                      className="h-full w-full object-cover"
+                      alt="Contact hero"
+                      src={kfm}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = fallbackContact;
+                      }}
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <p className="text-xs uppercase tracking-[0.18em] text-white/70">Make a booking</p>
+                      <h3 className="mt-2 font-sans text-3xl text-white">Start your journey</h3>
+                      <p className="mt-2 text-sm text-white/80">
+                        Reach us directly and we will curate your cinematic story.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        <img
-          src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/506895073_1308050927992498_7929603859618652279_n.jpg?stp=c341.0.1366.1366a_dst-jpg_s640x640_tt6&_nc_cat=107&ccb=1-7&_nc_sid=92e838&_nc_eui2=AeGYl0KgVe3fwblWXd4-sgwzMaGH1sq3o3wxoYfWyrejfDcnu2muLYPHfz25aRmvXlSrZ-wgnxNbVDJi6GFkPVWg&_nc_ohc=X_r5HJLema8Q7kNvwFUioqc&_nc_oc=AdlQj4_B5qMOu6TdzR0PGf97gdI3sKmuEdzA3yxHbJ9DcCAdXR93OdDB4NFOmcGoACw&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=pjocO0TZroXD0Iil8T3UAg&oh=00_Afb3yprBDwgSinRwOedEdGD2ge7wzM9cXeRWf_WhvIbL3w&oe=68E17239"
-          alt="Project 2"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-    
-    </div>
+              <div className="col-span-12 md:col-span-6">
+                <div className="rounded-3xl bg-white/40 p-6 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Contact Options</p>
+                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Let’s begin.</h2>
+                  <p className="mt-3 text-sm text-zinc-700">
+                    Choose a direct channel and our team will respond with the next steps.
+                  </p>
 
-    {/* Portfolio Image 3 */}
-    <div key={3} className="group relative overflow-hidden rounded-lg h-64">
-      
-        <img
-          src="https://z-p3-scontent.fcmb9-1.fna.fbcdn.net/v/t39.30808-6/502725665_1297228379074753_4301454013033470109_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeHXPr26v6PxbSDVVFbMWYseiRko01QGMmSJGSjTVAYyZPn8vLIVRdYFzmsDQc81KpAvp90-pv7iDmgb2W8KcXM4&_nc_ohc=4t5W36GwjA8Q7kNvwEBVyx3&_nc_oc=AdlNWn6eW0A187q48gevxxJz4aXYN0XJYV2e3AS5OVS4USPFRVOWzfnbiVAtit4G21I&_nc_pt=1&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb9-1.fna&_nc_gid=mjOUnYCNjRKCHe7HW5ddng&oh=00_AfeGFYKboAed0u4Wnl5oZleRjcDFzgE_Tb7k7DkRL5cw1w&oe=68E92953"
-          alt="Project 3"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      
-    </div>
+                  <div className="mt-6 grid gap-3">
+                    <a
+                      href="mailto:hello@nagans.studio"
+                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/60 px-4 py-4 text-sm text-white/80 hover:bg-black/70"
+                    >
+                      <span>Email</span>
+                      <span className="text-[#d4af37]">StudioKFM@gmail.com</span>
+                    </a>
+                    <a
+                      href="https://wa.me/94770000000"
+                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/60 px-4 py-4 text-sm text-white/80 hover:bg-black/70"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <span>WhatsApp</span>
+                      <span className="text-[#d4af37]">078 510 1018</span>
+                    </a>
+                    <a
+                      href="mailto:bookings@nagans.studio"
+                      className="flex items-center justify-between rounded-2xl border border-[#d4af37]/40 bg-black/70 px-4 py-4 text-sm text-white/80 hover:bg-black/80"
+                    >
+                      <span>Hotline</span>
+                      <span className="text-[#d4af37]">078 510 1018</span>
+                    </a>
+                  </div>
 
-    {/* Portfolio Image 4 */}
-    <div key={4} className="group relative overflow-hidden rounded-lg h-64">
-     
-        <img
-          src="https://z-p3-scontent.fcmb9-1.fna.fbcdn.net/v/t39.30808-6/500134679_1291869522943972_4867667890431532246_n.jpg?stp=c0.225.1366.1366a_cp6_dst-jpg_s640x640_tt6&_nc_cat=100&ccb=1-7&_nc_sid=92e838&_nc_eui2=AeEjJd9CCIGcJKFhnBS6cQpDVA2mVW31MtRUDaZVbfUy1PQFJyZseQvRBaOCtqerzEov3hNDpuhdEjxtjOFZ2lSq&_nc_ohc=csKZcCJUFGYQ7kNvwF83tXJ&_nc_oc=AdlWaYMrWOzdHD_dpEV_s59UvNkrosuikNI6ebu52ET4CI7cJp_25RF6LzZClQUfZfw&_nc_pt=1&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb9-1.fna&_nc_gid=kM3h5KyjDhUc9AP0vJE2LQ&oh=00_AfcWkJeYfUK4LMgtE6GZjOG7MnbYxXPMvs96xvkT5oi6lA&oe=68E94A24"
-          alt="Project 4"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-    
-    </div>
-
-    {/* Portfolio Image 5 */}
-    <div key={5} className="group relative overflow-hidden rounded-lg h-64">
-      
-        <img
-          src="https://z-p3-scontent.fcmb9-1.fna.fbcdn.net/v/t39.30808-6/497632684_1281690097295248_8782819037703080829_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeHjPsqVYNTNCZcKnFnZuQ3TXdBXk_pmwt9d0FeT-mbC37EkTgF7FM2bXansc_TkBCX3xh-8dv8qe65GOBGqH4S-&_nc_ohc=N4y8mUfKa5QQ7kNvwF63Y0V&_nc_oc=AdkdHO3KujQ8afTLy6nG6WpeP5_GNuR2weSXoEGnySjQss2Ph8_QjxehO3aLbE8JXcY&_nc_pt=1&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb9-1.fna&_nc_gid=3koWjpz3mXAhQHsY0dPOLg&oh=00_Afdze3WfC174a3V7fEVIitxByf4V6sz3XVd4g6xUGmb8qw&oe=68E9394C"
-          alt="Project 5"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      
-    </div>
-
-    {/* Portfolio Image 6 */}
-    <div key={6} className="group relative overflow-hidden rounded-lg h-64">
-        
-        <img
-          src="https://z-p3-scontent.fcmb9-1.fna.fbcdn.net/v/t39.30808-6/491929531_1263827892414802_2552556154320893587_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeE7RxCW1ApVMYNajYiKeBRCo817JVEltlCjzXslUSW2UPrP991JZ9PqKgDKupZY3pNclTbNwloGw6gKoTaymqOg&_nc_ohc=e9DoYeGZQKIQ7kNvwGqFQD2&_nc_oc=Adlk1fTfiCB8NnbBZBZe4yei_hVapPe6ezt-Pst8l6zvvKRxM5zgh4WKEIawZFsQo7I&_nc_pt=1&_nc_zt=23&_nc_ht=z-p3-scontent.fcmb9-1.fna&_nc_gid=XttlsqMmjuRS_Qwn4uk7Wg&oh=00_AfeqCLN5yCx5zjmjD37QKr8yr4RDoEgUqJ-KXtjEcxh_Mg&oe=68E93E5C"
-          alt="Project 6"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      
-    </div>
-  </div>
-</section>
-
-        </div>
-      </div>
-
-      {/* Section 3 */}
-      <div className="bg-[#1a1a1a] min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
-          <section className="mb-24 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Let's Create <br />
-              <span className="text-amber-400">Something Beautiful</span> Together
-            </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Capturing your most precious moments with artistry and passion
-            </p>
-          </section>
-
-          {/* Story Section */}
-          <section className="mb-24">
-            <h2 className="text-3xl font-bold mb-8 text-white">Our Studio Story</h2>
-            <div className="grid md:grid-cols-2 gap-12">
+                  <div className="mt-6 flex items-center justify-between text-xs text-black">
+                    <span>Response in 24h</span>
+                    <span>© {year} Studio KFM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section className="snapStart relative py-16">
+          <div className="absolute inset-0 gridlines" />
+          <div className="relative mx-auto max-w-6xl px-4">
+            <div className="grid items-center gap-6 rounded-[2.5rem] border border-white/10 bg-black/70 p-8 md:grid-cols-[1.4fr,0.6fr]">
               <div>
-                <p className="text-lg leading-relaxed mb-6 text-gray-300">
-                  Founded with a passion for authentic storytelling, Studio KFM began as a vision to capture life's unscripted beauty. What started with a single camera has grown into a celebrated studio specializing in weddings, portraits, and editorial work.
+                <p className="text-xs uppercase tracking-[0.18em] text-white/70">Book</p>
+                <h3 className="mt-3 font-sans text-3xl text-white">
+                  Capture your special moments with our professional photography services.
+                </h3>
+                <p className="mt-3 text-sm text-white/80">
+                  We specialize in creating memories that last a lifetime.
                 </p>
-                <p className="text-lg leading-relaxed text-gray-300">
-                  We believe every photograph should evoke emotion, every session should feel effortless, and every client should receive images they'll treasure for generations.
-                </p>
+                <Link
+                  to="/login"
+                  className="mt-6 inline-flex items-center justify-center rounded-full border border-[#d4af37]/60 bg-black/40 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#f5f2ea] hover:bg-black/60 blink-gold"
+                >
+Make Booking                </Link>
               </div>
-              <div className="bg-gray-800 rounded-lg p-8 border border-gray-700 flex flex-col md:flex-row gap-6">
-               <div className="w-full md:w-1/3 h-48 md:h-auto bg-gradient-to-br from-amber-500/20 to-amber-600/30 rounded-lg overflow-hidden flex items-center justify-center border border-gray-700">
-  <img 
-    src={featureIcon} 
-    alt="Feature Icon" 
-    className="w-full h-full object-cover rounded-lg" 
-  />
-</div>
-
-                
-                <div className="w-full md:w-2/3">
-                  <h3 className="text-xl font-semibold mb-4 text-white">Our Approach</h3>
-                  <ul className="space-y-4">
-                    <li className="flex items-start text-gray-300">
-                      <span className="text-amber-400 mr-2">•</span>
-                      <span>Authentic, emotion-driven photography</span>
-                    </li>
-                    <li className="flex items-start text-gray-300">
-                      <span className="text-amber-400 mr-2">•</span>
-                      <span>Tailored experiences for every client</span>
-                    </li>
-                    <li className="flex items-start text-gray-300">
-                      <span className="text-amber-400 mr-2">•</span>
-                      <span>Artistic excellence in every frame</span>
-                    </li>
-                  </ul>
+              <div className="relative overflow-hidden rounded-3xl border border-white/10">
+                <img
+                  src={kfmlogo}
+                  alt="Book a session"
+                  className="h-48 w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="rounded-full border border-[#d4af37]/60 bg-black/70 px-3 py-2 text-[11px] uppercase tracking-[0.3em] text-[#d4af37]">
+                    Studio KFM
+                  </span>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* Stats Section */}
-          {/* <section className="mb-24">
-            
-            <div
-            className="absolute opacity-40 rounded-full blur-2xl"
-            style={{
-              backgroundColor: '#BF9B30',
-              width: '250px',
-              height: '250px',
-              top: '2400px',
-              left: '-80px',
-              zIndex: 0,
-            }}
-            ></div>
-
-            <div
-            className="absolute opacity-40 rounded-full blur-2xl"
-            style={{
-              backgroundColor: '#BF9B30',
-              width: '250px',
-              height: '250px',
-              top: '2400px',
-              left: '-80px',
-              zIndex: 0,
-            }}
-            ></div>
-
-            
-            <div
-            className="absolute opacity-70 rounded-full blur-3xl"
-            style={{
-              backgroundColor: '#BF3030',
-              width: '250px',
-              height: '250px',
-              bottom: '900px',
-              right: '-80px',
-              zIndex: 0,
-            }}
-            ></div>
-
-            <div
-            className="absolute opacity-70 rounded-full blur-3xl"
-            style={{
-              backgroundColor: '#BF3030',
-              width: '250px',
-              height: '250px',
-              bottom: '900px',
-              right: '-80px',
-              zIndex: 0,
-            }}
-            ></div>
-
-            <h2 className="text-3xl font-bold mb-8 text-white">By The Lens</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="border border-gray-700 rounded-lg p-6 bg-gray-800">
-                <p className="text-4xl font-bold text-amber-400 mb-2">500+</p>
-                <p className="text-gray-300">Weddings Captured</p>
-              </div>
-              <div className="border border-gray-700 rounded-lg p-6 bg-gray-800">
-                <p className="text-4xl font-bold text-amber-400 mb-2">1k+</p>
-                <p className="text-gray-300">Portrait Sessions</p>
-              </div>
-              <div className="border border-gray-700 rounded-lg p-6 bg-gray-800">
-                <p className="text-4xl font-bold text-amber-400 mb-2">10k+</p>
-                <p className="text-gray-300">Photos Delivered</p>
-              </div>
-              <div className="border border-gray-700 rounded-lg p-6 bg-gray-800">
-                <p className="text-4xl font-bold text-amber-400 mb-2">100%</p>
-                <p className="text-gray-300">Client Satisfaction</p>
-              </div>
-            </div>
-          </section> */}
-
-          <section className="mb-24 relative overflow-hidden py-16">
-          {/* Content container */}
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className='text-center mb-16'>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Why choose <span className='text-amber-400'>Us</span>
-              </h2>
-              <div className="w-24 h-1 bg-amber-400 mx-auto"></div>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="group relative p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 overflow-hidden">
-                {/* Glow effect container (hidden by default) */}
-                <div className="absolute inset-0 overflow-hidden rounded-xl">
-                  {/* Glow effect (becomes visible on hover) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-400/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-                  
-                  {/* Subtle shimmer animation */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-700 w-[200%] animate-shimmer"></div>
-                </div>
-                
-                {/* Border glow (appears on hover) */}
-                <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-amber-400/30 transition-all duration-500 pointer-events-none"></div>
-
-                <div className="relative z-10">
-                  <p className="text-5xl font-bold text-amber-400 mb-4 group-hover:text-amber-300 transition-colors duration-300">300+</p>
-                  <p className="text-white text-2xl font-semibold mb-4 group-hover:text-gray-100 transition-colors duration-300">Projects</p>
-                  <p className='text-gray-300 text-sm tracking-wider leading-relaxed group-hover:text-gray-200 transition-colors duration-300'>
-                    Successfully completed 300+ projects with passion and precision — capturing timeless memories for happy clients.
-                  </p>
-                </div>
-              </div>
-
-              <div className="group relative p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 overflow-hidden">
-                {/* Glow effect container */}
-                <div className="absolute inset-0 overflow-hidden rounded-xl">
-                  {/* Gradient glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-400/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-                  
-                  {/* Shimmer animation */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-700 w-[200%] animate-shimmer"></div>
-                </div>
-                
-                {/* Border glow */}
-                <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-amber-400/30 transition-all duration-500 pointer-events-none"></div>
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <p className="text-5xl font-bold text-amber-400 mb-4 group-hover:text-amber-300 transition-colors duration-300">100%</p>
-                  <p className="text-white text-2xl font-semibold mb-4 group-hover:text-gray-100 transition-colors duration-300">Client Satisfaction</p>
-                  <p className='text-gray-300 text-sm tracking-wider leading-relaxed group-hover:text-gray-200 transition-colors duration-300'>
-                    Our top priority is your complete satisfaction — we deliver quality, creativity, and care in every shot.
-                  </p>
-                </div>
-              </div>
-
-              <div className="group relative p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 overflow-hidden">
-                {/* Glow effect container */}
-                <div className="absolute inset-0 overflow-hidden rounded-xl">
-                  {/* Gradient glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-400/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-                  
-                  {/* Shimmer animation */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-700 w-[200%] animate-shimmer"></div>
-                </div>
-                
-                {/* Border glow */}
-                <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-amber-400/30 transition-all duration-500 pointer-events-none"></div>
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <p className="text-5xl font-bold text-amber-400 mb-4 group-hover:text-amber-300 transition-colors duration-300">Premium</p>
-                  <p className="text-white text-2xl font-semibold mb-4 group-hover:text-gray-100 transition-colors duration-300">Products</p>
-                  <p className='text-gray-300 text-sm tracking-wider leading-relaxed group-hover:text-gray-200 transition-colors duration-300'>
-                    We provide only premium quality products — from prints to frames — ensuring vibrant detail that lasts.
-                  </p>
-                </div>
-              </div> 
             </div>
           </div>
         </section>
+        </section>
 
-          {/* Achievement Section */}
-          <div className="bg-black py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute opacity-20 rounded-full blur-3xl" style={{
-                background: 'radial-gradient(circle, #BF9B30 0%, transparent 70%)',
-                width: '500px',
-                height: '500px',
-                top: '-200px',
-                left: '-200px',
-              }}></div>
-              <div className="absolute opacity-20 rounded-full blur-3xl" style={{
-                background: 'radial-gradient(circle, #BF3030 0%, transparent 70%)',
-                width: '600px',
-                height: '600px',
-                bottom: '-300px',
-                right: '-200px',
-              }}></div>
-            </div>
+        {/* CTA */}
+    
 
-            <div className="text-center mb-12 max-w-4xl mx-auto relative z-10">
-              <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-                Our <span className="text-amber-400">Cinematic Journey</span>
-              </h2>
-              <p className="text-gray-400 text-base sm:text-lg font-light tracking-wider leading-relaxed">
-                Celebrating milestones that define our passion for visual storytelling
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto relative z-10">
-              <div className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-amber-500/30 transition-all">
-  <a
-    href="https://www.facebook.com/share/v/1ZGLH3tSXY/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block"
-  >
-    <img
-      src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/539101294_1377222224408701_1072061243269743414_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeG1m3PTR5kpwEBQ8vKDmPW4um30IyNaQDG6bfQjI1pAMbOj6ZYL1OE_5wBEfhqAKrfGKlIb-SwA9yEPsDv6oo7J&_nc_ohc=qMjCLDqx2mcQ7kNvwGtQL5R&_nc_oc=AdmqhZT_dsWmujgQ6_mS5Z0yXfEyK8-KimVhmHzl8NvVpUvs9EVhw1cs6xl_UEtLcZo&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=aLb3tv1biF3UGQT7Adt2-Q&oh=00_AfZzGgcN0xKdJlnQQzsIW3umoSIuQqbzTVTBtiJ1n7Ryaw&oe=68E00AC4"
-      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-      alt="Feature Film Production"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <h3 className="text-white text-xl font-bold mb-1">"𝐑𝐈𝐋𝐀𝐊𝐒𝐇𝐀𝐍 ❤ 𝐊𝐈𝐒𝐇𝐀𝐍𝐔𝐊𝐀"</h3>
-      <p className="text-amber-400 text-sm font-medium">2025 Feature Film</p>
-      <p className="text-gray-300 text-sm mt-2">
-        4K cinematic masterpiece 
-      </p>
+        {/* Bottom spacer */}
+        <div className="h-10" />
+      </main>
     </div>
-  </a>
-</div>
-
-
-              <div className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-amber-500/30 transition-all">
-  <a
-    href="https://www.facebook.com/share/v/1B95szcohs/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block"
-  >
-    <img
-      src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/492366134_1262544052543186_3958375574042094829_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGLbdSYjeaeeUu83eIUxbWQWzEsrOUHRyRbMSys5QdHJOQFWulDFYa2B_4eqlFX0egrBXNCeq0DefzEXsJ7Fp7N&_nc_ohc=35gbry77Kg8Q7kNvwFvc6aR&_nc_oc=AdlX62-8Jgd8qTyMAt_0uXItVpM-5doIqvDGC1IoPVJTP3HyAuo2QQG-qtgM1UaUEng&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=RqoV0BkTmK1976ISelb0AQ&oh=00_AfaUmRiH7tyz85L-ncBODxbZrO4F3G-npvGRGItoVA7V-Q&oe=68E05A94"
-      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-      alt="Feature Film Production"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <h3 className="text-white text-xl font-bold mb-1">𝓢𝓪𝓷𝓳𝓮𝓮𝓿 ❤ 𝓐𝓷𝓳𝓪𝓵𝓲</h3>
-      <p className="text-amber-400 text-sm font-medium">𝗪𝗘𝗗𝗗𝗜𝗡𝗚 𝗣𝗥𝗘 𝗦𝗛𝗢𝗢𝗧</p>
-      <p className="text-gray-300 text-sm mt-2">
-        𝐊𝐀𝐍𝐆𝐀𝐋 𝐄𝐃𝐇𝐎...
-      </p>
-    </div>
-  </a>
-</div>
-
-
-              <div className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-amber-500/30 transition-all">
-  <a
-    href="https://www.facebook.com/share/v/1B95szcohs/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block"
-  >
-    <img
-      src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/492366134_1262544052543186_3958375574042094829_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGLbdSYjeaeeUu83eIUxbWQWzEsrOUHRyRbMSys5QdHJOQFWulDFYa2B_4eqlFX0egrBXNCeq0DefzEXsJ7Fp7N&_nc_ohc=35gbry77Kg8Q7kNvwFvc6aR&_nc_oc=AdlX62-8Jgd8qTyMAt_0uXItVpM-5doIqvDGC1IoPVJTP3HyAuo2QQG-qtgM1UaUEng&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=RqoV0BkTmK1976ISelb0AQ&oh=00_AfaUmRiH7tyz85L-ncBODxbZrO4F3G-npvGRGItoVA7V-Q&oe=68E05A94"
-      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-      alt="Feature Film Production"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <h3 className="text-white text-xl font-bold mb-1">𝓢𝓪𝓷𝓳𝓮𝓮𝓿 ❤ 𝓐𝓷𝓳𝓪𝓵𝓲</h3>
-      <p className="text-amber-400 text-sm font-medium">𝗪𝗘𝗗𝗗𝗜𝗡𝗚 𝗣𝗥𝗘 𝗦𝗛𝗢𝗢𝗧</p>
-      <p className="text-gray-300 text-sm mt-2">
-        𝐊𝐀𝐍𝐆𝐀𝐋 𝐄𝐃𝐇𝐎...
-      </p>
-    </div>
-  </a>
-</div>
-
-               <div className="group relative overflow-hidden rounded-lg border border-gray-800 hover:border-amber-500/30 transition-all">
-  <a
-    href="https://www.facebook.com/share/v/1B95szcohs/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block"
-  >
-    <img
-      src="https://scontent.fcmb1-2.fna.fbcdn.net/v/t39.30808-6/492366134_1262544052543186_3958375574042094829_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGLbdSYjeaeeUu83eIUxbWQWzEsrOUHRyRbMSys5QdHJOQFWulDFYa2B_4eqlFX0egrBXNCeq0DefzEXsJ7Fp7N&_nc_ohc=35gbry77Kg8Q7kNvwFvc6aR&_nc_oc=AdlX62-8Jgd8qTyMAt_0uXItVpM-5doIqvDGC1IoPVJTP3HyAuo2QQG-qtgM1UaUEng&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fcmb1-2.fna&_nc_gid=RqoV0BkTmK1976ISelb0AQ&oh=00_AfaUmRiH7tyz85L-ncBODxbZrO4F3G-npvGRGItoVA7V-Q&oe=68E05A94"
-      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-      alt="Feature Film Production"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <h3 className="text-white text-xl font-bold mb-1">𝓢𝓪𝓷𝓳𝓮𝓮𝓿 ❤ 𝓐𝓷𝓳𝓪𝓵𝓲</h3>
-      <p className="text-amber-400 text-sm font-medium">𝗪𝗘𝗗𝗗𝗜𝗡𝗚 𝗣𝗥𝗘 𝗦𝗛𝗢𝗢𝗧</p>
-      <p className="text-gray-300 text-sm mt-2">
-        𝐊𝐀𝐍𝐆𝐀𝐋 𝐄𝐃𝐇𝐎...
-      </p>
-    </div>
-  </a>
-</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <hr className='h-[1px] w-full'/>
-      
-      {/* Footer */}
-      <footer className="bg-black text-white pt-8 pb-12 px-4 sm:px-8 lg:px-16 relative overflow-hidden">  
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-          <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold tracking-wider mb-6">
-              <span className="text-amber-400">Interested</span> in working together
-            </h3>
-            
-            <div className="flex justify-center md:justify-start mb-6">
-              <div className="relative">
-                <h2 className="text-3xl sm:text-4xl font-bold tracking-wider">CONTACT US</h2>
-              </div>
-            </div>
-            
-            <p className="text-xs text-gray-400 tracking-wide mb-8">Get in touch with us</p>    
-            <button className="px-8 py-3 bg-transparent border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white rounded-full font-medium transition-colors">
-              Send a Message
-            </button>
-          </div>
-
-          <div className="flex flex-col items-center justify-between">
-            <div className="flex justify-center md:justify-start mb-6">
-              <div className="relative">
-                <div className="text-center">      
-                  <div className="text-3xl font-bold mb-4">
-                    <span className="text-amber-400">Studio</span>
-                    <span className="text-white">KFM</span>         
-                  </div>       
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent"></div>
-              </div>
-            </div>
-
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                </svg>
-              </a>
-              
-              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                </svg>
-              </a>
-              
-              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <div className="text-center md:text-right">
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-amber-400 font-medium mb-1">Email</h4>
-                <p className="text-gray-300">StudioKFM@gmail.com</p>
-              </div>
-              
-              <div>
-                <h4 className="text-amber-400 font-medium mb-1">Call us</h4>
-                <p className="text-gray-300">021 222 2343</p>
-              </div>
-              
-              <div>
-                <h4 className="text-amber-400 font-medium mb-1">Follow us</h4>
-                <p className="text-gray-300">@StudioKFM</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Studio KFM. All rights reserved.
-        </div>
-
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-400 rounded-full opacity-10 blur-xl"></div>
-        <div className="absolute top-1/3 right-0 w-24 h-24 bg-red-500 rounded-full opacity-10 blur-xl"></div>
-      </footer>
-    </div>
-  )
+  );
 }
 
-export default Portfolio
+function Filmstrip({ items }) {
+  const ref = useRef(null);
+  const prefersReduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    if (prefersReduced) return undefined;
+    const el = ref.current;
+    if (!el) return undefined;
+
+    const tick = () => {
+      const card = el.querySelector("figure");
+      if (!card) return;
+      const step = card.getBoundingClientRect().width + 16;
+      const next = el.scrollLeft + step;
+      const max = el.scrollWidth - el.clientWidth;
+      el.scrollTo({ left: next >= max ? 0 : next, behavior: "smooth" });
+    };
+
+    const id = setInterval(tick, 3500);
+    return () => clearInterval(id);
+  }, [prefersReduced]);
+
+  // Drag-to-scroll (mouse)
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let startLeft = 0;
+
+    const down = (e) => {
+      isDown = true;
+      startX = e.pageX;
+      startLeft = el.scrollLeft;
+      el.classList.add("cursor-grabbing");
+    };
+    const up = () => {
+      isDown = false;
+      el.classList.remove("cursor-grabbing");
+    };
+    const move = (e) => {
+      if (!isDown) return;
+      const dx = e.pageX - startX;
+      el.scrollLeft = startLeft - dx;
+    };
+
+    el.addEventListener("mousedown", down);
+    window.addEventListener("mouseup", up);
+    window.addEventListener("mousemove", move);
+    return () => {
+      el.removeEventListener("mousedown", down);
+      window.removeEventListener("mouseup", up);
+      window.removeEventListener("mousemove", move);
+    };
+  }, []);
+
+  return (
+    <div className="mt-4">
+      <div
+        ref={ref}
+        className={cn(
+          "relative flex gap-4 overflow-x-auto pb-2",
+          "cursor-grab select-none",
+          "[scrollbar-width:none] [-ms-overflow-style:none]",
+          prefersReduced ? "" : "scroll-smooth"
+        )}
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        <style>{`div::-webkit-scrollbar{display:none;}`}</style>
+
+        {items.map((it, idx) => (
+          <figure
+            key={it.title}
+            className={cn(
+              "group relative shrink-0 overflow-hidden rounded-[1.6rem] bg-zinc-900/5 hairline",
+              "w-[78vw] sm:w-[52vw] md:w-[34vw]"
+            )}
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <img
+                alt={it.title}
+                src={it.src}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.src = fallbackHero;
+                }}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-900/45 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
+                <div>
+                  <p className="font-sans text-2xl text-white">{it.title}</p>
+                  <p className="mt-1 text-xs text-white/80">{it.meta}</p>
+                </div>
+                <div className="rounded-full bg-white/70 px-3 py-2 text-xs backdrop-blur hairline">
+                  {String(idx + 1).padStart(2, "0")}
+                </div>
+              </div>
+            </div>
+          </figure>
+        ))}
+      </div>
+
+      <p className="mt-2 text-xs text-black">
+        Tip: On mobile, swipe the filmstrip. On desktop, drag to scrub like a reel.
+      </p>
+    </div>
+  );
+}
+
+function ServiceCard({ index, title, image, chips }) {
+  return (
+    <div className="flex h-full flex-col rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs uppercase tracking-[0.18em] text-black">{index}</p>
+          <p className="mt-2 font-sans text-3xl leading-tight">{title}</p>
+        </div>
+      </div>
+      <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
+        <img
+          src={image}
+          alt={`${title} service`}
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {chips.map((c) => (
+          <span
+            key={c}
+            className="rounded-full border border-zinc-900/10 bg-white/70 px-3 py-2 text-xs text-zinc-700"
+          >
+            {c}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TestimonialCard({ quote, name, title }) {
+  return (
+    <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+      <div className="flex items-start justify-between">
+        <p className="text-xs uppercase tracking-[0.18em] text-black">“</p>
+        <span className="rounded-full bg-white/70 px-3 py-2 text-xs backdrop-blur hairline">Testimonial</span>
+      </div>
+      <p className="mt-3 font-sans text-2xl leading-tight text-zinc-900">{quote}</p>
+      <div className="mt-5 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-zinc-900">{name}</p>
+          <p className="text-xs text-black">{title}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-zinc-900/35" />
+          <span className="h-2 w-2 rounded-full bg-zinc-900/20" />
+          <span className="h-2 w-2 rounded-full bg-zinc-900/10" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Input({ label, ...props }) {
+  return (
+    <div>
+      <label className="text-xs uppercase tracking-[0.18em] text-black">{label}</label>
+      <input
+        {...props}
+        className="mt-2 w-full rounded-2xl border border-zinc-900/15 bg-white/70 px-4 py-3 text-sm outline-none placeholder:text-zinc-500 focus:border-zinc-900/30"
+      />
+    </div>
+  );
+}
