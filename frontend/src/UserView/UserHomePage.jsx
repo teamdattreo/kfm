@@ -165,7 +165,7 @@ const UserHomePage = () => {
                 onClick={onOpenVideo}
                 className="text-xl font-bold cursor-pointer flex items-center focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-full"
               >
-                <div className="bg-white/90 p-[16px] rounded-full shadow-md">
+                <div className="">
                   <img
                     src={logo}
                     alt="StudioKFM Logo"

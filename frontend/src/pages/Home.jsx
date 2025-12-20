@@ -119,7 +119,7 @@ const Home = () => {
     className="text-xl font-bold cursor-pointer flex items-center"
     onClick={() => window.location.href = '/'}
   >
-    <div className="bg-white/90 p-[16px] rounded-full shadow-md">
+    <div className="">
      <img 
   src={logo}
   alt="StudioKFM Logo"
