@@ -5,7 +5,7 @@ import BannerShowPage from '../Banner/BannerShowPage';
 import photo2 from '../assets/Sony_FX3.png';
 import Portfolio from '../Portfolio/Portfolio';
 import HeaderHome from '../components/HeaderHome';
-import logo from '../assets/KFM_Logo.png';
+import logo from '../assets/KFM_Logo2.png';
 import { API_ENDPOINTS, api } from '../api';
 
 const Home = () => {
@@ -119,7 +119,7 @@ const Home = () => {
     className="text-xl font-bold cursor-pointer flex items-center"
     onClick={() => window.location.href = '/'}
   >
-    <div className="bg-white/40 p-[16px] rounded-full shadow-md">
+    <div className="bg-white/90 p-[16px] rounded-full shadow-md">
      <img 
   src={logo}
   alt="StudioKFM Logo"
