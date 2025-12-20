@@ -165,7 +165,7 @@ export default function Portfolio() {
           <Header />
         </div>
         {/* Top progress rail */}
-        <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
+        <div className="fixed left-0 mt-10 top-0 z-50 h-1 w-full bg-white/10">
           <div
             className="h-full bg-[#d4af37]"
             style={{ width: `${Math.round(progress * 100)}%` }}
