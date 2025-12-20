@@ -238,21 +238,21 @@ const ExpenseManagement = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className={`${colorTheme.card} rounded-xl p-8 mb-6 shadow-lg`}>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div className={`${colorTheme.card} rounded-xl p-5 sm:p-8 mb-6 shadow-lg`}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h1 className="text-2xl font-bold text-amber-400 mb-4 md:mb-0">
               Studio Expense Management
             </h1>
-            <div className="flex space-x-2 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
               <input
                 type="text"
                 placeholder="Search..."
-                className="px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white"
+                className="w-full sm:w-64 px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <select
-                className="px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white"
+                className="w-full sm:w-48 px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white"
                 value={filterEventType}
                 onChange={(e) => setFilterEventType(e.target.value)}
               >
@@ -273,11 +273,11 @@ const ExpenseManagement = () => {
           )}
 
           <div className="bg-gray-700 rounded-lg shadow-md overflow-hidden mb-6">
-            <div className="p-4 bg-amber-600 text-white flex justify-between items-center">
+            <div className="p-4 bg-amber-600 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <h2 className="text-lg font-semibold">Expense Summary</h2>
               <button
                 onClick={() => setShowForm(!showForm)}
-                className={`px-4 py-2 ${colorTheme.accent} rounded-md`}
+                className={`w-full sm:w-auto px-4 py-2 ${colorTheme.accent} rounded-md`}
               >
                 {showForm ? 'Hide Form' : 'Add New Expense'}
               </button>
@@ -408,10 +408,10 @@ const ExpenseManagement = () => {
                     />
                   </div>
                 </div>
-                <div className="flex space-x-3 pt-2">
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <button
                     type="submit"
-                    className={`px-5 py-2.5 text-sm font-medium text-white ${colorTheme.accent} rounded-md`}
+                    className={`w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white ${colorTheme.accent} rounded-md`}
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? 'Processing...' : (editingId ? 'Update Expense' : 'Add Expense')}
@@ -419,7 +419,7 @@ const ExpenseManagement = () => {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="px-5 py-2.5 text-sm font-medium text-gray-300 bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-600"
+                    className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-300 bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-600"
                   >
                     Cancel
                   </button>
@@ -432,7 +432,70 @@ const ExpenseManagement = () => {
             <div className="p-4 bg-gray-800 border-b border-gray-600">
               <h2 className="text-lg font-semibold text-white">Expense Records</h2>
             </div>
-            <div className="overflow-x-auto">
+            <div className="block md:hidden p-4 space-y-4">
+              {filteredExpenses.map((expense) => (
+                <div key={expense._id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm text-gray-400">Customer</p>
+                      <p className="text-base font-semibold text-white">{expense.customerName}</p>
+                    </div>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full 
+                      ${expense.eventType === 'Wedding' ? 'bg-purple-900 text-purple-300' :
+                        expense.eventType === 'Birthday' ? 'bg-blue-900 text-blue-300' :
+                        expense.eventType === 'Corporate' ? 'bg-green-900 text-green-300' :
+                        'bg-yellow-900 text-yellow-300'}`}>
+                      {expense.eventType}
+                    </span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-gray-300">
+                    <div className="flex items-center justify-between">
+                      <span>Mobile</span>
+                      <span className="text-white">{expense.mobileNumber}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Event Date</span>
+                      <span className="text-white">{new Date(expense.eventDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Total</span>
+                      <span className="text-white">LKR {expense.totalAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Paid</span>
+                      <span className="text-white">LKR {(expense.paymentAmount || 0).toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Balance</span>
+                      <span className={`${(expense.totalAmount - (expense.paymentAmount || 0)) > 0 ? 'text-red-400' : 'text-green-400'} font-semibold`}>
+                        LKR {(expense.totalAmount - (expense.paymentAmount || 0)).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-3 text-sm font-medium">
+                    <button
+                      onClick={() => handleEdit(expense)}
+                      className="text-amber-400 hover:text-amber-300"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(expense._id)}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => generatePDF(expense)}
+                      className="text-blue-400 hover:text-blue-300"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="hidden md:block overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-600">
                 <thead className="bg-gray-800">
                   <tr>
