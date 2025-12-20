@@ -201,11 +201,14 @@ router.post("/login", async (req, res) => {
   const { email, password, authProvider = "email" } = req.body;
 
   try {
-    const user = await UserModel.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await UserModel.findOne({ email: normalizedEmail });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     // Determine role using env
-    const role = (user.email === process.env.ADMIN_EMAIL) ? "admin" : "user";
+    const adminEmail = (process.env.ADMIN_EMAIL || "").toLowerCase().trim();
+    const isAdmin = adminEmail && user.email.toLowerCase() === adminEmail;
+    const role = isAdmin ? "admin" : "user";
 
     if (authProvider === "google") {
       if (user.authProvider !== "google") {
@@ -224,7 +227,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    if (!user.verified) {
+    if (!user.verified && !isAdmin) {
       return res.status(403).json({ message: "Email not verified" });
     }
 

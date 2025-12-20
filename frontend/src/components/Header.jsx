@@ -168,7 +168,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/Products" className="block rounded-lg px-3 py-2 hover:bg-gray-600/60" onClick={closeMobile}>
-                  Sale
+                  Sales
                 </Link>
               </li>
             </ul>
