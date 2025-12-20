@@ -185,11 +185,7 @@ const Addform = () => {
       formData.append('colors', JSON.stringify(productData.colors));
       formData.append('sizes', JSON.stringify(productData.sizes));
 
-      const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
+      const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formData);
 
       console.log('Product created:', response.data);
       alert('Product created successfully!');
