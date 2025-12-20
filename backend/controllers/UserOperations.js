@@ -14,7 +14,7 @@ const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-strong-secret-key";
 const BACKEND_URL = process.env.BACKEND_URL || "https://kfm.onrender.com";
-const FRONTEND_URL = process.env.FRONTEND_URL || "https://kfm-chi.vercel.app/";
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://www.studiokfm.com";
 
 // Debug logs
 console.log("ENV BACKEND_URL:", BACKEND_URL);
