@@ -254,7 +254,7 @@ const SignUp = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="Enter your name"
                   required
                   readOnly={isGoogleSignUp}
@@ -269,7 +269,7 @@ const SignUp = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="example@gmail.com"
                   required
                   readOnly={isGoogleSignUp}
@@ -284,7 +284,7 @@ const SignUp = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.address ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.address ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="Enter your address"
                   required
                 />
@@ -298,7 +298,7 @@ const SignUp = () => {
                   name="mobile"
                   value={formData.mobile}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="Enter mobile number"
                   required
                 />
@@ -312,7 +312,7 @@ const SignUp = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="••••••••"
                   required
                 />
@@ -326,7 +326,7 @@ const SignUp = () => {
                   name="cpassword"
                   value={formData.cpassword}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.cpassword ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                  className={`w-full px-4 py-2 rounded-lg border ${errors.cpassword ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                   placeholder="••••••••"
                   required
                 />

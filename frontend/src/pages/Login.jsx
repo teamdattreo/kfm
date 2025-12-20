@@ -182,7 +182,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full mt-2 px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                className={`w-full mt-2 px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                 placeholder="kfm@gmail.com"
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -201,7 +201,7 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70`}
+                className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
                 placeholder="••••••••"
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
