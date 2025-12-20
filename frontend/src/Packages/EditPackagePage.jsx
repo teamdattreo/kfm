@@ -26,9 +26,9 @@ const EditPackagePage = () => {
       try {
         const response = await api.get(API_ENDPOINTS.PACKAGES.GET_BY_ID(id));
         
-        console.log('Package fetch response:', response.data);
+        console.log('Package fetch response:', response);
 
-        const pkg = response.data.gpackages;
+        const pkg = response.package;
         setPackageData({
           name: pkg.name || '',
           descriptionPoints: Array.isArray(pkg.descriptionPoints) ? [...pkg.descriptionPoints] : [''],
@@ -37,7 +37,7 @@ const EditPackagePage = () => {
 
       } catch (err) {
         console.error('Error fetching package:', err);
-        setError(err.response?.data?.message || 'Failed to fetch package');
+        setError(err.data?.message || err.message || 'Failed to fetch package');
       } finally {
         setLoading(false);
       }
