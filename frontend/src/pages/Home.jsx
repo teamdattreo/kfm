@@ -5,7 +5,7 @@ import BannerShowPage from '../Banner/BannerShowPage';
 import photo2 from '../assets/Sony_FX3.png';
 import Portfolio from '../Portfolio/Portfolio';
 import HeaderHome from '../components/HeaderHome';
-import logo from '../assets/KFM_Logo2.png';
+import logo from '../assets/KFM_Logo2.PNG';
 import { API_ENDPOINTS, api } from '../api';
 
 const Home = () => {
