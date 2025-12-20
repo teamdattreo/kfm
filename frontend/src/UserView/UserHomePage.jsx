@@ -8,6 +8,7 @@ import BannerShowPage from '../Banner/BannerShowPage';
 import Packages from '../Packages/ClientPackagesPage';
 import logo from '../assets/KFM_Logo.png';
 import introVideo from '../assets/KFM Intro.mp4'; // Consider renaming to KFM_Intro.mp4
+import { Link } from 'react-router-dom';
 
 const UserHomePage = () => {
   const navigate = useNavigate();
