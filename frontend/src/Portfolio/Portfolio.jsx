@@ -137,7 +137,7 @@ export default function Portfolio() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
 
-            <span className="font-sans text-lg tracking-wide">STUDIO KFM</span>
+            <span className="font-serif text-lg tracking-wide">STUDIO KFM</span>
           </div>
 
           <nav className="hidden items-center gap-5 text-sm text-white/70 md:flex">
@@ -268,7 +268,7 @@ export default function Portfolio() {
                     <p className="text-xs uppercase tracking-[0.18em] text-black">
                       Kalmunai, Srilanka
                     </p>
-                    <h1 className="mt-3 font-sans text-4xl leading-[1.05] md:text-5xl">
+                    <h1 className="mt-3 font-serif text-4xl leading-[1.05] md:text-5xl">
                       Capture your moment
                       <span className="block">through our scope.</span>
                     </h1>
@@ -305,7 +305,7 @@ export default function Portfolio() {
               <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline md:col-span-2">
                   <p className="text-xs uppercase tracking-[0.18em] text-black">Services</p>
-                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Studio packages</h2>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Studio packages</h2>
                   <p className="mt-4 text-sm leading-relaxed text-zinc-700">
                     Designed for pace and intention. We’ll build a shot list, set design, and light
                     plan—then shoot like a sequence.
@@ -345,7 +345,7 @@ export default function Portfolio() {
               <div className="relative mt-6 overflow-hidden rounded-[2rem] bg-zinc-900/5 hairline">
                 {/* Giant typographic layer */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="breath select-none font-sans text-[22vw] leading-none text-zinc-900/10 md:text-[14vw]">
+                  <div className="breath select-none font-serif text-[22vw] leading-none text-zinc-900/10 md:text-[14vw]">
                     SCOPE
                   </div>
                 </div>
@@ -460,7 +460,7 @@ export default function Portfolio() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="mt-2 font-sans text-2xl leading-tight text-white">
+                      <p className="mt-2 font-serif text-2xl leading-tight text-white">
                         High‑performance portraits, editorial, and product—
                         <span className="text-white/70">for every level.</span>
                       </p>
@@ -508,7 +508,7 @@ export default function Portfolio() {
               <div className="col-span-12 md:col-span-4">
                 <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <p className="text-xs uppercase tracking-[0.18em] text-black">Gallery</p>
-                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">A cinematic journey</h2>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">A cinematic journey</h2>
                   <p className="mt-4 text-sm leading-relaxed text-zinc-700">
                     Scroll sideways like a contact sheet. Each frame is a chapter—light, texture,
                     restraint.
@@ -562,10 +562,10 @@ export default function Portfolio() {
              
                 {/* <div className="mt-5 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <p className="text-xs uppercase tracking-[0.18em] text-zinc-600">Our Works</p>
-                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Signature Shoots</h2>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Signature Shoots</h2>
                 </div> */}
                 <div className="mt-0 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
-                  <h2 className="mt-3 font-sans text-3xl leading-[1.05]">Wedding Shoot</h2>
+                  <h2 className="mt-3 font-serif text-3xl leading-[1.05]">Wedding Shoot</h2>
                   <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
                     <div className="work-slideshow h-full w-full">
                       <img src={kfm2} alt="Wedding shoot 1" loading="lazy" />
@@ -575,7 +575,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <div className="mt-5  rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
-                  <h2 className="mt-3 font-sans text-3xl leading-[1.05]">Birthday Shoot</h2>
+                  <h2 className="mt-3 font-serif text-3xl leading-[1.05]">Birthday Shoot</h2>
                   <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
                     <div className="work-slideshow h-full w-full">
                       <img src={kfm15} alt="Birthday shoot 1" loading="lazy" />
@@ -626,7 +626,7 @@ export default function Portfolio() {
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-12 md:col-span-4">
                 <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
-                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Everything is perfect.</h2>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Everything is perfect.</h2>
                   <p className="mt-4 text-sm leading-relaxed text-zinc-700">
                     From low‑light shots to high‑speed action, this gear never lets me down.
                   </p>
@@ -642,7 +642,7 @@ export default function Portfolio() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <p className="text-xs uppercase tracking-[0.18em] text-white/70">Founder</p>
-                      <p className="mt-1 font-sans text-xl text-white">Dilojan</p>
+                      <p className="mt-1 font-serif text-xl text-white">Dilojan</p>
                       <p className="mt-2 text-xs text-white/70">
                         “We craft cinematic stories with calm direction and premium finish.”
                       </p>
@@ -659,7 +659,7 @@ export default function Portfolio() {
 
                 <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <p className="text-xs uppercase tracking-[0.18em text-black">Why Choose Us</p>
-                  <h3 className="mt-3 font-sans text-3xl">Our cinematic journey</h3>
+                  <h3 className="mt-3 font-serif text-3xl">Our cinematic journey</h3>
                   <div className="mt-8 grid gap-3 md:grid-cols-3">
                     {[
                       {
@@ -723,7 +723,7 @@ export default function Portfolio() {
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <p className="text-xs uppercase tracking-[0.18em] text-white/70">Make a booking</p>
-                      <h3 className="mt-2 font-sans text-3xl text-white">Start your journey</h3>
+                      <h3 className="mt-2 font-serif text-3xl text-white">Start your journey</h3>
                       <p className="mt-2 text-sm text-white/80">
                         Reach us directly and we will curate your cinematic story.
                       </p>
@@ -735,7 +735,7 @@ export default function Portfolio() {
               <div className="col-span-12 md:col-span-6">
                 <div className="rounded-3xl bg-white/40 p-6 backdrop-blur-md hairline">
                   <p className="text-xs uppercase tracking-[0.18em] text-black">Contact Options</p>
-                  <h2 className="mt-3 font-sans text-4xl leading-[1.05]">Let’s begin.</h2>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Let’s begin.</h2>
                   <p className="mt-3 text-sm text-zinc-700">
                     Choose a direct channel and our team will respond with the next steps.
                   </p>
@@ -780,7 +780,7 @@ export default function Portfolio() {
             <div className="grid items-center gap-6 rounded-[2.5rem] border border-white/10 bg-black/70 p-8 md:grid-cols-[1.4fr,0.6fr]">
               <div>
                 <p className="text-xs uppercase tracking-[0.18em] text-white/70">Book</p>
-                <h3 className="mt-3 font-sans text-3xl text-white">
+                <h3 className="mt-3 font-serif text-3xl text-white">
                   Capture your special moments with our professional photography services.
                 </h3>
                 <p className="mt-3 text-sm text-white/80">
@@ -913,7 +913,7 @@ function Filmstrip({ items }) {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-900/45 via-transparent to-transparent" />
               <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
                 <div>
-                  <p className="font-sans text-2xl text-white">{it.title}</p>
+                  <p className="font-serif text-2xl text-white">{it.title}</p>
                   <p className="mt-1 text-xs text-white/80">{it.meta}</p>
                 </div>
                 <div className="rounded-full bg-white/70 px-3 py-2 text-xs backdrop-blur hairline">
@@ -938,7 +938,7 @@ function ServiceCard({ index, title, image, chips }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-black">{index}</p>
-          <p className="mt-2 font-sans text-3xl leading-tight">{title}</p>
+          <p className="mt-2 font-serif text-3xl leading-tight">{title}</p>
         </div>
       </div>
       <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
@@ -970,7 +970,7 @@ function TestimonialCard({ quote, name, title }) {
         <p className="text-xs uppercase tracking-[0.18em] text-black">“</p>
         <span className="rounded-full bg-white/70 px-3 py-2 text-xs backdrop-blur hairline">Testimonial</span>
       </div>
-      <p className="mt-3 font-sans text-2xl leading-tight text-zinc-900">{quote}</p>
+      <p className="mt-3 font-serif text-2xl leading-tight text-zinc-900">{quote}</p>
       <div className="mt-5 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-zinc-900">{name}</p>
