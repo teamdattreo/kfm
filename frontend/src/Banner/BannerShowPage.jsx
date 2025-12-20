@@ -24,12 +24,40 @@ const BannerShowPage = () => {
     setAuthChecked(true);
     const fetchBanners = async () => {
       try {
-        const response = await api.get(API_ENDPOINTS.BANNERS_UI.CURRENT);
-        const imageUrl = response?.imageUrl;
-        const bannersData = imageUrl ? [{ _id: 'current', imageUrl }] : [];
+        console.log('Fetching banners from:', API_ENDPOINTS.BANNERS.ACTIVE);
+        const response = await api.get(API_ENDPOINTS.BANNERS.ACTIVE);
+        console.log('Full API Response:', response);
+        
+        let bannersData = [];
+        
+        // Handle array response directly since we know the API returns an array
+        if (Array.isArray(response)) {
+          console.log('Processing array response. First item:', response[0]);
+          bannersData = response.map((banner, index) => ({
+            _id: banner._id || `banner-${index}`,
+            imageUrl: banner.imageUrl || banner.bannerUrl || banner.url || banner.image || banner.image_url
+          })).filter(banner => banner.imageUrl); // Only keep banners with valid image URLs
+          
+          console.log('Mapped banners data:', bannersData);
+        } 
+        // Fallback for other response formats if needed
+        else if (response?.data && Array.isArray(response.data)) {
+          console.log('Processing response.data array. First item:', response.data[0]);
+          bannersData = response.data.map((banner, index) => ({
+            _id: banner._id || `banner-${index}`,
+            imageUrl: banner.imageUrl || banner.bannerUrl || banner.url || banner.image || banner.image_url
+          })).filter(banner => banner.imageUrl);
+        }
+        
+        console.log('Final banners data:', bannersData);
         setBanners(bannersData);
       } catch (err) {
-        console.error('Error fetching banners:', err);
+        console.error('Error fetching banners:', {
+          message: err.message,
+          response: err.response?.data,
+          status: err.response?.status,
+          statusText: err.response?.statusText
+        });
         setError(err.message || 'Failed to load banners');
         setBanners([]);
       } finally {
