@@ -35,6 +35,31 @@ const parseJsonArray = (value, fieldName) => {
   }
 };
 
+const isCloudinaryConfigured = () =>
+  !!process.env.CLOUDINARY_CLOUD_NAME &&
+  !!process.env.CLOUDINARY_API_KEY &&
+  !!process.env.CLOUDINARY_API_SECRET;
+
+const handleUpload = (req, res, next) => {
+  upload.single('image')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({
+        success: false,
+        error: err.message
+      });
+    }
+
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        error: err.message || 'Invalid file upload'
+      });
+    }
+
+    return next();
+  });
+};
+
 // Cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -58,7 +83,7 @@ const upload = multer({
 });
 
 // Create new product with image upload
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', handleUpload, async (req, res) => {
   try {
     const { name, code, colors, sizes } = req.body;
     
@@ -114,6 +139,13 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'At least one valid size is required'
+      });
+    }
+
+    if (!isCloudinaryConfigured()) {
+      return res.status(500).json({
+        success: false,
+        error: 'Image upload is not configured'
       });
     }
 
@@ -232,7 +264,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Update product
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', handleUpload, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, code, colors, sizes } = req.body;
@@ -305,6 +337,13 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
     // Handle image update if new file was uploaded
     if (req.file) {
+      if (!isCloudinaryConfigured()) {
+        return res.status(500).json({
+          success: false,
+          error: 'Image upload is not configured'
+        });
+      }
+
       // First delete old image from Cloudinary if it exists
       if (existingProduct.cloudinaryId) {
         await cloudinary.uploader.destroy(existingProduct.cloudinaryId);
