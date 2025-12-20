@@ -40,7 +40,7 @@ const app = express();
 
 const corsOptions = {
   origin: (origin, cb) => {
-    const allowed = ['http://localhost:5173', 'https://kfm-chi.vercel.app'];
+    const allowed = ['http://localhost:5173', 'https://www.studiokfm.com'];
     if (!origin || allowed.includes(origin)) {
       return cb(null, true);
     }

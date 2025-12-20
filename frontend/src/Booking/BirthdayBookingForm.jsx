@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, api } from '../api';
+import Header from '../components/Header';
 import { FiHome } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-const PubertyBookingForm = () => {
+
+const BirthdayBookingForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const [formData, setFormData] = useState({
-    girlName: '',
-    parentName: '',  // For backend compatibility
-    fatherName: '',
-    motherName: '',
+    childName: '',
+    parentName: '',
+    age: '',
     phone: '',
     email: '',
     eventDate: '',
-    bookingDate: '',
     location: '',
-    outfitChange: '',
+    theme: '',
     storageName: '',
     notes: '',
     package: '',
@@ -26,7 +27,6 @@ const PubertyBookingForm = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Retrieve event and package from location state
   const selectedEvent = location.state?.selectedEvent || '';
   const selectedPackage = location.state?.selectedPackage || '';
 
@@ -40,13 +40,6 @@ const PubertyBookingForm = () => {
     }
   }, [selectedEvent, selectedPackage]);
 
-  // Helper to compose parentName
-  const composeParentName = (father, mother, fallback) => {
-    const parts = [father?.trim(), mother?.trim()].filter(Boolean);
-    if (parts.length > 0) return parts.join(' & ');
-    return (fallback || '').trim();
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -54,45 +47,33 @@ const PubertyBookingForm = () => {
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
-
-    // Auto-compose parentName when fatherName or motherName is updated
-    if (name === 'fatherName' || name === 'motherName') {
-      setFormData((prevData) => ({
-        ...prevData,
-        parentName: composeParentName(prevData.fatherName, prevData.motherName, prevData.parentName)
-      }));
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Get and validate user ID
     const userId = localStorage.getItem('userId');
-    if (!userId || userId === 'undefined') {
+    if (!userId || userId === "undefined") {
       alert('Please log in to make a booking');
       setIsSubmitting(false);
       return;
     }
 
-    // Compose parentName one last time before validation/post
-    const composedParentName = composeParentName(formData.fatherName, formData.motherName, formData.parentName);
+    const requiredFields = {
+      childName: "Child's name",
+      parentName: "Parent's name",
+      age: "Child's age",
+      phone: "Phone number",
+      eventDate: "Event date",
+      location: "Location",
+      package: "Package"
+    };
 
     const newErrors = {};
-
-    // Require at least one of father/mother/parentName
-    if (!composedParentName) {
-      newErrors.parentName = 'Enter at least one parent/guardian name';
-    }
-
     if (formData.phone && !/^\d{10,15}$/.test(formData.phone)) {
       newErrors.phone = 'Enter a valid 10-15 digit phone number';
     }
-
-    if (!formData.girlName?.trim()) newErrors.girlName = "Girl's name is required";
-    if (!formData.eventDate?.trim()) newErrors.eventDate = 'Event date is required';
-    if (!formData.location?.trim()) newErrors.location = 'Location is required';
 
     setErrors(newErrors);
 
@@ -102,24 +83,13 @@ const PubertyBookingForm = () => {
     }
 
     try {
-      // Build payload explicitly to avoid sending fatherName/motherName
       const bookingData = {
-        girlName: formData.girlName,
-        parentName: composedParentName, // backend stays the same
-        phone: formData.phone,
-        email: formData.email,
-        eventDate: formData.eventDate,
-        bookingDate: formData.bookingDate,
-        location: formData.location,
-        outfitChange: formData.outfitChange,
-        storageName: formData.storageName,
-        notes: formData.notes,
-        package: formData.package,
-        userId,
+        ...formData,
+        userId
       };
 
-      await api.post(API_ENDPOINTS.BOOKINGS.CREATE_BIRTHDAY, bookingData);
-      alert('Puberty booking submitted successfully!');
+      const response = await api.post(API_ENDPOINTS.BOOKINGS.CREATE_BIRTHDAY, bookingData);
+      alert("Birthday booking submitted successfully!");
       navigate('/BookingHistory');
     } catch (error) {
       console.error('Booking error:', {
@@ -131,65 +101,77 @@ const PubertyBookingForm = () => {
     }
     setIsSubmitting(false);
   };
+ const today = new Date().toISOString().split("T")[0]; 
 
   return (
     <div className='relative'>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-3 bg-black bg-opacity-50">
-        <Link to="/UserHomePage" className="text-white hover:text-[#FFCF40] transition-colors" title="Back to Home">
-          <FiHome className="text-2xl sm:text-3xl" />
-        </Link>
-      </div>
+  <Link to="/UserHomePage" className="text-white hover:text-[#FFCF40] transition-colors" title="Back to Home">
+    <FiHome className="text-2xl sm:text-3xl" />
+  </Link>
+</div>
+
       <div className="min-h-screen bg-black text-white flex flex-col items-center pt-32 pb-12 px-4 sm:px-6">
         <div className="text-center mb-10 max-w-2xl">
           <h1 className="bg-gradient-to-r from-white to-[#BF3030] bg-clip-text text-transparent text-4xl sm:text-5xl font-bold mb-3">
-            Puberty Booking Form
+            Birthday Booking Form
           </h1>
           <p className="text-xs font-medium bg-gradient-to-r from-white to-[#BF3030] bg-clip-text text-transparent">
             Studio KFM | Professional Photography Services
           </p>
         </div>
 
-        <form className="w-full max-w-4xl bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] opacity-90 border border-gray-700 p-8 rounded-xl shadow-2xl" onSubmit={handleSubmit}>
+        <form className="w-full max-w-4xl bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 opacity-90 border border-gray-700 p-8 rounded-xl shadow-2xl" onSubmit={handleSubmit}>
           <h2 className="text-3xl font-bold mb-8 text-white text-center">
-            Complete Your <span className="text-[#FFCF40]">Puberty Booking</span>
+            Complete Your <span className="text-[#FFCF40]">Birthday Booking</span>
           </h2>
 
           <div className="text-center mb-8">
+            {/* <p className="text-lg text-white mb-4">Event: {selectedEvent}</p> */}
             <p className="text-lg text-white mb-4">Package: {selectedPackage.type}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
             {[ 
-              { label: "Girl's Name", name: "girlName" },
+              { label: "Child's Name", name: "childName" },
               { label: "Parent's Name", name: "parentName" },
+              { label: "Age", name: "age", type: "number" },
               { label: "Phone Number", name: "phone" },
               { label: "Email", name: "email" },
               { label: "Event Date", name: "eventDate", type: "date" },
-              { label: "Booking Date", name: "bookingDate", type: "date" },
               { label: "Location", name: "location" },
               { 
-                label: "Outfit Change", 
-                name: "outfitChange", 
+                label: "Theme", 
+                name: "theme", 
                 type: "select", 
-                options: ['Yes', 'No'] 
+                options: [
+                  { value: '', label: 'Select a Theme' },
+                  { value: 'Superhero', label: 'Superhero' },
+                  { value: 'Princess', label: 'Princess' },
+                  { value: 'Jungle', label: 'Jungle Safari' },
+                  { value: 'Space', label: 'Outer Space' },
+                  { value: 'Dinosaur', label: 'Dinosaur' },
+                  { value: 'Unicorn', label: 'Unicorn' },
+                  { value: 'Pirate', label: 'Pirate Adventure' },
+                  { value: 'Sports', label: 'Sports' },
+                  { value: 'Other', label: 'Other (please specify)' }
+                ] 
               },
               { label: "Storage Name", name: "storageName" },
               { label: "Notes", name: "notes", type: "textarea" },
             ].map(({ label, name, type = 'text', options = [] }) => (
               <div key={name} className="w-full">
-               <label className="block text-white text-lg">
-                  {label}
-                  {["girlName", "parentName", "phone", "eventDate", "location","package"].includes(name) && (
-                    <span className="text-red-500 text-10px" > Please fill this field (required).</span>
+                <label className="block text-white text-lg">
+                  {label} {["childName", "parentName", "phone","age", "eventDate", "location", "package"].includes(name) && (
+                    <span className="text-red-500 text-xs" > Please fill this field (required).</span>
                   )}
                 </label>
-
                 {type === 'textarea' ? (
                   <textarea
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    className="border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
+                    className="border border-gray-500 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
                     rows="4"
                     placeholder={label}
                   />
@@ -198,12 +180,11 @@ const PubertyBookingForm = () => {
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    className="border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
+                    className="border border-gray-500 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
                   >
-                    <option value="">Select {label}</option>
                     {options.map(option => (
-                      <option key={option} value={option}>
-                        {option}
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </select>
@@ -213,8 +194,10 @@ const PubertyBookingForm = () => {
                     name={name}
                     value={formData[name]}
                     onChange={handleChange}
-                    className="border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
+                    className="border border-gray-500 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[#FFCF40] bg-gray-800 text-white placeholder-gray-400"
                     placeholder={label}
+                    min={type === 'number' ? 1 : undefined}
+                    max={type === 'number' ? 1000 : undefined}
                   />
                 )}
                 {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]}</p>}
@@ -227,7 +210,7 @@ const PubertyBookingForm = () => {
               type="submit"
               disabled={isSubmitting}
               className={`px-8 py-3 rounded-xl font-bold text-white transition-all duration-200 ${
-                isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#FFCF40] hover:bg-[#e6b935] shadow-lg'
+                isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-amber-400 hover:bg-amber-500 shadow-lg'
               }`}
             >
               {isSubmitting ? 'Submitting...' : 'Submit Booking'}
@@ -239,4 +222,4 @@ const PubertyBookingForm = () => {
   );
 };
 
-export default PubertyBookingForm;
+export default BirthdayBookingForm;
