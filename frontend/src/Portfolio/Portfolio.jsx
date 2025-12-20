@@ -18,7 +18,7 @@ import kfm18 from "./Images/kfm18.jpg";
 import kfm19 from "./Images/kfm19.jpg";
 import kfm15 from "./Images/kfm15.jpg";
 import kfm11 from "./Images/kfm11.jpg";
-import Header from "../Components/Header";
+import Header from "../components/Header";
 
 
 
