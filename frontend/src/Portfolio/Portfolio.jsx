@@ -92,8 +92,12 @@ export default function Portfolio() {
   const prefersReduced = usePrefersReducedMotion();
   const scrollerRef = useRef(null);
   const progress = useScrollProgress(scrollerRef);
+  const [bgIndex, setBgIndex] = useState(0);
+  const [bgNext, setBgNext] = useState(null);
+  const [isFading, setIsFading] = useState(false);
 
   const year = useMemo(() => new Date().getFullYear(), []);
+  const bgImages = useMemo(() => [kfm7, kfm,kfm4], []);
 
   // A tiny cinematic “lens breathing” feel (disabled for reduced motion)
   useEffect(() => {
@@ -111,26 +115,62 @@ export default function Portfolio() {
     return () => cancelAnimationFrame(raf);
   }, [prefersReduced]);
 
+  useEffect(() => {
+    if (prefersReduced || bgImages.length === 0) return undefined;
+
+    let timeoutId = 0;
+    const intervalId = setInterval(() => {
+      const next = (bgIndex + 1) % bgImages.length;
+      setBgNext(next);
+      setIsFading(true);
+      timeoutId = window.setTimeout(() => {
+        setBgIndex(next);
+        setIsFading(false);
+      }, 1200);
+    }, 7000);
+
+    return () => {
+      clearInterval(intervalId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [bgImages.length, bgIndex, prefersReduced]);
+
   return (
     <div
-      className="portfolio-theme min-h-screen bg-black text-white"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${kfm7})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="portfolio-theme relative min-h-screen bg-black text-white"
     >
-       <div className="fixed top-0 left-0 right-0 z-50">
-        <Header />
-      </div>
-      {/* Top progress rail */}
-      <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
+      <div className="absolute inset-0 z-0">
         <div
-          className="h-full bg-[#d4af37]"
-          style={{ width: `${Math.round(progress * 100)}%` }}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1200ms] ${
+            isFading ? "opacity-0" : "opacity-100"
+          }`}
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${bgImages[bgIndex]})`,
+          }}
         />
+        {bgNext !== null && (
+          <div
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1200ms] ${
+              isFading ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${bgImages[bgNext]})`,
+            }}
+          />
+        )}
       </div>
+
+      <div className="relative z-10">
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <Header />
+        </div>
+        {/* Top progress rail */}
+        <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
+          <div
+            className="h-full bg-[#d4af37]"
+            style={{ width: `${Math.round(progress * 100)}%` }}
+          />
+        </div>
 
       {/* Sticky micro-nav */}
       {/* <header className="fixed left-0 top-1 z-40 w-full">
@@ -817,6 +857,7 @@ Make Booking                </Link>
         {/* Bottom spacer */}
         <div className="h-10" />
       </main>
+      </div>
     </div>
   );
 }
