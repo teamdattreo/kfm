@@ -48,7 +48,7 @@ const AdminProfile = () => {
   }), []);
 
  const NAV_ITEMS = useMemo(() => [
-  { icon: <FaUser className="text-lg" />, label: "Profile", path: "/Profile" },
+  // { icon: <FaUser className="text-lg" />, label: "Profile", path: "/Profile" },
   { icon: <FaBoxOpen className="text-lg" />, label: "Packages", path: "/PackagesPage" },
   { icon: <FaProductHunt className="text-lg" />, label: "Products", path: "/ProductsPage" },
   { icon: <FaUsers className="text-lg" />, label: "Users", path: "/AdminUsersPage" },
