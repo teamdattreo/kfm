@@ -88,7 +88,7 @@ const toggleBannerStatus = async (id, currentStatus) => {
 
   return (
     <div className={`${colorTheme.bg} min-h-screen p-4`}>
-      <Banners />
+      {/* <Banners /> */}
 
       <br />
 

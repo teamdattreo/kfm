@@ -234,7 +234,7 @@ const SidebarButton = ({ icon, label, path, onClick }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-10 overflow-y-auto ml-[180px]">
+      <main className="flex-1 p-4 md:p-10 overflow-y-auto ml-0 md:ml-64">
         <div className="max-w-4xl mx-auto">
           {/* Success/Error Messages */}
           {successMessage && (
