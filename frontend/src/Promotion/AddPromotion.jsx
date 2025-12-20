@@ -1,6 +1,5 @@
-import { useState, useRef,useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AdvancedImage } from '@cloudinary/react';
 import { API_ENDPOINTS, api } from '../api';
 
 const AddPromotion = () => {
@@ -12,8 +11,6 @@ const AddPromotion = () => {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   const [authChecked, setAuthChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
 
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
@@ -23,24 +20,8 @@ const AddPromotion = () => {
         navigate('/login');
         return;
       }
-  
-      try {
-        setLoading(true);
-        const userData = await fetchUserData(token);
-        setUserData(userData);
-        setAuthChecked(true);
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        // Handle specific error cases
-        if (error.response?.status === 401) {
-          localStorage.removeItem('authToken');
-          navigate('/login', { state: { from: 'session_expired' } });
-        } else {
-          setError(error.message || 'Failed to load user data');
-        }
-      } finally {
-        setLoading(false);
-      }
+
+      setAuthChecked(true);
     };
   
     checkAuthAndFetchData();
