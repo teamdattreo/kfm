@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Footer from '../components/Footer';
 import BannerShowPage from '../Banner/BannerShowPage';
 import photo2 from '../assets/Sony_FX3.png';
@@ -93,7 +94,11 @@ const Home = () => {
       
       {/* Hero Banner Section */}
      
-
+     <Helmet>
+        <title>Studio KFM - Home</title>
+        <meta name="description" content="Studio KFM - Capture your special moments with our professional photography services." />
+        <link rel="canonical" href="https://studiokfm.com/" />
+      </Helmet>
       <div className="fixed top-0 left-0 right-0 z-50">
         <HeaderHome />
       </div>
