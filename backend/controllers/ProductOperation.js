@@ -1,233 +1,3 @@
-// import express from "express";
-// import ProductModel from "../models/Product.js";
-// import jwt from "jsonwebtoken";
-// // import { JWT_SECRET } from "../config.js";
-
-// const router = express.Router();
-// const JWT_SECRET = 'jiggujigurailkilambuthupaar'; 
-
-
-// // CORS Middleware
-// router.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     res.header('Access-Control-Allow-Credentials', 'true');
-    
-//     if (req.method === 'OPTIONS') {
-//       return res.status(200).end();
-//     }
-    
-//     next();
-// });
-
-// // Authentication Middleware
-// const authenticateUser = (req, res, next) => {
-//     const authHeader = req.headers.authorization;
-    
-//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-//       return res.status(401).json({ 
-//         success: false,
-//         message: 'Authentication token required' 
-//       });
-//     }
-  
-//     const token = authHeader.split(' ')[1];
-    
-//     try {
-//       const decoded = jwt.verify(token, JWT_SECRET);
-//       req.userId = decoded.userId;
-//       next();
-//     } catch (err) {
-//       return res.status(401).json({
-//         success: false,
-//         message: 'Invalid or expired token'
-//       });
-//     }
-// };
-
-// // Create Product with URL
-// router.post("/", authenticateUser, async (req, res) => {
-//     try {
-//         const { name, code, photo, colors, sizes } = req.body;
-        
-//         // Validate URL format
-//         if (photo && !photo.match(/^https?:\/\/.+\/.+$/)) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Invalid photo URL format"
-//             });
-//         }
-
-//         // Check if product code already exists
-//         const existingProduct = await ProductModel.findOne({ code });
-//         if (existingProduct) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Product code must be unique"
-//             });
-//         }
-
-//         const newProduct = new ProductModel({
-//             name,
-//             code,
-//             photo: photo || null,
-//             colors: Array.isArray(colors) ? colors : [colors],
-//             sizes: Array.isArray(sizes) ? sizes : [sizes]
-//         });
-
-//         await newProduct.save();
-        
-//         res.status(201).json({
-//             success: true,
-//             message: "Product created successfully!",
-//             data: newProduct
-//         });
-//     } catch (err) {
-//         console.error('Error creating product:', err);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error creating product",
-//             error: err.message
-//         });
-//     }
-// });
-
-// // Get All Products
-// router.get("/", async (req, res) => {
-//     try {
-//         const products = await ProductModel.find().sort({ createdAt: -1 });
-//         res.json({
-//             success: true,
-//             count: products.length,
-//             data: products
-//         });
-//     } catch (err) {
-//         console.error('Error fetching products:', err);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error fetching products",
-//             error: err.message
-//         });
-//     }
-// });
-
-// // Get Single Product
-// router.get("/:id", async (req, res) => {
-//     try {
-//         const product = await ProductModel.findById(req.params.id);
-        
-//         if (!product) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Product not found"
-//             });
-//         }
-        
-//         res.json({
-//             success: true,
-//             data: product
-//         });
-//     } catch (err) {
-//         console.error('Error fetching product:', err);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error fetching product",
-//             error: err.message
-//         });
-//     }
-// });
-
-// // Update Product with URL
-// router.put("/:id", authenticateUser, async (req, res) => {
-//     try {
-//         const { name, code, photo, colors, sizes } = req.body;
-        
-//         // Validate URL format
-//         if (photo && !photo.match(/^https?:\/\/.+\/.+$/)) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Invalid photo URL format"
-//             });
-//         }
-
-//         const updateData = {
-//             name,
-//             code,
-//             photo: photo || null,
-//             colors: Array.isArray(colors) ? colors : [colors],
-//             sizes: Array.isArray(sizes) ? sizes : [sizes]
-//         };
-
-//         // Check if product code is being changed to an existing one
-//         if (code) {
-//             const existingProduct = await ProductModel.findOne({ 
-//                 code,
-//                 _id: { $ne: req.params.id } // Exclude current product
-//             });
-//             if (existingProduct) {
-//                 return res.status(400).json({
-//                     success: false,
-//                     message: "Product code must be unique"
-//                 });
-//             }
-//         }
-
-//         const updatedProduct = await ProductModel.findByIdAndUpdate(
-//             req.params.id,
-//             updateData,
-//             { new: true, runValidators: true }
-//         );
-
-//         if (!updatedProduct) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Product not found"
-//             });
-//         }
-
-//         res.json({
-//             success: true,
-//             message: "Product updated successfully!",
-//             data: updatedProduct
-//         });
-//     } catch (err) {
-//         console.error('Error updating product:', err);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error updating product",
-//             error: err.message
-//         });
-//     }
-// });
-
-// // Delete Product
-// router.delete("/:id", authenticateUser, async (req, res) => {
-//     try {
-//         const deletedProduct = await ProductModel.findByIdAndDelete(req.params.id);
-        
-//         if (!deletedProduct) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Product not found"
-//             });
-//         }
-
-//         res.json({
-//             success: true,
-//             message: "Product deleted successfully!"
-//         });
-//     } catch (err) {
-//         console.error('Error deleting product:', err);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error deleting product",
-//             error: err.message
-//         });
-//     }
-// });
-
-// export default router;
 
 
 import express from 'express';
@@ -239,6 +9,31 @@ import Product from '../models/Product.js';
 dotenv.config();
 
 const router = express.Router();
+
+const parseJsonArray = (value, fieldName) => {
+  if (Array.isArray(value)) {
+    return { value, error: null };
+  }
+  if (typeof value === 'undefined') {
+    return { value: [], error: null };
+  }
+  if (typeof value !== 'string') {
+    return { value: [], error: `${fieldName} must be an array` };
+  }
+  if (value.trim() === '') {
+    return { value: [], error: null };
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return { value: [], error: `${fieldName} must be an array` };
+    }
+    return { value: parsed, error: null };
+  } catch (err) {
+    return { value: [], error: `${fieldName} must be valid JSON` };
+  }
+};
 
 // Cloudinary configuration
 cloudinary.config({
@@ -281,9 +76,46 @@ router.post('/', upload.single('image'), async (req, res) => {
       });
     }
 
-    // Convert colors and sizes from string to array if needed
-    const colorsArray = Array.isArray(colors) ? colors : JSON.parse(colors || '[]');
-    const sizesArray = Array.isArray(sizes) ? sizes : JSON.parse(sizes || '[]');
+    const colorsParse = parseJsonArray(colors, 'colors');
+    if (colorsParse.error) {
+      return res.status(400).json({
+        success: false,
+        error: colorsParse.error
+      });
+    }
+
+    const sizesParse = parseJsonArray(sizes, 'sizes');
+    if (sizesParse.error) {
+      return res.status(400).json({
+        success: false,
+        error: sizesParse.error
+      });
+    }
+
+    const colorsArray = colorsParse.value
+      .map((color) => (typeof color === 'string' ? color.trim() : ''))
+      .filter(Boolean);
+
+    const sizesArray = sizesParse.value
+      .map((size) => (typeof size === 'string' ? { size } : size))
+      .map((size) => ({
+        size: typeof size?.size === 'string' ? size.size.trim() : ''
+      }))
+      .filter((size) => size.size);
+
+    if (colorsArray.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one valid color is required'
+      });
+    }
+
+    if (sizesArray.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one valid size is required'
+      });
+    }
 
     // Upload to Cloudinary
     const uploadResult = await cloudinary.uploader.upload(
@@ -322,6 +154,13 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Product code must be unique'
+      });
+    }
+
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        error: error.message
       });
     }
     
@@ -407,12 +246,60 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       });
     }
 
+    const hasColors = typeof colors !== 'undefined';
+    const hasSizes = typeof sizes !== 'undefined';
+
+    const colorsParse = parseJsonArray(colors, 'colors');
+    if (colorsParse.error) {
+      return res.status(400).json({
+        success: false,
+        error: colorsParse.error
+      });
+    }
+
+    const sizesParse = parseJsonArray(sizes, 'sizes');
+    if (sizesParse.error) {
+      return res.status(400).json({
+        success: false,
+        error: sizesParse.error
+      });
+    }
+
+    const nextColors = hasColors
+      ? colorsParse.value
+          .map((color) => (typeof color === 'string' ? color.trim() : ''))
+          .filter(Boolean)
+      : existingProduct.colors;
+
+    const nextSizes = hasSizes
+      ? sizesParse.value
+          .map((size) => (typeof size === 'string' ? { size } : size))
+          .map((size) => ({
+            size: typeof size?.size === 'string' ? size.size.trim() : ''
+          }))
+          .filter((size) => size.size)
+      : existingProduct.sizes;
+
+    if (hasColors && nextColors.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one valid color is required'
+      });
+    }
+
+    if (hasSizes && nextSizes.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one valid size is required'
+      });
+    }
+
     // Prepare update data
     const updateData = {
       name: name || existingProduct.name,
       code: code || existingProduct.code,
-      colors: Array.isArray(colors) ? colors : JSON.parse(colors || JSON.stringify(existingProduct.colors)),
-      sizes: Array.isArray(sizes) ? sizes : JSON.parse(sizes || JSON.stringify(existingProduct.sizes)),
+      colors: nextColors,
+      sizes: nextSizes,
       updatedAt: new Date()
     };
 
@@ -453,6 +340,12 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
   } catch (error) {
     console.error('Product update error:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        error: error.message
+      });
+    }
     res.status(500).json({
       success: false,
       error: 'Failed to update product',

@@ -162,7 +162,7 @@ const Addform = () => {
       navigate('/PackagesPage');
     } catch (err) {
       console.error('Error creating package:', err);
-      setError(err.response?.data?.error || err.message || 'Failed to create package');
+      setError(err.data?.error || err.response?.data?.error || err.message || 'Failed to create package');
     } finally {
       setIsSubmitting(false);
     }
@@ -204,10 +204,11 @@ const Addform = () => {
       navigate('/ProductsPage');
     } catch (err) {
       console.error('Error creating product:', err);
-      if (err.response?.data?.error === 'Product code must be unique') {
+      const apiError = err.data?.error || err.response?.data?.error;
+      if (apiError === 'Product code must be unique') {
         setError('A product with this code already exists');
       } else {
-        setError(err.response?.data?.error || err.message || 'Failed to create product');
+        setError(apiError || err.message || 'Failed to create product');
       }
     } finally {
       setIsSubmitting(false);
