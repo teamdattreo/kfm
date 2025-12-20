@@ -185,20 +185,49 @@ const UserHomePage = () => {
       </div>
 
       {/* Welcome Strip */}
-      <div className="hero bg-black h-[20vh]">
-        <div className="hero-content text-center">
-          <div className="max-w-3xl">
-            <h1 className="text-6xl font-bold text-white">
-              Welcome to{' '}
-              <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
-                Studio
-              </span>{' '}
-              KFM
-            </h1>
-            <p className="py-6 text-gray-400">
-              Capture your special moments with our professional photography services. We
-              specialize in creating memories that last a lifetime.
-            </p>
+      <div className="relative overflow-hidden bg-black py-16">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,207,64,0.12),transparent_55%)] animate-[glowShift_18s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_80%,rgba(255,255,255,0.08),transparent_60%)] animate-[glowShiftAlt_22s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(315deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:140px_140px] animate-[gridDrift_30s_linear_infinite]" />
+        <style>{`
+          @keyframes glowShift {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+            50% { transform: translate(6%, -4%) scale(1.05); opacity: 0.9; }
+          }
+          @keyframes glowShiftAlt {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(-6%, 5%) scale(1.08); opacity: 0.85; }
+          }
+          @keyframes gridDrift {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 140px 140px, -140px 140px; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .animate-\\[glowShift_18s_ease-in-out_infinite\\],
+            .animate-\\[glowShiftAlt_22s_ease-in-out_infinite\\],
+            .animate-\\[gridDrift_30s_linear_infinite\\] {
+              animation: none !important;
+            }
+          }
+        `}</style>
+        <div className="relative mx-auto max-w-5xl px-6 text-center">
+          <p className="text-xs uppercase tracking-[0.4em] text-amber-300/80">
+            Studio KFM
+          </p>
+          <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white">
+            Crafting cinematic stories for your most treasured moments.
+          </h1>
+          <p className="mt-4 text-sm sm:text-base text-gray-300">
+            Capture your special moments with our professional photography services. We
+            specialize in creating memories that last a lifetime.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <Link
+              to="/Portfolio"
+              className="rounded-full border border-amber-300/60 bg-black/40 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-amber-100 hover:bg-black/60"
+            >
+              Explore Our Services
+            </Link>
           </div>
         </div>
       </div>
@@ -304,5 +333,3 @@ const UserHomePage = () => {
 };
 
 export default UserHomePage;
-
-

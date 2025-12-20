@@ -143,18 +143,28 @@ const Home = () => {
       </div>
 
 
-        <div className="hero bg-black h-[80vh]">
-          <div className="hero-content text-center">
-            <div className="max-w-3xl">
-              <h1 className="text-6xl font-bold text-white">Welcome to <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">Studio</span> KFM</h1>
-              <p className="py-6 text-gray-400">
-                Capture your special moments with our professional photography services. 
-              We specialize in creating memories that last a lifetime.
-              </p>
-              <Link to='./login'>
-              <button className=" btn border border-amber-300 text-xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent hover:bg-amber-500 hover:font-medium transition-colors duration-300">Book Your Session</button>
-              </Link>
-            </div>
+        <div className="relative bg-black py-20">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(255,207,64,0.18),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(255,255,255,0.08),transparent_60%)]" />
+          {/* <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:120px_120px]" /> */}
+          <div className="relative mx-auto max-w-4xl px-6 text-center">
+            <p className="text-xs uppercase tracking-[0.4em] text-amber-300/80">Studio KFM</p>
+            <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold text-white">
+              Welcome to{' '}
+              <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+                Studio
+              </span>{' '}
+              KFM
+            </h1>
+            <p className="mt-4 text-sm sm:text-base text-gray-300">
+              Capture your special moments with our professional photography services. We
+              specialize in creating memories that last a lifetime.
+            </p>
+            <Link to="./login" className="mt-6 inline-flex">
+              <span className="rounded-full border border-amber-300/60 bg-black/40 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-amber-100 hover:bg-black/60">
+                Book Your Session
+              </span>
+            </Link>
           </div>
         </div>
 
