@@ -17,9 +17,9 @@ const ContactUs = () => {
 
   // Event to category mapping
   const eventToCategory = {
-    'Wedding Photography': 'Wedding',
-    'Birthday Celebrations': 'Birthday',
-    'Puberty Shoot': 'Puberty'
+    'Wedding Photography': 'wedding',
+    'Birthday Celebrations': 'birthday',
+    'Puberty Shoot': 'puberty'
   };
 
   useEffect(() => {
