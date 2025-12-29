@@ -9,16 +9,25 @@ const ContactUs = () => {
   const [selectedEvent, setSelectedEvent] = useState(location.state?.selectedEvent || '');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [allPackages, setAllPackages] = useState([]);
+  const [filteredPackages, setFilteredPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const whatsappLink = "https://wa.me/94785101018?text=Hi%2C%20I%20want%20to%20contact%20you";
 
+  // Event to category mapping
+  const eventToCategory = {
+    'Wedding Photography': 'Wedding',
+    'Birthday Celebrations': 'Birthday',
+    'Puberty Shoot': 'Puberty'
+  };
+
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
-        setAllPackages(Array.isArray(response) ? response : []);
+        const packagesData = Array.isArray(response) ? response : [];
+        setAllPackages(packagesData);
       } catch (err) {
         console.error('Error fetching packages:', err);
         setAllPackages([]);
@@ -28,6 +37,25 @@ const ContactUs = () => {
     };
     fetchPackages();
   }, []);
+
+  // Filter packages based on selected event category
+  useEffect(() => {
+    if (selectedEvent && allPackages.length > 0) {
+      const category = eventToCategory[selectedEvent];
+      if (category) {
+        const filtered = allPackages.filter(pkg => 
+          pkg.category === category
+        );
+        setFilteredPackages(filtered);
+      } else {
+        // If no category mapping found, show all packages
+        setFilteredPackages(allPackages);
+      }
+    } else {
+      // If no event selected, show all packages
+      setFilteredPackages(allPackages);
+    }
+  }, [selectedEvent, allPackages]);
 
   const handleBooking = () => {
     if (selectedEvent && selectedPackage) {
@@ -117,6 +145,7 @@ const ContactUs = () => {
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-amber-900/30 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
         <div className="absolute -bottom-20 left-20 w-72 h-72 bg-blue-900/30 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-900/20 rounded-full mix-blend-multiply filter blur-xl opacity-10"></div>
+        
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
@@ -142,8 +171,13 @@ const ContactUs = () => {
         {/* Selected Event */}
         {selectedEvent && (
           <div className="mb-8 text-center">
-            <p className="text-lg text-gray-300">
-              Selected Event: <span className="font-semibold text-white">{selectedEvent}</span>
+            <div className="inline-block bg-amber-900/20 border border-amber-800/50 rounded-full px-6 py-2">
+              <p className="text-lg text-gray-300">
+                Selected Event: <span className="font-semibold text-amber-300">{selectedEvent}</span>
+              </p>
+            </div>
+            <p className="mt-2 text-sm text-amber-200/70">
+              Showing {filteredPackages.length} packages for {eventToCategory[selectedEvent] || 'this event'}
             </p>
           </div>
         )}
@@ -184,10 +218,18 @@ const ContactUs = () => {
         {contactOption === 'booking' && (
           <div className="mb-16">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-white mb-3">Our <span className="text-amber-400">Photography</span> Packages</h2>
+              <h2 className="text-3xl font-bold text-white mb-3">
+                {selectedEvent ? 
+                  `${eventToCategory[selectedEvent] || 'Event'} Packages` : 
+                  'Our Photography Packages'
+                }
+              </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-amber-600 mx-auto rounded-full"></div>
               <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
-                Choose the perfect package that fits your needs. All packages include high-quality photos and professional editing.
+                {selectedEvent ? 
+                  `Choose the perfect ${eventToCategory[selectedEvent]?.toLowerCase() || 'event'} package for your special day.` :
+                  'Choose the perfect package that fits your needs. All packages include high-quality photos and professional editing.'
+                }
               </p>
             </div>
 
@@ -195,14 +237,21 @@ const ContactUs = () => {
               <div className="flex justify-center py-16">
                 <div className="h-12 w-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
-            ) : allPackages.length === 0 ? (
+            ) : filteredPackages.length === 0 ? (
               <div className="text-center py-12 bg-gray-700/30 rounded-xl border-2 border-dashed border-gray-600">
-                <p className="text-gray-300 text-lg">No packages available at the moment.</p>
-                <p className="text-sm text-gray-400 mt-2">Please check back later or contact us directly.</p>
+                <p className="text-gray-300 text-lg">
+                  {selectedEvent ? 
+                    `No ${eventToCategory[selectedEvent]?.toLowerCase() || 'event'} packages available yet.` :
+                    'No packages available at the moment.'
+                  }
+                </p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Please contact us directly to discuss custom packages for your event.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {allPackages.map((pkg) => {
+                {filteredPackages.map((pkg) => {
                   const styles = getPackageStyles(pkg.type);
                   const isSelected = selectedPackage?._id === pkg._id;
                   
@@ -219,6 +268,15 @@ const ContactUs = () => {
                       {isSelected && (
                         <div className="absolute top-4 right-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                           SELECTED
+                        </div>
+                      )}
+                      
+                      {/* Package Category Badge */}
+                      {pkg.category && (
+                        <div className="absolute top-4 left-4">
+                          <span className="px-2 py-1 text-xs font-medium bg-gray-900/80 text-amber-200 rounded">
+                            {pkg.category}
+                          </span>
                         </div>
                       )}
                       
@@ -291,11 +349,18 @@ const ContactUs = () => {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                   <div>
                     <h4 className="text-xl font-bold text-white">{selectedPackage.name}</h4>
-                    {selectedPackage.type && (
-                      <span className="inline-block mt-2 px-3 py-1 text-sm font-medium bg-amber-900/50 text-amber-200 rounded-full border border-amber-800/50">
-                        {selectedPackage.type}
-                      </span>
-                    )}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {selectedPackage.category && (
+                        <span className="inline-block px-3 py-1 text-sm font-medium bg-amber-900/50 text-amber-200 rounded-full border border-amber-800/50">
+                          {selectedPackage.category}
+                        </span>
+                      )}
+                      {selectedPackage.type && (
+                        <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-700/80 text-gray-200 rounded-full">
+                          {selectedPackage.type}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-3 md:mt-0 text-right">
                     {selectedPackage.price && (
@@ -333,9 +398,14 @@ const ContactUs = () => {
                 </button>
                 <button
                   onClick={handleBooking}
-                  className="px-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 shadow-lg"
+                  disabled={!selectedEvent}
+                  className={`px-8 py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105 shadow-lg ${
+                    selectedEvent 
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700' 
+                      : 'bg-gradient-to-r from-gray-600 to-gray-700 cursor-not-allowed opacity-70'
+                  }`}
                 >
-                  Proceed to Booking
+                  {selectedEvent ? 'Proceed to Booking' : 'Please select an event'}
                 </button>
               </div>
             </div>
