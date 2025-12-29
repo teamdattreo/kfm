@@ -16,7 +16,7 @@ const EditPackagePage = () => {
     name: '',
     descriptionPoints: [''],
     type: 'silver',
-    category: 'Wedding' // Added category field
+    category: 'Wedding' 
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,7 +104,7 @@ const EditPackagePage = () => {
           name: packageData.name,
           descriptionPoints: packageData.descriptionPoints,
           type: packageData.type,
-          category: packageData.category // Added category to update
+          category: packageData.category
         }
       );
 
@@ -175,7 +175,6 @@ const EditPackagePage = () => {
                   />
                 </div>
                 
-                {/* Added Package Category Field */}
                 <div>
                   <label className="block text-amber-100/90 text-sm font-medium mb-2">
                     Package Category

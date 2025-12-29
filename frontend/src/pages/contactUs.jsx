@@ -271,20 +271,12 @@ const ContactUs = () => {
                         </div>
                       )}
                       
-                      {/* Package Category Badge */}
-                      {pkg.category && (
-                        <div className="absolute top-4 left-4">
-                          <span className="px-2 py-1 text-xs font-medium bg-gray-900/80 text-amber-200 rounded">
-                            {pkg.category}
-                          </span>
-                        </div>
-                      )}
                       
                       <div className={`p-8 ${styles.borderColor} border-b border-gray-700`}>
                         <h3 className={`text-2xl font-bold mb-2 ${styles.titleColor}`}>
                           {pkg.name}
                         </h3>
-                        <div className="flex items-baseline mb-2">
+                        {/* <div className="flex items-baseline mb-2">
                           <span className={`text-4xl font-extrabold ${styles.priceColor}`}>
                             ${pkg.price || '--'}
                           </span>
@@ -293,7 +285,7 @@ const ContactUs = () => {
                               / {pkg.duration}
                             </span>
                           )}
-                        </div>
+                        </div> */}
                         {pkg.type && (
                           <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${styles.buttonBg} text-white`}>
                             {pkg.type}
