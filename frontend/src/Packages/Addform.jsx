@@ -28,7 +28,8 @@ const Addform = () => {
   const [packageData, setPackageData] = useState({
     name: '',
     descriptionPoints: [''],
-    type: 'silver'
+    type: 'silver',
+    category: 'Wedding'
   });
 
   const [productData, setProductData] = useState({
@@ -65,6 +66,8 @@ const Addform = () => {
       setPackageData(prev => ({ ...prev, [name]: value }));
     }
   };
+
+   const packageCategories = ['Wedding', 'Birthday', 'Puberty'];
 
   const handleDescriptionPointChange = (index, value) => {
     const newPoints = [...packageData.descriptionPoints];
@@ -147,7 +150,8 @@ const Addform = () => {
       const response = await api.post(API_ENDPOINTS.PACKAGES.CREATE, {
         name: packageData.name,
         descriptionPoints: packageData.descriptionPoints,
-        type: packageData.type
+        type: packageData.type,
+        category: packageData.category
       });
 
       console.log('Package created:', response.data);
@@ -155,7 +159,8 @@ const Addform = () => {
       setPackageData({
         name: '',
         descriptionPoints: [''],
-        type: 'silver'
+        type: 'silver',
+        category: 'Wedding'
       });
       setNewType('');
       setShowNewTypeInput(false);
@@ -312,6 +317,25 @@ const Addform = () => {
                         Add Another Point
                       </button>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-amber-100/90 text-sm font-medium mb-2">
+                      Package Category
+                    </label>
+                    <select
+                      name="category"
+                      value={packageData.category}
+                      onChange={handlePackageChange}
+                      className="w-full px-4 py-3 bg-white/15 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-transparent transition-all appearance-none"
+                      required
+                    >
+                      {packageCategories.map(category => (
+                        <option key={category} value={category} className="bg-amber-900 text-white">
+                          {category}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   
                   <div>
