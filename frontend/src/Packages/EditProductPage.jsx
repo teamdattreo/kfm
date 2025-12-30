@@ -9,7 +9,7 @@ const EditProductPage = () => {
     name: '',
     code: '',
     colors: [''],
-    sizes: [{ size: '', price: '' }]
+    sizes: [{ size: '' }]
   });
   const [productImageFile, setProductImageFile] = useState(null);
   const [productImagePreview, setProductImagePreview] = useState('');
@@ -17,38 +17,55 @@ const EditProductPage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Auth token is automatically handled by the api utility
-
   useEffect(() => {
-  const fetchProduct = async () => {
-  try {
-    const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_BY_ID(id));
+    const fetchProduct = async () => {
+      try {
+        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_BY_ID(id));
 
-    console.log('Product fetch response:', response.data);
+        console.log('Product fetch response:', response);
+        
+        // Handle different possible response structures
+        let product;
+        
+        if (response.data) {
+          // Try different possible structures
+          product = response.data.product || 
+                    response.data.data?.product || 
+                    response.data.data || 
+                    response.data;
+        } else {
+          product = response.product || response;
+        }
 
-    const product = response.data.product; // <-- Corrected here ✅
+        if (!product) {
+          throw new Error('Product data not found in response');
+        }
 
-    setProductData({
-      name: product.name || '',
-      code: product.code || '',
-      colors: Array.isArray(product.colors) && product.colors.length > 0 ? product.colors : [''],
-      sizes: Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes : [{ size: '', price: '' }]
-    });
+        console.log('Product data:', product);
 
-    if (product.imageUrl) {
-      setProductImagePreview(product.imageUrl);
-    }
+        setProductData({
+          name: product.name || '',
+          code: product.code || '',
+          colors: Array.isArray(product.colors) && product.colors.length > 0 ? product.colors : [''],
+          sizes: Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes : [{ size: '' }]
+        });
 
-  } catch (err) {
-    console.error('Error fetching product:', err.response || err.message);
-    setError(err.response?.data?.message || 'Failed to fetch product');
-  }
-};
+        // Check for image in different possible fields
+        if (product.imageUrl || product.photo || product.image) {
+          setProductImagePreview(product.imageUrl || product.photo || product.image);
+        }
 
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        console.error('Error response:', err.response);
+        console.error('Error data:', err.response?.data);
+        
+        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to fetch product');
+      }
+    };
 
-  if (id) fetchProduct();
-}, [id]);
-
+    if (id) fetchProduct();
+  }, [id]);
 
   const handleProductImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,7 +108,7 @@ const EditProductPage = () => {
   const addSize = () => {
     setProductData(prev => ({
       ...prev,
-      sizes: [...prev.sizes, { size: '', price: '' }]
+      sizes: [...prev.sizes, { size: '' }]
     }));
   };
 
@@ -107,30 +124,27 @@ const EditProductPage = () => {
     setSuccess(null);
 
     try {
-      const formData = new FormData();
-      
-      // Append the new image if it was changed
       if (productImageFile) {
-  const formData = new FormData();
-  formData.append('image', productImageFile);
-  formData.append('name', productData.name);
-  formData.append('code', productData.code);
-  formData.append('colors', JSON.stringify(productData.colors));
-  formData.append('sizes', JSON.stringify(productData.sizes));
+        const formData = new FormData();
+        formData.append('image', productImageFile);
+        formData.append('name', productData.name);
+        formData.append('code', productData.code);
+        formData.append('colors', JSON.stringify(productData.colors));
+        formData.append('sizes', JSON.stringify(productData.sizes));
 
-  await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  });
-} else {
-  await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), {
-    name: productData.name,
-    code: productData.code,
-    colors: productData.colors,
-    sizes: productData.sizes
-  });
-}
+        await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      } else {
+        await api.put(API_ENDPOINTS.PRODUCTS.UPDATE(id), {
+          name: productData.name,
+          code: productData.code,
+          colors: productData.colors,
+          sizes: productData.sizes
+        });
+      }
 
       setSuccess('Product updated successfully!');
       setTimeout(() => {
@@ -138,10 +152,12 @@ const EditProductPage = () => {
       }, 1500);
     } catch (err) {
       console.error('Error updating product:', err);
+      console.error('Error response:', err.response);
+      
       if (err.response?.data?.error === 'Product code must be unique') {
         setError('A product with this code already exists');
       } else {
-        setError(err.response?.data?.error || err.message || 'Failed to update product');
+        setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Failed to update product');
       }
     } finally {
       setIsSubmitting(false);
@@ -308,19 +324,6 @@ const EditProductPage = () => {
                             required
                           />
                         </div>
-                        {/* <div>
-                          <label className="block text-xs text-amber-100/70 mb-1">Price</label>
-                          <input
-                            type="number"
-                            value={sizeData.price}
-                            onChange={(e) => handleSizeChange(index, 'price', e.target.value)}
-                            className="w-full px-4 py-2 bg-white/15 border border-white/30 rounded-lg text-white placeholder-amber-100/60 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-transparent transition-all"
-                            placeholder="Price"
-                            min="0"
-                            step="0.01"
-                            required
-                          />
-                        </div> */}
                         {productData.sizes.length > 1 && (
                           <button
                             type="button"

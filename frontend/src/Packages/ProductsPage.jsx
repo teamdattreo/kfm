@@ -131,7 +131,7 @@ const ProductsPage = () => {
                     </div>
                     
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-amber-200/80 mb-2">Sizes & Prices:</h4>
+                      <h4 className="text-sm font-medium text-amber-200/80 mb-2">Sizes:</h4>
                       <div className="grid grid-cols-2 gap-2">
                         {Array.isArray(product.sizes) && product.sizes.map((size, index) => (
                           <div key={index} className="bg-white/5 rounded p-2">
