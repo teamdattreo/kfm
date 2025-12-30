@@ -1,68 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.studiokfm.com/KFM_Logo2.ico</loc>
+    <loc>https://www.studiokfm.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Portfolio</loc>
+    <loc>https://www.studiokfm.com/portfolio</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Gallery</loc>
+    <loc>https://www.studiokfm.com/gallery</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Packages</loc>
+    <loc>https://www.studiokfm.com/packages</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Products</loc>
+    <loc>https://www.studiokfm.com/products</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Booking</loc>
+    <loc>https://www.studiokfm.com/booking</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://www.studiokfm.com/Promotions</loc>
+    <loc>https://www.studiokfm.com/promotions</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://www.studiokfm.com/promo</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
+
   <url>
     <loc>https://www.studiokfm.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.studiokfm.com/Contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.studiokfm.com/contactUs</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.studiokfm.com/Login</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://www.studiokfm.com/SignUp</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
   </url>
 </urlset>
