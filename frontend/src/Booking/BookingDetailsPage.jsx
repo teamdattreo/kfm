@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { API_ENDPOINTS, api } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -51,6 +51,14 @@ const BookingDetailsPage = () => {
 
     fetchBookings();
   }, [eventType]);
+
+  const sortedBookings = useMemo(() => {
+    return [...bookings].sort((a, b) => {
+      const aTime = new Date(a?.createdAt || a?.created_at || a?.createdOn || 0).getTime();
+      const bTime = new Date(b?.createdAt || b?.created_at || b?.createdOn || 0).getTime();
+      return bTime - aTime;
+    });
+  }, [bookings]);
 
   // Handle delete booking
   const handleDelete = async (bookingId) => {
@@ -130,8 +138,11 @@ const BookingDetailsPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((booking) => (
-                  <tr key={booking._id}>
+                {sortedBookings.map((booking, index) => (
+                  <tr
+                    key={booking._id}
+                    className={index === 0 ? 'bg-amber-100/10' : ''}
+                  >
                     {/* Display fields depending on eventType */}
                     {eventType === 'wedding' && (
                       <>
