@@ -41,6 +41,7 @@ const Navbar = () => {
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') syncAuthState();
     };
+    const intervalId = window.setInterval(syncAuthState, 1500);
     window.addEventListener('storage', handleStorage);
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibility);
@@ -48,6 +49,7 @@ const Navbar = () => {
       window.removeEventListener('storage', handleStorage);
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
+      window.clearInterval(intervalId);
     };
   }, []);
 
