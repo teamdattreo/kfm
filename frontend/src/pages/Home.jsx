@@ -254,72 +254,7 @@ const Home = () => {
           </p>
         </div>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Silver Package */}
-          <div className="bg-gradient-to-br from-gray-200 to-gray-300 p-8 rounded-xl text-center hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group hover:shadow-amber-500/20">
-            <div className="h-14 w-14 mx-auto mb-6 flex items-center justify-center bg-gray-400 rounded-full shadow-md">
-              <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"/>
-              </svg>
-            </div>
-            <h4 className="text-gray-800 text-2xl font-bold mb-4">Silver</h4>
-            <p className="text-gray-600 mb-8 text-sm min-h-[60px]">Basic coverage with essential features for small events</p>
-            <Link to='/Login'>
-              <button className="w-full py-3 px-6 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
-                Book Now
-              </button>
-            </Link> 
-          </div>
-
-          {/* Gold Package */}
-          <div className="bg-gradient-to-br from-amber-500 to-amber-300 p-8 rounded-xl text-center hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group hover:shadow-amber-500/30">
-            <div className="h-14 w-14 mx-auto mb-6 flex items-center justify-center bg-amber-600 rounded-full shadow-md">
-              <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"/>
-              </svg>
-            </div>
-            <h4 className="text-white text-2xl font-bold mb-4">Gold</h4>
-            <p className="text-amber-100 mb-8 text-sm min-h-[60px]">Enhanced coverage with more edits, prints, and time</p>
-            <Link to='/Login'>
-              <button className="w-full py-3 px-6 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
-                Book Now
-              </button>
-            </Link> 
-          </div>
-
-          {/* Diamond Package */}
-          <div className="bg-gradient-to-br from-cyan-400 to-blue-300 p-8 rounded-xl text-center hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group hover:shadow-cyan-500/20">
-            <div className="h-14 w-14 mx-auto mb-6 flex items-center justify-center bg-cyan-500 rounded-full shadow-md">
-              <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd"/>
-              </svg>
-            </div>
-            <h4 className="text-gray-800 text-2xl font-bold mb-4">Diamond</h4>
-            <p className="text-gray-600 mb-8 text-sm min-h-[60px]">Premium experience with extra team support and features</p>
-            <Link to='/Login'>
-              <button className="w-full py-3 px-6 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
-                Book Now
-              </button>
-            </Link>
-          </div>
-
-          {/* Platinum Package */}
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-xl text-center hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group hover:shadow-gray-500/20">
-            <div className="h-14 w-14 mx-auto mb-6 flex items-center justify-center bg-gray-700 rounded-full shadow-md">
-              <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"/>
-              </svg>
-            </div>
-            <h4 className="text-white text-2xl font-bold mb-4">Platinum</h4>
-            <p className="text-gray-300 mb-8 text-sm min-h-[60px]">Ultimate package with everything included for elite moments</p>
-            <Link to='/Login'>
-              <button className="w-full py-3 px-6 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
-                Book Now
-              </button>
-            </Link> 
-          </div>
-        </div>
+       
        < ClientPackagesPage/>
 
         {/* CTA Footer */}
