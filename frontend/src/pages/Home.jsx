@@ -7,6 +7,7 @@ import Portfolio from '../Portfolio/Portfolio';
 import HeaderHome from '../components/HeaderHome';
 import logo from '../assets/KFM_Logo2.PNG';
 import { API_ENDPOINTS, api } from '../api';
+import ClientPackagesPage from '../Packages/ClientPackagesPage';
 
 const Home = () => {
   const [bannerUrl, setBannerUrl] = useState('/default-banner.jpg');
@@ -319,7 +320,7 @@ const Home = () => {
             </Link> 
           </div>
         </div>
-
+       < ClientPackagesPage/>
 
         {/* CTA Footer */}
         <div className="text-center mt-16">
