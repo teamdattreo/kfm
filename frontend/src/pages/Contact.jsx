@@ -52,7 +52,7 @@ const ContactPage = () => {
               <FaPhone className="text-xl text-blue-400" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Call Us</h3>
-            <p className="text-gray-400 mb-4">+94 77 112 9911</p>
+            <p className="text-gray-400 mb-4">+94 78 510 1018</p>
             <a
               href="tel:+94771129911"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition transform hover:scale-105"

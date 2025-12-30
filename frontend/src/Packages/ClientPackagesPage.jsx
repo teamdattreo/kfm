@@ -1,123 +1,29 @@
-
-import { useState, useEffect } from 'react';
-import { API_ENDPOINTS, api } from '../api';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from 'react';
 
 const ClientPackagesPage = () => {
-  const [allPackages, setAllPackages] = useState([]);
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
-  const baseTypeColors = {
-    silver: {
-      bgFrom: 'from-gray-200',
-      bgTo: 'to-gray-300',
-      iconBg: 'bg-gray-400',
-      titleColor: 'text-gray-800',
-      textColor: 'text-gray-600',
-      icon: (
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"/>
-        </svg>
-      )
-    },
-    gold: {
-      bgFrom: 'from-amber-500',
-      bgTo: 'to-amber-300',
-      iconBg: 'bg-amber-600',
-      titleColor: 'text-white',
-      textColor: 'text-amber-100',
-      icon: (
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"/>
-        </svg>
-      )
-    },
-    diamond: {
-      bgFrom: 'from-cyan-300',
-      bgTo: 'to-blue-200',
-      iconBg: 'bg-cyan-500',
-      titleColor: 'text-gray-800',
-      textColor: 'text-gray-600',
-      icon: (
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd"/>
-        </svg>
-      )
-    },
-    platinum: {
-      bgFrom: 'from-gray-700',
-      bgTo: 'to-gray-900',
-      iconBg: 'bg-gray-600',
-      titleColor: 'text-white',
-      textColor: 'text-gray-300',
-      icon: (
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"/>
-        </svg>
-      )
-    }
-  };
-
-  const getRandomPackageColors = (type) => {
-    const colors = [
-      { bgFrom: 'from-purple-400', bgTo: 'to-purple-200', iconBg: 'bg-purple-500' },
-      { bgFrom: 'from-green-400', bgTo: 'to-green-200', iconBg: 'bg-green-500' },
-      { bgFrom: 'from-pink-400', bgTo: 'to-pink-200', iconBg: 'bg-pink-500' },
-      { bgFrom: 'from-indigo-400', bgTo: 'to-indigo-200', iconBg: 'bg-indigo-500' },
-      { bgFrom: 'from-red-400', bgTo: 'to-red-200', iconBg: 'bg-red-500' },
-      { bgFrom: 'from-yellow-400', bgTo: 'to-yellow-200', iconBg: 'bg-yellow-500' }
-    ];
-    const hash = type.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
-    const colorIndex = hash % colors.length;
-    return {
-      ...colors[colorIndex],
-      titleColor: 'text-white',
-      textColor: 'text-gray-100',
-      icon: (
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"/>
-        </svg>
-      )
-    };
-  };
-
-  const getPackageColors = (type) => {
-    return baseTypeColors[type.toLowerCase()] || getRandomPackageColors(type);
-  };
-
-  useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const response = await api.get(API_ENDPOINTS.PACKAGES.GET_ALL);
-        const packagesData = Array.isArray(response) ? response : [];
-        setAllPackages(packagesData);
-      } catch (err) {
-        console.error('Error fetching packages:', err);
-        setError('Failed to load packages. Please try again later.');
-        setAllPackages([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPackages();
-  }, []);
-
-  const handleContactClick = () => {
-    navigate('/ContactUs');
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-amber-900/10">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
-      </div>
-    );
-  }
+  const packages = useMemo(
+    () => [
+      {
+        id: 'deluxe',
+        title: 'Deluxe',
+        subtitle: 'Premium coverage for signature celebrations',
+        accent: 'from-amber-500/30 via-amber-400/10 to-transparent',
+      },
+      {
+        id: 'gold',
+        title: 'Gold',
+        subtitle: 'Classic elegance with cinematic storytelling',
+        accent: 'from-amber-400/20 via-white/5 to-transparent',
+      },
+      {
+        id: 'platinum',
+        title: 'Platinum',
+        subtitle: 'Elite experience with full creative direction',
+        accent: 'from-gray-500/20 via-white/5 to-transparent',
+      },
+    ],
+    []
+  );
 
   return (
     <div className="relative min-h-screen bg-[#0b0b0b] text-white">
@@ -131,95 +37,38 @@ const ClientPackagesPage = () => {
             Curated Packages
           </p>
           <h1 className="text-white text-4xl md:text-5xl font-semibold mb-4 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-            The Perfect Package for Your Precious Moments
+            Choose Your Signature Package
           </h1>
           <p className="text-gray-300 font-light tracking-wide leading-relaxed">
-            Choose from our carefully crafted packages to frame your memories in timeless style.
+            Deluxe, Gold, and Platinum packages are available for all celebrations.
           </p>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-100 text-center max-w-3xl mx-auto">
-            {error}
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
-          {allPackages.map((pkg) => {
-            const colors = getPackageColors(pkg.type);
-            const packageType = pkg.type?.charAt(0).toUpperCase() + pkg.type?.slice(1);
-            return (
-              <div
-                key={pkg._id}
-                className={`group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br ${colors.bgFrom} ${colors.bgTo} shadow-[0_18px_55px_-35px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-amber-300/60 cursor-pointer`}
-                onClick={() => setSelectedPackage({ ...pkg, colors })}
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-80"></div>
-                <div className="relative p-7 text-center">
-                  <div className={`h-12 w-12 mx-auto mb-4 flex items-center justify-center ${colors.iconBg} rounded-full shadow-md`}>
-                    {colors.icon}
-                  </div>
-                  <h4 className={`${colors.titleColor} text-2xl font-semibold mb-2`}>{packageType}</h4>
-                  <p className={`${colors.textColor} text-sm`}>{pkg.name}</p>
-                  <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-black/70 bg-white/60 px-3 py-1 rounded-full">
-                    View Details
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {packages.map((pkg) => (
+            <div
+              key={pkg.id}
+              className="group relative rounded-3xl border border-white/10 bg-black/70 p-8 shadow-[0_18px_55px_-35px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-amber-300/60"
+            >
+              <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${pkg.accent}`} />
+              <div className="relative">
+                <p className="text-xs uppercase tracking-[0.3em] text-amber-300/80">
+                  {pkg.title}
+                </p>
+                <h2 className="mt-4 text-3xl font-semibold text-white">{pkg.title} Package</h2>
+                <p className="mt-3 text-sm text-white/70">{pkg.subtitle}</p>
+                <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-amber-200 border border-amber-300/40 px-3 py-1 rounded-full">
+                  Available Now
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center text-xs uppercase tracking-[0.35em] text-amber-300/60">
+          Deluxe · Gold · Platinum
         </div>
       </div>
-
-      {/* Modal */}
-      <AnimatePresence>
-        {selectedPackage && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="bg-[#111111] text-white rounded-2xl max-w-md w-full p-6 relative border border-white/10 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.9)]"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-            >
-              <button
-                className="absolute top-3 right-3 text-gray-400 hover:text-amber-300 text-2xl"
-                onClick={() => setSelectedPackage(null)}
-              >
-                ×
-              </button>
-
-              <div className="text-center">
-                <div className={`h-12 w-12 mx-auto mb-4 flex items-center justify-center ${selectedPackage.colors.iconBg} rounded-full`}>
-                  {selectedPackage.colors.icon}
-                </div>
-                <h2 className="text-2xl font-semibold mb-2">{selectedPackage.name}</h2>
-                <h4 className="text-sm text-amber-300/80 mb-4">{selectedPackage.type}</h4>
-              </div>
-
-              <div className="mb-4">
-                <h5 className="font-semibold mb-2">What's Included:</h5>
-                <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
-                  {selectedPackage.descriptionPoints?.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <button
-                onClick={handleContactClick}
-                className={`w-full py-2.5 px-4 ${selectedPackage.colors.iconBg} text-white rounded-lg mt-4 hover:opacity-90`}
-              >
-                Contact Us About This Package
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
