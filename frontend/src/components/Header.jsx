@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,18 +10,45 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
+  const location = useLocation();
+
+  const syncAuthState = () => {
     const token = localStorage.getItem('authToken');
     const user = JSON.parse(localStorage.getItem('userData'));
     if (token) {
       setIsLoggedIn(true);
-      if (user) {
-        setUserData({
-          name: user.name || 'User',
-          profilePic: user.profilePic || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-        });
-      }
+      setUserData({
+        name: user?.name || 'User',
+        profilePic: user?.profilePic || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      });
+    } else {
+      setIsLoggedIn(false);
+      setUserData({ name: '', profilePic: '' });
     }
+  };
+
+  useEffect(() => {
+    syncAuthState();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === 'authToken' || e.key === 'userData') {
+        syncAuthState();
+      }
+    };
+    const handleFocus = () => syncAuthState();
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') syncAuthState();
+    };
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, []);
 
   // close dropdown when clicking outside
