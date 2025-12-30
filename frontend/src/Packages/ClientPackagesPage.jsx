@@ -26,17 +26,17 @@ const ClientPackagesPage = () => {
   );
 
   return (
-    <div className="relative min-h-screen bg-[#0b0b0b] text-white">
+    <div className="relative bg-[#0b0b0b] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#1a1a1a,transparent_60%)]"></div>
       <div className="absolute -top-24 right-10 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl"></div>
       <div className="absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl"></div>
 
-      <div className="relative container mx-auto px-4 py-16">
-        <div className="text-center mb-14 max-w-3xl mx-auto">
+      <div className="relative container mx-auto px-4 py-10">
+        <div className="text-center mb-8 max-w-3xl mx-auto">
           <p className="text-xs uppercase tracking-[0.35em] text-amber-300/70 mb-3">
             Curated Packages
           </p>
-          <h1 className="text-white text-4xl md:text-5xl font-semibold mb-4 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+          <h1 className="text-white text-3xl md:text-4xl font-semibold mb-3 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
             Choose Your Signature Package
           </h1>
           <p className="text-gray-300 font-light tracking-wide leading-relaxed">
@@ -44,20 +44,20 @@ const ClientPackagesPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {packages.map((pkg) => (
             <div
               key={pkg.id}
-              className="group relative rounded-3xl border border-white/10 bg-black/70 p-8 shadow-[0_18px_55px_-35px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-amber-300/60"
+              className="group relative rounded-2xl border border-white/10 bg-black/70 p-6 shadow-[0_18px_55px_-35px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-amber-300/60"
             >
               <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${pkg.accent}`} />
               <div className="relative">
                 <p className="text-xs uppercase tracking-[0.3em] text-amber-300/80">
                   {pkg.title}
                 </p>
-                <h2 className="mt-4 text-3xl font-semibold text-white">{pkg.title} Package</h2>
-                <p className="mt-3 text-sm text-white/70">{pkg.subtitle}</p>
-                <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-amber-200 border border-amber-300/40 px-3 py-1 rounded-full">
+                <h2 className="mt-3 text-2xl font-semibold text-white">{pkg.title} Package</h2>
+                <p className="mt-2 text-sm text-white/70">{pkg.subtitle}</p>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-amber-200 border border-amber-300/40 px-3 py-1 rounded-full">
                   Available Now
                 </div>
               </div>
@@ -65,7 +65,7 @@ const ClientPackagesPage = () => {
           ))}
         </div>
 
-        <div className="mt-12 text-center text-xs uppercase tracking-[0.35em] text-amber-300/60">
+        <div className="mt-8 text-center text-xs uppercase tracking-[0.35em] text-amber-300/60">
           Deluxe · Gold · Platinum
         </div>
       </div>
