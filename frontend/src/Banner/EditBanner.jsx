@@ -20,20 +20,52 @@ const EditBanner = () => {
     const fetchBanner = async () => {
       try {
         const response = await api.get(API_ENDPOINTS.BANNERS.GET_BY_ID(id));
+                
+        // Handle different response structures
+        const banner = response.data || response;
+        
+        if (!banner) {
+          throw new Error('No banner data received');
+        }
+        
         setFormData({
-          publishDate: response.data.publishDate.split('T')[0],
-          isActive: response.data.isActive
+          publishDate: banner.publishDate ? banner.publishDate.split('T')[0] : new Date().toISOString().split('T')[0],
+          isActive: banner.isActive !== undefined ? banner.isActive : true
         });
-        setCurrentImageUrl(response.data.imageUrl);
-        setPreviewImage(response.data.imageUrl);
+        
+        if (banner.imageUrl) {
+          setCurrentImageUrl(banner.imageUrl);
+          setPreviewImage(banner.imageUrl);
+        }
+        
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load banner');
+        console.error('Error fetching banner:', err);
+        console.error('Error response:', err.response);
+        
+        let errorMessage = 'Failed to load banner';
+        
+        if (err.response) {
+          // Handle different error response structures
+          errorMessage = err.response.data?.message || 
+                        err.response.data?.error || 
+                        err.response.statusText || 
+                        'Failed to load banner';
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+        
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBanner();
+    if (id) {
+      fetchBanner();
+    } else {
+      setError('No banner ID provided');
+      setLoading(false);
+    }
   }, [id]);
 
   const handleChange = (e) => {
@@ -80,7 +112,7 @@ const EditBanner = () => {
       const formDataToSend = new FormData();
       
       // Only append the image if a new one was selected
-      if (fileInputRef.current.files[0]) {
+      if (fileInputRef.current?.files?.[0]) {
         formDataToSend.append('image', fileInputRef.current.files[0]);
       }
       
@@ -93,21 +125,30 @@ const EditBanner = () => {
         }
       });
 
-      if (response.data.success) {
+      console.log('Update response:', response); // Debug log
+      
+      // Handle different success response structures
+      if (response.success || response.data?.success) {
         navigate('/AdminBannerPage');
       } else {
-        setError(response.data.message || 'Failed to update banner');
+        setError(response.message || response.data?.message || 'Failed to update banner');
       }
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Error updating banner:', err);
+      console.error('Error response:', err.response);
+      
       if (err.response) {
-        if (err.response.data.errors) {
+        if (err.response.data?.errors) {
           setError(err.response.data.errors.map(e => e.msg).join(', '));
+        } else if (err.response.data?.error) {
+          setError(err.response.data.error);
+        } else if (err.response.data?.message) {
+          setError(err.response.data.message);
         } else {
-          setError(err.response.data.message || 
-                  err.response.data.error || 
-                  'Failed to update banner');
+          setError(`Failed to update banner: ${err.response.statusText}`);
         }
+      } else if (err.message) {
+        setError(err.message);
       } else {
         setError('Network error - could not connect to server');
       }
@@ -206,7 +247,7 @@ const EditBanner = () => {
                       />
                     </label>
                   </div>
-                  {currentImageUrl && !fileInputRef.current?.files[0] && (
+                  {currentImageUrl && !fileInputRef.current?.files?.[0] && (
                     <p className="text-xs text-amber-100/60 mt-1">
                       Current image will be kept if no new image is selected
                     </p>
