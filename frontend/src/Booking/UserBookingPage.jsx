@@ -7,6 +7,7 @@ const UserBookingsPage = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [packageMap, setPackageMap] = useState({});
+  const [paymentMap, setPaymentMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,31 +21,71 @@ const UserBookingsPage = () => {
           return;
         }
 
-        // Fetch all booking types and packages in parallel
-        const [weddings, birthdays, puberties, packages] = await Promise.all([
+        // Fetch all booking types, packages, and payments in parallel
+        const [weddings, birthdays, puberties, packages, payments] = await Promise.all([
           api.get(API_ENDPOINTS.BOOKINGS.USER_WEDDING(userId)),
           api.get(API_ENDPOINTS.BOOKINGS.USER_BIRTHDAY(userId)),
           api.get(API_ENDPOINTS.BOOKINGS.USER_PUBERTY(userId)),
-          api.get(API_ENDPOINTS.PACKAGES.GET_ALL)
+          api.get(API_ENDPOINTS.PACKAGES.GET_ALL),
+          api.get(API_ENDPOINTS.EXPENSES.ALL) // Fetch all payments
         ]);
 
-        // Combine all bookings with their types
-        const weddingsList = Array.isArray(weddings) ? weddings : [];
-        const birthdaysList = Array.isArray(birthdays) ? birthdays : [];
-        const pubertiesList = Array.isArray(puberties) ? puberties : [];
+        // Process packages
         const packagesList = Array.isArray(packages) ? packages : [];
         const nextPackageMap = packagesList.reduce((acc, pkg) => {
           if (pkg?._id) acc[pkg._id] = pkg.name || pkg.type || pkg._id;
           return acc;
         }, {});
         setPackageMap(nextPackageMap);
+
+        // Process payments - create a map for quick lookup
+        const paymentsList = Array.isArray(payments) ? payments : [];
+        const nextPaymentMap = paymentsList.reduce((acc, payment) => {
+          // Find booking based on customer name, phone, or event type/date
+          acc[payment.customerName + '|' + payment.mobileNumber] = payment;
+          return acc;
+        }, {});
+        setPaymentMap(nextPaymentMap);
+
+        // Combine all bookings with their types
+        const weddingsList = Array.isArray(weddings) ? weddings : [];
+        const birthdaysList = Array.isArray(birthdays) ? birthdays : [];
+        const pubertiesList = Array.isArray(puberties) ? puberties : [];
+
         const allBookings = [
           ...weddingsList.map(b => ({ ...b, type: 'Wedding' })),
           ...birthdaysList.map(b => ({ ...b, type: 'Birthday' })),
           ...pubertiesList.map(b => ({ ...b, type: 'Puberty' }))
         ].sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
 
-        setBookings(allBookings);
+        // Enrich bookings with payment information
+        const bookingsWithPayments = allBookings.map(booking => {
+          // Try to find matching payment
+          let matchingPayment = null;
+          
+          // Look for payment by customer name and phone
+          const customerName = getCustomerName(booking);
+          const phone = booking.phone || '';
+          const paymentKey = customerName + '|' + phone;
+          
+          if (paymentMap[paymentKey]) {
+            matchingPayment = paymentMap[paymentKey];
+          } else {
+            // Try to find by event date and type as fallback
+            const eventDate = booking.eventDate ? new Date(booking.eventDate).toISOString().split('T')[0] : '';
+            matchingPayment = paymentsList.find(payment => 
+              payment.eventType === booking.type &&
+              new Date(payment.eventDate).toISOString().split('T')[0] === eventDate
+            );
+          }
+          
+          return {
+            ...booking,
+            payment: matchingPayment
+          };
+        });
+
+        setBookings(bookingsWithPayments);
         
       } catch (err) {
         console.error('Error fetching bookings:', {
@@ -67,6 +108,20 @@ const UserBookingsPage = () => {
 
     fetchUserBookings();
   }, [navigate]);
+
+  // Helper function to get customer name from booking
+  const getCustomerName = (booking) => {
+    switch(booking.type) {
+      case 'Wedding':
+        return booking.customerName || booking.brideName || booking.groomName || '';
+      case 'Birthday':
+        return booking.parentName || booking.childName || '';
+      case 'Puberty':
+        return booking.girlName || '';
+      default:
+        return '';
+    }
+  };
 
   const handleDelete = async (bookingId, bookingType) => {
     try {
@@ -125,8 +180,49 @@ const UserBookingsPage = () => {
     }
   };
 
+  const getPaymentStatus = (booking) => {
+    if (!booking.payment) {
+      return {
+        hasPayment: false,
+        total: 0,
+        paid: 0,
+        balance: 0,
+        status: 'No Payment'
+      };
+    }
+
+    const total = booking.payment.totalAmount || 0;
+    const paid = booking.payment.paymentAmount || 0;
+    const balance = total - paid;
+
+    let status = 'No Payment';
+    let colorClass = 'bg-gray-500';
+
+    if (balance === 0 && total > 0) {
+      status = 'Paid in Full';
+      colorClass = 'bg-green-500';
+    } else if (paid > 0 && balance > 0) {
+      status = 'Partial Payment';
+      colorClass = 'bg-yellow-500';
+    } else if (paid === 0 && total > 0) {
+      status = 'Payment Pending';
+      colorClass = 'bg-red-500';
+    }
+
+    return {
+      hasPayment: true,
+      total,
+      paid,
+      balance,
+      status,
+      colorClass
+    };
+  };
+
   const getBookingDetails = (booking) => {
     const packageLabel = packageMap[booking.package] || booking.package;
+    const paymentStatus = getPaymentStatus(booking);
+    
     const details = [
       { label: 'Type', value: booking.type },
       { label: 'Date', value: new Date(booking.eventDate).toLocaleDateString() },
@@ -140,6 +236,43 @@ const UserBookingsPage = () => {
         ) 
       }
     ];
+
+    // Add payment information
+    if (paymentStatus.hasPayment) {
+      details.push(
+        { 
+          label: 'Total Amount', 
+          value: `LKR ${paymentStatus.total.toLocaleString()}` 
+        },
+        { 
+          label: 'Amount Paid', 
+          value: `LKR ${paymentStatus.paid.toLocaleString()}` 
+        },
+        { 
+          label: 'Balance', 
+          value: `LKR ${paymentStatus.balance.toLocaleString()}` 
+        },
+        { 
+          label: 'Payment Status', 
+          value: (
+            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${paymentStatus.colorClass}`}>
+              {paymentStatus.status}
+            </span>
+          ) 
+        }
+      );
+    } else {
+      details.push(
+        { 
+          label: 'Payment Status', 
+          value: (
+            <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-500">
+              No Payment Recorded
+            </span>
+          ) 
+        }
+      );
+    }
 
     if (booking.location) details.push({ label: 'Location', value: booking.location });
     if (booking.phone) details.push({ label: 'Phone', value: booking.phone });
@@ -192,32 +325,62 @@ const UserBookingsPage = () => {
         ) : (
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {bookings.map((booking) => (
-                <div 
-                  key={`${booking.type}-${booking._id}`} 
-                  className="bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] border border-gray-700 rounded-xl p-6 shadow-lg"
-                >
-                  <h3 className="text-xl font-bold mb-2 text-[#FFCF40]">
-                    {getBookingTitle(booking)}
-                  </h3>
-                  <div className="space-y-2">
-                    {getBookingDetails(booking).map((detail, index) => (
-                      <p key={index} className="flex items-center">
-                        <span className="font-semibold mr-2">{detail.label}:</span> 
-                        {detail.value}
-                      </p>
-                    ))}
+              {bookings.map((booking) => {
+                const paymentStatus = getPaymentStatus(booking);
+                return (
+                  <div 
+                    key={`${booking.type}-${booking._id}`} 
+                    className="bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] border border-gray-700 rounded-xl p-6 shadow-lg"
+                  >
+                    <h3 className="text-xl font-bold mb-2 text-[#FFCF40]">
+                      {getBookingTitle(booking)}
+                    </h3>
+                    <div className="space-y-2">
+                      {getBookingDetails(booking).map((detail, index) => (
+                        <p key={index} className="flex items-center">
+                          <span className="font-semibold mr-2">{detail.label}:</span> 
+                          {detail.value}
+                        </p>
+                      ))}
+                    </div>
+                    
+                    {/* Payment Summary Card */}
+                    {paymentStatus.hasPayment && (
+                      <div className="mt-4 p-3 bg-gray-800 rounded-lg">
+                        <h4 className="font-bold text-[#FFCF40] mb-2">Payment Summary</h4>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div className="text-gray-300">Total:</div>
+                          <div className="font-semibold text-white">LKR {paymentStatus.total.toLocaleString()}</div>
+                          
+                          <div className="text-gray-300">Paid:</div>
+                          <div className="font-semibold text-green-400">LKR {paymentStatus.paid.toLocaleString()}</div>
+                          
+                          <div className="text-gray-300">Balance:</div>
+                          <div className={`font-semibold ${paymentStatus.balance > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                            LKR {paymentStatus.balance.toLocaleString()}
+                          </div>
+                          
+                          <div className="text-gray-300">Status:</div>
+                          <div>
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${paymentStatus.colorClass}`}>
+                              {paymentStatus.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-4 flex justify-end">
+                      <button 
+                        onClick={() => handleDelete(booking._id, booking.type)}
+                        className="px-4 py-2 bg-red-600 rounded-lg text-sm hover:bg-red-700 transition"
+                      >
+                        Cancel Booking
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-4 flex justify-end">
-                    <button 
-                      onClick={() => handleDelete(booking._id, booking.type)}
-                      className="px-4 py-2 bg-red-600 rounded-lg text-sm"
-                    >
-                      Cancel Booking
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
