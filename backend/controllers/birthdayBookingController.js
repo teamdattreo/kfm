@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { BirthdayBooking } from '../models/BirthdayBooking.js';
+import { sendBookingEmails } from '../utils/bookingEmail.js';
 
 export const createBirthdayBooking = async (req, res) => {
   try {
@@ -28,6 +29,12 @@ export const createBirthdayBooking = async (req, res) => {
     });
 
     await booking.save();
+
+    try {
+      await sendBookingEmails({ bookingType: 'Birthday', booking });
+    } catch (emailError) {
+      console.error('Booking email failed:', emailError);
+    }
     
     res.status(201).json({
       message: "Birthday booking created successfully",

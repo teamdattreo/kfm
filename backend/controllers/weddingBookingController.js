@@ -60,6 +60,7 @@
 
 import mongoose from 'mongoose';
 import { WeddingBooking } from '../models/WeddingBooking.js';
+import { sendBookingEmails } from '../utils/bookingEmail.js';
 
 // Create a new wedding booking
 export const createWeddingBooking = async (req, res) => {
@@ -84,6 +85,12 @@ export const createWeddingBooking = async (req, res) => {
     });
 
     await booking.save();
+
+    try {
+      await sendBookingEmails({ bookingType: 'Wedding', booking });
+    } catch (emailError) {
+      console.error('Booking email failed:', emailError);
+    }
     
     res.status(201).json({
       message: 'Booking created successfully',

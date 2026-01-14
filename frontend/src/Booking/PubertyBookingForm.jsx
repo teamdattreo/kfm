@@ -293,7 +293,18 @@ const PubertyBookingForm = () => {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10 pt-6 border-t border-gray-700">
+          <div className="mt-8 flex items-center justify-center">
+            <label className="flex items-center gap-3 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                defaultChecked
+                className="h-4 w-4 rounded border-gray-500 bg-gray-700 text-amber-500 focus:ring-amber-500"
+              />
+              Notify studio owner by email about this booking
+            </label>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6 pt-6 border-t border-gray-700">
             <button
               type="button"
               onClick={() => window.history.back()}

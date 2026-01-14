@@ -19,6 +19,7 @@ const Login = () => {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -196,14 +197,25 @@ const Login = () => {
             </div>
 
             <fieldset className="mb-6 mt-4">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 pr-14 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
             </fieldset>
 
@@ -271,14 +283,14 @@ const Login = () => {
   </div>
 </div>
 
-            <p className="text-sm font-medium text-gray-800 text-center mt-4 transition-colors duration-200 group">
-              <span className="transition-colors duration-200 group-hover:text-white">
+            <p className="text-base sm:text-sm font-medium text-gray-900 text-center mt-5 transition-colors duration-200 group">
+              <span onClick={() => navigate('/signup')} className="transition-colors duration-200 group-hover:text-white">
                 Don&apos;t have an account?{' '}
               </span>
               <button
                 type="button"
                 onClick={() => navigate('/signup')}
-                className="btn btn-link no-underline text-gray-800 p-0 mb-1 transition-colors duration-200 group-hover:underline group-hover:text-white focus-visible:underline focus-visible:text-white"
+                className="btn btn-link no-underline text-gray-900 p-0 mb-1 underline underline-offset-4 transition-colors duration-200 sm:no-underline group-hover:underline group-hover:text-white focus-visible:underline focus-visible:text-white"
               >
                 Sign up
               </button>

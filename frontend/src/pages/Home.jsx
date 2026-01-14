@@ -136,9 +136,18 @@ const Home = () => {
 
             <br /><br />
 
-           <Link to='/Login'><button className="w-[300px] text-white font-medium py-4 rounded-full opacity-1300 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:opacity-90 transition-all duration-300">
-              SIGN IN
-            </button></Link>
+           <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+             <Link to="/login" className="group w-full sm:w-auto">
+               <button className="w-full sm:w-[260px] text-white text-sm sm:text-base font-semibold py-4 px-6 rounded-full bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 shadow-lg shadow-amber-400/30 hover:shadow-amber-400/50 hover:scale-[1.02] transition-all duration-300">
+                 login
+               </button>
+             </Link>
+             <Link to="/signup" className="group w-full sm:w-auto">
+               <button className="w-full sm:w-[260px] text-amber-900 text-sm sm:text-base font-semibold py-4 px-6 rounded-full border border-amber-300/60 bg-white/90 hover:bg-white hover:border-amber-400 hover:scale-[1.02] transition-all duration-300">
+                 Create account
+               </button>
+             </Link>
+           </div>
           </div>
         </div>
       </div>

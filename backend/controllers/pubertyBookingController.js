@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { PubertyBooking } from '../models/PubertyBooking.js';
+import { sendBookingEmails } from '../utils/bookingEmail.js';
 
 export const createPubertyBooking = async (req, res) => {
   try {
@@ -29,6 +30,12 @@ export const createPubertyBooking = async (req, res) => {
     });
 
     await booking.save();
+
+    try {
+      await sendBookingEmails({ bookingType: 'Puberty', booking });
+    } catch (emailError) {
+      console.error('Booking email failed:', emailError);
+    }
     
     res.status(201).json({
       message: "Puberty booking created successfully",

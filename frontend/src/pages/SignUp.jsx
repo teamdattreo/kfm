@@ -37,6 +37,8 @@ const SignUp = () => {
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Handle countdown for resend button
   useEffect(() => {
@@ -307,29 +309,51 @@ const SignUp = () => {
 
               <div className="mb-4">
                 <label className="block text-sm text-gray-800 mb-1">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
-                  placeholder="••••••••"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 pr-14 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
                 {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
               </div>
 
               <div className="mb-4">
                 <label className="block text-sm text-gray-800 mb-1">Confirm Password</label>
-                <input
-                  type="password"
-                  name="cpassword"
-                  value={formData.cpassword}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 rounded-lg border ${errors.cpassword ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
-                  placeholder="••••••••"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="cpassword"
+                    value={formData.cpassword}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 pr-14 rounded-lg border ${errors.cpassword ? 'border-red-500' : 'border-gray-300'} bg-white bg-opacity-70 text-gray-900 placeholder-gray-500`}
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showConfirmPassword}
+                  >
+                    {showConfirmPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
                 {errors.cpassword && <p className="text-red-500 text-xs mt-1">{errors.cpassword}</p>}
               </div>
             </div>
@@ -405,12 +429,14 @@ const SignUp = () => {
 </div>
 
 
-            <p className="text-sm font-medium text-gray-800 text-center mt-4">
-              Already have an account?{' '}
+            <p className="text-sm font-medium text-gray-800 text-center mt-4 transition-colors duration-200 group">
+              <span onClick={() => navigate('/login')} className="transition-colors duration-200 group-hover:text-white">
+                Already have an account?{' '}
+              </span>
               <button 
                 type="button"
                 onClick={() => navigate('/login')}
-                className="text-gray-800 font-semibold hover:underline hover:text-white"
+                className="text-gray-800 font-semibold transition-colors duration-200 group-hover:underline group-hover:text-white focus-visible:underline focus-visible:text-white animate-pulse"
               >
                 Sign in
               </button>
