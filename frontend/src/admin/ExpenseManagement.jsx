@@ -55,17 +55,42 @@ const ExpenseManagement = () => {
       setShowForm(true);
     }
 
-    const fetchExpenses = async () => {
-      try {
-        const response = await api.get(API_ENDPOINTS.EXPENSES.ALL);
-        setExpenses(Array.isArray(response) ? response : []);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching expenses:', error);
-        setLoading(false);
-        setMessage('Failed to load expenses');
+    // In your ExpenseManagement component, update the fetchExpenses function:
+const fetchExpenses = async () => {
+  try {
+    const response = await api.get(API_ENDPOINTS.EXPENSES.ALL);
+    
+    // Check the actual structure of the response
+    let expensesData = [];
+    
+    if (Array.isArray(response)) {
+      // If response is directly an array
+      expensesData = response;
+    } else if (response.data && Array.isArray(response.data)) {
+      // If response has a data property with array
+      expensesData = response.data;
+    } else if (response.expenses && Array.isArray(response.expenses)) {
+      // If response has an expenses property with array
+      expensesData = response.expenses;
+    } else if (typeof response === 'object') {
+      // Try to extract array from the object
+      for (const key in response) {
+        if (Array.isArray(response[key])) {
+          expensesData = response[key];
+          break;
+        }
       }
-    };
+    }
+    
+    setExpenses(expensesData);
+    setLoading(false);
+    
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    setLoading(false);
+    setMessage('Failed to load expenses');
+  }
+};
 
     fetchExpenses();
   }, []);
