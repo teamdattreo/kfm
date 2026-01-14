@@ -10,7 +10,7 @@ import kfm7 from "./Images/kfm7.jpg";
 import kfm4 from "./Images/kfm4.jpg";
 import kfmlogo from "./Images/kfmlogo.jpg";
 import kfm from "./Images/kfm.webp"
-import kfm14 from "./Images/kfm14.jpg";
+import kfm14 from "./Images/founder.JPG";
 import kfm6 from "./Images/kfm6.jpg";
 import kfm2 from "./Images/kfm2.jpg";
 import kfm16 from "./Images/kfm16.jpg";
@@ -18,6 +18,38 @@ import kfm18 from "./Images/kfm18.jpg";
 import kfm19 from "./Images/kfm19.jpg";
 import kfm15 from "./Images/kfm15.jpg";
 import kfm11 from "./Images/kfm11.jpg";
+import mem7437 from "../assets/memories/IMG_7437.JPG";
+import mem7438 from "../assets/memories/IMG_7438.JPG";
+import mem7439 from "../assets/memories/IMG_7439.JPG";
+import mem7440 from "../assets/memories/IMG_7440.JPG";
+import mem7441 from "../assets/memories/IMG_7441.JPG";
+import mem7442 from "../assets/memories/IMG_7442.JPG";
+import mem7443 from "../assets/memories/IMG_7443.JPG";
+import mem7444 from "../assets/memories/IMG_7444.JPG";
+import mem7445 from "../assets/memories/IMG_7445.JPG";
+import mem7446 from "../assets/memories/IMG_7446.JPG";
+import mem7447 from "../assets/memories/IMG_7447.JPG";
+import mem7448 from "../assets/memories/IMG_7448.JPG";
+import mem7449 from "../assets/memories/IMG_7449.JPG";
+import mem7450 from "../assets/memories/IMG_7450.JPG";
+import mem7451 from "../assets/memories/IMG_7451.JPG";
+import mem7452 from "../assets/memories/IMG_7452.JPG";
+import mem7453 from "../assets/memories/IMG_7453.JPG";
+import mem7454 from "../assets/memories/IMG_7454.JPG";
+import mem7455 from "../assets/memories/IMG_7455.JPG";
+import mem7456 from "../assets/memories/IMG_7456.JPG";
+import mem7458 from "../assets/memories/IMG_7458.JPG";
+import editorTwo from "../assets/team/editor.jpg";
+import editorOne from "../assets/team/editor (2).JPG";
+import photographerOne from "../assets/team/Photographer (1).jpg";
+import photographerThree from "../assets/team/Photographer (3).jpg";
+import photographerFour from "../assets/team/Photographer (4).jpg";
+import ceo from "../assets/team/ceo.JPG";
+import camera from "../assets/team/lithuraj.jpg";
+import camera2 from "../assets/team/thiruvarangan.jpg";  
+import camera3 from "../assets/team/ki.jpg"; 
+import thishanth from "../assets/team/thishant.jpg";
+import administrator1 from "../assets/team/kumar.jpg"; 
 import Header from "../components/Header";
 
 
@@ -51,6 +83,31 @@ const work = [
     // meta: "Fashion • 2025",
     src: kfm9,
   },
+];
+
+const memories = [
+  { src: mem7437, label: "Memory 01", rotate: "-4deg", shiftX: "-6px", shiftY: "-6px" },
+  { src: mem7438, label: "Memory 02", rotate: "3deg", shiftX: "10px", shiftY: "-4px" },
+  { src: mem7439, label: "Memory 03", rotate: "-2deg", shiftX: "-12px", shiftY: "6px" },
+  { src: mem7440, label: "Memory 04", rotate: "5deg", shiftX: "6px", shiftY: "10px" },
+  { src: mem7441, label: "Memory 05", rotate: "-6deg", shiftX: "-8px", shiftY: "4px" },
+  { src: mem7442, label: "Memory 06", rotate: "4deg", shiftX: "12px", shiftY: "-6px" },
+  { src: mem7443, label: "Memory 07", rotate: "-3deg", shiftX: "-10px", shiftY: "8px" },
+  { src: mem7444, label: "Memory 08", rotate: "2deg", shiftX: "6px", shiftY: "-4px" },
+  { src: mem7445, label: "Memory 09", rotate: "-5deg", shiftX: "-6px", shiftY: "10px" },
+  { src: mem7446, label: "Memory 10", rotate: "3deg", shiftX: "10px", shiftY: "6px" },
+  { src: mem7447, label: "Memory 11", rotate: "-2deg", shiftX: "-12px", shiftY: "-2px" },
+  { src: mem7448, label: "Memory 12", rotate: "6deg", shiftX: "8px", shiftY: "8px" },
+  { src: mem7449, label: "Memory 13", rotate: "-4deg", shiftX: "-8px", shiftY: "10px" },
+  { src: mem7450, label: "Memory 14", rotate: "2deg", shiftX: "6px", shiftY: "-6px" },
+  { src: mem7451, label: "Memory 15", rotate: "-6deg", shiftX: "-10px", shiftY: "6px" },
+  { src: mem7452, label: "Memory 16", rotate: "4deg", shiftX: "12px", shiftY: "10px" },
+  { src: mem7453, label: "Memory 17", rotate: "-3deg", shiftX: "-6px", shiftY: "-6px" },
+  { src: mem7454, label: "Memory 18", rotate: "5deg", shiftX: "10px", shiftY: "8px" },
+  { src: mem7455, label: "Memory 19", rotate: "-2deg", shiftX: "-12px", shiftY: "4px" },
+  { src: mem7456, label: "Memory 20", rotate: "3deg", shiftX: "6px", shiftY: "10px" },
+  { src: mem7458, label: "Memory 21", rotate: "-5deg", shiftX: "-8px", shiftY: "-4px" },
+ 
 ];
 
 function usePrefersReducedMotion() {
@@ -237,6 +294,90 @@ export default function Portfolio() {
             38% { opacity: 0; }
             100% { opacity: 0; }
           }
+          .memory-album{
+            background:
+              linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0) 20%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.35)),
+              linear-gradient(180deg, #8a5d3b 0%, #7b5132 100%);
+            border-radius: 2rem;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+          }
+          .album-spread{
+            display: grid;
+            gap: 1.5rem;
+          }
+          @media (min-width: 900px){
+            .album-spread{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          }
+          .album-page{
+            position: relative;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            background:
+              linear-gradient(140deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 35%),
+              #d0a56a;
+            box-shadow: inset 0 0 0 8px #7a512f, inset 0 0 0 12px #5a3a22;
+          }
+          .album-cork{
+            position: relative;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            min-height: 320px;
+            background-image:
+              radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), transparent 28%),
+              radial-gradient(circle at 80% 10%, rgba(0,0,0,0.14), transparent 30%),
+              repeating-linear-gradient(0deg, rgba(0,0,0,0.08), rgba(0,0,0,0.08) 1px, transparent 1px, transparent 6px),
+              repeating-linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08) 1px, transparent 1px, transparent 8px);
+            background-color: #a4784d;
+          }
+          .album-grid{
+            display: grid;
+            gap: 0.9rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .album-photo{
+            position: relative;
+            background: #f7f2ea;
+            padding: 0.5rem;
+            border-radius: 0.9rem;
+            box-shadow: 0 12px 26px rgba(0,0,0,0.3);
+            cursor: pointer;
+          }
+          .album-photo img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.7rem;
+            filter: saturate(0.92) contrast(1.05);
+          }
+          .album-pin{
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 12px;
+            width: 12px;
+            border-radius: 999px;
+            background: #d4af37;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+          }
+          .album-controls{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+          }
+          @media (min-width: 640px){
+            .memory-board{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          }
+          @media (min-width: 1024px){
+            .memory-board{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+          }
           @media (prefers-reduced-motion: reduce){
             .blink-gold{ animation: none; }
             .work-slideshow img{ animation: none; opacity: 1; position: static; }
@@ -292,256 +433,11 @@ export default function Portfolio() {
         `}</style> */}
 
         {/* HERO */}
-        <section className="snapStart relative min-h-[100svh] pt-20">
-          <div className="absolute inset-0 gridlines" />
-          <div className="absolute inset-0 filmgrain" />
-
-          {/* Iridescence layer removed (missing component) */}
-          <div className="pointer-events-none absolute inset-0 opacity-[0.14]" />
-
-          <div className="relative mx-auto grid max-w-6xl grid-cols-12 gap-4 px-4 pb-10">
-            {/* Left column */}
-            <div className="col-span-12 md:col-span-5">
-              <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-black">
-                      Kalmunai, Srilanka
-                    </p>
-                    <h1 className="mt-3 font-serif text-4xl leading-[1.05] md:text-5xl">
-                      Capture your moment
-                      <span className="block">through our scope.</span>
-                    </h1>
-                  </div>
-                  <div className="hidden md:block">
-
-                  </div>
-                </div>
-
-                <p className="mt-4 max-w-prose text-sm leading-relaxed text-zinc-700">
-                  A studio portfolio built like a cinematic sequence—quiet grids, large typography,
-                  and deliberate motion. Portrait, editorial, and product work with clarity and
-                  texture.
-                </p>
-
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <a
-                    href="#work"
-                    className="rounded-full border border-[#d4af37]/60 bg-black px-5 py-3 text-sm text-[#f5f2ea] hover:bg-black/60 blink-gold"
-                  >
-                    View Gallery
-                  </a>
-                  <a
-                    href="#services"
-                    className="rounded-full border border-[#d4af37]/60 bg-black px-5 py-3 text-sm text-[#f5f2ea] hover:bg-black/60 blink-gold"
-                  >
-                    Services
-                  </a>
-
-                </div>
-              </div>
-
-              {/* Micro-cards */}
-              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline md:col-span-2">
-                  <p className="text-xs uppercase tracking-[0.18em] text-black">Services</p>
-                  <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Studio packages</h2>
-                  <p className="mt-4 text-sm leading-relaxed text-zinc-700">
-                    Designed for pace and intention. We’ll build a shot list, set design, and light
-                    plan—then shoot like a sequence.
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    {["Silver", "Gold", "Platinum"].map((tier) => (
-                      <span
-                        key={tier}
-                        className={`rounded-full px-5 py-2 text-xs uppercase tracking-[0.3em] ${
-                          tier === "Gold"
-                            ? "border border-[#d4af37]/60 bg-black/70 text-[#d4af37]"
-                            : "border border-white/10 bg-black/60 text-white/70"
-                        }`}
-                      >
-                        {tier}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="rounded-3xl bg-white/40 p-4 backdrop-blur-md hairline">
-                  <p className="text-xs uppercase tracking-[0.18em] text-black">Process</p>
-                  <p className="mt-2 text-sm text-zinc-700">
-                    Moodboard → Light plan → Shoot → Grade.
-                  </p>
-                </div>
-                <div className="rounded-3xl bg-white/40 p-4 backdrop-blur-md hairline">
-                  <p className="text-xs uppercase tracking-[0.18em] text-black">Delivery</p>
-                  <p className="mt-2 text-sm text-zinc-700">
-                    48–72h preview. Full set in 7–10 days.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Center / Hero visual */}
-            <div className="col-span-12 md:col-span-7">
-              <div className="relative mt-6 overflow-hidden rounded-[2rem] bg-zinc-900/5 hairline">
-                {/* Giant typographic layer */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="breath select-none font-serif text-[22vw] leading-none text-zinc-900/10 md:text-[14vw]">
-                    SCOPE
-                  </div>
-                </div>
-
-                {/* Main image */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden">
-                  <img
-                    className="h-full w-full object-cover opacity-[0.96]"
-                    alt="Hero work"
-                    src={kfm4}
-                    loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.src = fallbackHero;
-                    }}
-                  />
-
-                  {/* Floating badges */}
-                  <div className="absolute left-4 top-4 flex items-center gap-2">
-                    <span className="rounded-full border border-[#d4af37]/60 bg-black px-3 py-2 text-xs text-[#f5f2ea] hover:bg-black/60 blink-gold ">
-                      Advanced video capabilities
-                    </span>
-                    <span className="rounded-full border border-[#d4af37]/60 bg-black px-3 py-2 text-xs text-[#f5f2ea] hover:bg-black/60 blink-gold" >
-                      Ultra‑HD clarity
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-4 right-4 flex items-center gap-2">
-
-                  </div>                 
-                </div>
-
-                {/* Footer strip */}
-                <div className="grid grid-cols-12 gap-3 border-t border-zinc-900/10 bg-white/70 px-4 py-3 backdrop-blur">
-
-                  <div className="col-span-12 flex items-center justify-between md:col-span-5">
-                   
-                    <div className="flex items-center gap-2">
-                      <a
-                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
-                        href="@StudioKFM"
-                        aria-label="Instagram"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <svg
-                          xmlns="https://www.instagram.com/studio.kfm?igsh=bGp1Zmhkdmw4ZHh2"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4"
-                        >
-                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                          <path d="M16 11.37a4 4 0 1 1-7.999 1.26A4 4 0 0 1 16 11.37z" />
-                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                        </svg>
-                      </a>
-                      <a
-                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
-                        href="https://www.facebook.com/KFMKALMUNAI"
-                        aria-label="Facebook"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4"
-                        >
-                          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                        </svg>
-                      </a>
-                      <a
-                        className="rounded-full bg-white/70 px-3 py-2 text-xs text-black hairline hover:bg-white"
-                        href="tel:+94770000000"
-                        aria-label="Call"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4"
-                        >
-                          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.8.3 1.6.6 2.4a2 2 0 0 1-.5 2.1L8 9a16 16 0 0 0 7 7l.8-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.4.6a2 2 0 0 1 1.7 2.1z" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tiny “index” / stats row */}
-              <div className="mt-4 grid grid-cols-12 gap-4">
-                <div className="col-span-12 overflow-hidden rounded-3xl hairline md:col-span-6">
-                  <div className="relative aspect-[4/3] w-full">
-                    <img
-                      src={kfm12}
-                      alt="Core editorial"
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <p className="mt-2 font-serif text-2xl leading-tight text-white">
-                        High‑performance portraits, editorial, and product—
-                        <span className="text-white/70">for every level.</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-12 overflow-hidden rounded-3xl hairline md:col-span-6">
-                  <div className="relative aspect-[4/3] w-full">
-                    <img
-                      src={kfm11}
-                      alt="Community moments"
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <div className="flex items-baseline justify-between text-white">
-                        <p className="text-xs uppercase tracking-[0.18em] text-white/70">Community</p>
-                      </div>
-                      <p className="mt-2 text-sm text-white/80">
-                        Clients, collaborators, and creatives who trust the process.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Down hint */}
-              <div className="mt-8 flex items-center gap-3 text-xs text-black">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/60 backdrop-blur hairline">
-                  ↓
-                </span>
-                <span>Scroll for the filmstrip.</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        
 
         <div className="space-y-0">
         {/* WORK / FILMSTRIP */}
-        <section id="work" className="snapStart relative min-h-[100svh] pt-20">
+        {/* <section id="work" className="snapStart relative min-h-[100svh] pt-20">
           <div className="absolute inset-0 gridlines" />
           <div className="relative mx-auto max-w-6xl px-4 pb-16">
             <div className="grid grid-cols-12 gap-4">
@@ -573,28 +469,55 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              <div className="col-span-12 md:col-span-8">
+              {/* <div className="col-span-12 md:col-span-8">
                 <div
                   className={cn(
                     "relative overflow-hidden rounded-[2rem] bg-white/40 backdrop-blur-md hairline",
                     "p-4"
                   )}
                 >
-                  <div className="flex items-center justify-between">
+                  {/* <div className="flex items-center justify-between">
                     <p className="text-xs uppercase tracking-[0.18em] text-black">Gallery sheet</p>
                     <p className="text-xs text-black">Drag • Swipe • Scroll</p>
-                  </div>
-
+                  </div> */}
+{/* 
                   <Filmstrip items={work} />
                 </div>
 
-              </div>
+              </div> */} 
+            {/* </div>
+          </div>
+        </section>  */}
+
+        {/* MEMORIES */}
+        <section id="memories" className="snapStart relative min-h-[100svh] pt-20">
+          <div className="absolute inset-0 gridlines" />
+          <div className="absolute inset-0 filmgrain" />
+
+          <div className="relative mx-auto max-w-6xl px-4 pb-16">
+            <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+              {/* <p className="text-xs uppercase tracking-[0.18em] text-black">Testimonial</p> */}
+              <p className="mt-3 font-serif text-2xl leading-tight text-zinc-900">
+                Founded with a passion for authentic storytelling, Studio KFM began as a vision to
+                capture life's unscripted beauty. What started with a single camera has grown into
+                a celebrated studio specializing in weddings, portraits, and editorial work.
+              </p>
+              <p className="mt-4 text-xs uppercase tracking-[0.18em] text-black">Our Studio Story</p>
+              <div className="mt-6 h-px w-full bg-black/10" />
+              <p className="text-xs uppercase tracking-[0.18em] text-black">Old Memories</p>
+              <h2 className="mt-3 font-serif text-4xl leading-[1.05]">A scrapbook of our earliest frames.</h2>
+              <p className="mt-4 text-sm leading-relaxed text-zinc-700">
+                Every photo is pinned like a keepsake. Scroll through a layered collage that feels
+                like a studio wall of prints.
+              </p>
             </div>
+
+            <MemoryWall items={memories} />
           </div>
         </section>
 
         {/* SERVICES */}
-        <section id="services" className="snapStart relative min-h-[100svh] pt-20">
+        {/* <section id="services" className="snapStart relative min-h-[100svh] pt-20">
           <div className="absolute inset-0 gridlines" />
           <div className="relative mx-auto max-w-6xl px-4 pb-16">
             <div className="grid grid-cols-12 gap-4">
@@ -604,7 +527,7 @@ export default function Portfolio() {
                   <p className="text-xs uppercase tracking-[0.18em] text-zinc-600">Our Works</p>
                   <h2 className="mt-3 font-serif text-4xl leading-[1.05]">Signature Shoots</h2>
                 </div> */}
-                <div className="mt-0 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                {/* <div className="mt-0 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <h2 className="mt-3 font-serif text-3xl leading-[1.05]">Wedding Shoot</h2>
                   <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
                     <div className="work-slideshow h-full w-full">
@@ -613,8 +536,8 @@ export default function Portfolio() {
                       <img src={kfm19} alt="Wedding shoot 3" loading="lazy" />
                     </div>
                   </div>
-                </div>
-                <div className="mt-5  rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                </div> */}
+                {/* <div className="mt-5  rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <h2 className="mt-3 font-serif text-3xl leading-[1.05]">Birthday Shoot</h2>
                   <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl">
                     <div className="work-slideshow h-full w-full">
@@ -623,10 +546,10 @@ export default function Portfolio() {
                       <img src={kfm4} alt="Birthday shoot 3" loading="lazy" />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
-              <div className="col-span-12 md:col-span-7">
+              {/* <div className="col-span-12 md:col-span-7">
                 <div className="grid gap-4 md:grid-cols-2 auto-rows-fr">
                   <ServiceCard
                     index="01"
@@ -653,11 +576,11 @@ export default function Portfolio() {
                     chips={["Traditional", "Outdoor", "Portraits", "Album"]}
                   />
                 </div>
-              </div>
-            </div>
+              </div> */}
+            {/* </div>
           </div>
-        </section>
-        </div>
+        </section> */} 
+        {/* </div> */}
 
         {/* TESTIMONIALS */}
         <section id="testimonials" className="snapStart relative min-h-[100svh] pt-20">
@@ -681,10 +604,10 @@ export default function Portfolio() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-xs uppercase tracking-[0.18em] text-white/70">Founder</p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-white/70">Founder – KFM Studio</p>
                       <p className="mt-1 font-serif text-xl text-white">Dilojan</p>
                       <p className="mt-2 text-xs text-white/70">
-                        “We craft cinematic stories with calm direction and premium finish.”
+                        “Visionary founder of KFM Studio, responsible for establishing the brand and laying the creative and operational foundation of the studio.”
                       </p>
                     </div>
                   </div>
@@ -692,46 +615,79 @@ export default function Portfolio() {
               </div>
 
               <div className="col-span-12 md:col-span-8">
-                <TestimonialCard
+                {/* <TestimonialCard
                   quote="Founded with a passion for authentic storytelling, Studio KFM began as a vision to capture life's unscripted beauty. What started with a single camera has grown into a celebrated studio specializing in weddings, portraits, and editorial work."
                   title="Our Studio Story"
-                />
+                /> */}
+
+                <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
+                  <p className="text-xs uppercase tracking-[0.18em] text-black">Our Team</p>
+                  <h3 className="mt-3 font-serif text-3xl">Meet the crew</h3>
+                  <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                    {[
+                      { role: "CEO", name: "Niluxshana Dilojan", image: ceo },
+                      { role: "Managing Director & Cameraman & Editor", name: "Yathushan Vijayaretnam", image: editorOne },
+                      { role: "Cameraman", name: "Kirush Raj", image: camera3 },
+                      { role: "Cameraman", name: "Lithuraj", image: camera },
+                      { role: "Cameraman", name: "Thiruvarangan", image: camera2 },
+                      { role: "Cameraman, Editor & Technician", name: "Visvalingam Kapileshan", image: photographerThree },
+                      { role: "Editor & Technician", name: "Thanusheegan", image: editorTwo },
+                      { role: "Cameraman & Editor", name: "Thishanth", image: thishanth },
+                      { role: "Administrative Assistant", name: "Sanojan", image: photographerFour },
+                       { role: "Administrative Assistant", name: "Kumaran", image: administrator1 },
+                      { role: "Administrative Assistant", name: "Rakesh", image: photographerOne },
+                    ].map((member) => (
+                      <div
+                        key={`${member.role}-${member.name}`}
+                        className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/60 p-4"
+                      >
+                        <div className="shrink-0 overflow-hidden rounded-xl">
+                          <img
+                            src={member.image}
+                            alt={`${member.role} ${member.name}`}
+                            className="h-20 w-20 object-cover object-top"
+                            loading="lazy"
+                          />
+                        </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] leading-tight uppercase tracking-[0.12em] text-white/70 break-words sm:text-xs">
+                          {member.role}
+                        </p>
+                          <p className="mt-1 text-sm text-white/90">{member.name}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
                 <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
                   <p className="text-xs uppercase tracking-[0.18em text-black">Why Choose Us</p>
                   <h3 className="mt-3 font-serif text-3xl">Our cinematic journey</h3>
-                  <div className="mt-8 grid gap-3 md:grid-cols-3">
+                  <div className="mt-8 grid gap-4 md:grid-cols-2">
                     {[
-                      {
-                        title: "Story-first",
-                        text: "We design every frame like a film still.",
-                      },
-                      {
-                        title: "Premium finish",
-                        text: "Color science tuned for skin and texture.",
-                      },
-                      {
-                        title: "Calm direction",
-                        text: "Guided poses that feel natural on camera.",
-                      },
-                      {
-                        title: "Story-first",
-                        text: "We design every frame like a film still.",
-                      },
-                      {
-                        title: "Premium finish",
-                        text: "Color science tuned for skin and texture.",
-                      },
-                      {
-                        title: "Calm direction",
-                        text: "Guided poses that feel natural on camera.",
-                      },
+                      { title: "Cinematic Reel 01", id: "owTq_baw_mM" },
+                      { title: "Cinematic Reel 02", id: "_jZ9Sh6sNPk" },
+                      { title: "Cinematic Reel 03", id: "VTIxB5XKToQ" },
+                      { title: "Cinematic Reel 04", id: "QV9JVFfQHSY" },
+                      { title: "Cinematic Reel 05", id: "Oty-PgDc7Fo" },
                     ].map((item) => (
-                      <div key={item.title} className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                        <p className="text-xs uppercase tracking-[0.18em] text-white/70">
+                      <div
+                        key={item.id}
+                        className="overflow-hidden rounded-2xl border border-white/10 bg-black/60"
+                      >
+                        <div className="aspect-video w-full">
+                          <iframe
+                            className="h-full w-full"
+                            src={`https://www.youtube-nocookie.com/embed/${item.id}?rel=0`}
+                            title={item.title}
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                        <p className="px-4 py-3 text-xs uppercase tracking-[0.18em] text-white/70">
                           {item.title}
                         </p>
-                        <p className="mt-2 text-sm text-white/80">{item.text}</p>
                       </div>
                     ))}
                   </div>
@@ -786,7 +742,7 @@ export default function Portfolio() {
                       className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/60 px-4 py-4 text-sm text-white/80 hover:bg-black/70"
                     >
                       <span>Email</span>
-                      <span className="text-[#d4af37]">StudioKFM@gmail.com</span>
+                      <span className="text-[#d4af37]">kishafilmmakers.lmt@gmail.com</span>
                     </a>
                     <a
                       href="https://wa.me/94770000000"
@@ -858,6 +814,129 @@ Make Booking                </Link>
         <div className="h-10" />
       </main>
       </div>
+    </div>
+  );
+}
+
+function MemoryWall({ items }) {
+  const [active, setActive] = useState(null);
+  const [page, setPage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 899px)");
+    const onChange = () => setIsMobile(!!mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  const pageSize = isMobile ? 6 : 8;
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const pagedItems = items.slice(page * pageSize, page * pageSize + pageSize);
+  const leftItems = isMobile ? pagedItems : pagedItems.slice(0, 4);
+  const rightItems = isMobile ? [] : pagedItems.slice(4, 8);
+
+  useEffect(() => {
+    if (page >= totalPages) {
+      setPage(0);
+    }
+  }, [page, totalPages]);
+
+  return (
+    <div className="memory-album mt-8 border border-white/10 p-5 md:p-8">
+      <div className="album-controls">
+        <span>Album Page {page + 1} of {totalPages}</span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-white/20 bg-black/60 px-3 py-2 text-[10px] text-white/80 hover:bg-black/80"
+            onClick={() => setPage((p) => (p - 1 + totalPages) % totalPages)}
+          >
+            Prev Page
+          </button>
+          <button
+            type="button"
+            className="rounded-full border border-white/20 bg-black/60 px-3 py-2 text-[10px] text-white/80 hover:bg-black/80"
+            onClick={() => setPage((p) => (p + 1) % totalPages)}
+          >
+            Next Page
+          </button>
+        </div>
+      </div>
+      <div className="album-spread">
+        <div className="album-page">
+          <div className="album-cork">
+            <div className="album-grid">
+              {leftItems.map((item, idx) => (
+                <button
+                  type="button"
+                  key={`${item.label}-left-${idx}`}
+                  className="album-photo"
+                  style={{
+                    transform: `rotate(${item.rotate}) translate(${item.shiftX}, ${item.shiftY})`,
+                  }}
+                  onClick={() => setActive((prev) => (prev?.src === item.src ? null : item))}
+                  aria-label={`Toggle ${item.label}`}
+                >
+                  <span className="album-pin" />
+                  <img src={item.src} alt={item.label} loading="lazy" />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        {!isMobile && (
+          <div className="album-page">
+            <div className="album-cork">
+              <div className="album-grid">
+                {rightItems.map((item, idx) => (
+                  <button
+                    type="button"
+                    key={`${item.label}-right-${idx}`}
+                    className="album-photo"
+                    style={{
+                      transform: `rotate(${item.rotate}) translate(${item.shiftX}, ${item.shiftY})`,
+                    }}
+                    onClick={() => setActive((prev) => (prev?.src === item.src ? null : item))}
+                    aria-label={`Toggle ${item.label}`}
+                  >
+                    <span className="album-pin" />
+                    <img src={item.src} alt={item.label} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {active && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-6"
+          onClick={() => setActive(null)}
+          role="button"
+          tabIndex={0}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={active.src}
+              alt={active.label}
+              className="h-full w-full object-contain"
+            />
+            <button
+              type="button"
+              className="absolute right-4 top-4 rounded-full border border-white/20 bg-black/70 px-3 py-2 text-xs uppercase tracking-[0.2em] text-white"
+              onClick={() => setActive(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
