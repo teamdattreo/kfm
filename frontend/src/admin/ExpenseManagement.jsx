@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API_ENDPOINTS, api } from '../api';
 import jsPDF from 'jspdf';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ExpenseManagement = () => {
   const [expenses, setExpenses] = useState([]);
@@ -13,6 +13,14 @@ const ExpenseManagement = () => {
   const [message, setMessage] = useState('');
   const [authChecked, setAuthChecked] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check for pre-filled data from booking page
+  const preFillData = location.state?.preFillData;
+  const sourceBookingId = location.state?.sourceBookingId;
+  const sourceEventType = location.state?.sourceEventType;
+
   const [formData, setFormData] = useState({
     customerName: '',
     mobileNumber: '',
@@ -20,12 +28,14 @@ const ExpenseManagement = () => {
     eventType: 'Wedding',
     totalAmount: '',
     paymentAmount: '',
-    paymentDate: new Date().toISOString().split('T')[0]
+    paymentDate: new Date().toISOString().split('T')[0],
+    bookingReference: '', // New field to track booking source
+    eventTypeSource: '' // Track the original event type
   });
 
   const [editingId, setEditingId] = useState(null);
-  const eventTypes = ['Wedding', 'Birthday', 'Corporate', 'Photoshoot', 'Other'];
-  const navigate = useNavigate();
+  const eventTypes = ['Wedding', 'Birthday', 'Puberty', 'Corporate', 'Photoshoot', 'Other'];
+
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -34,6 +44,16 @@ const ExpenseManagement = () => {
     }
     setAuthChecked(true);
 
+    // If there's pre-filled data from booking page, set it and show form
+    if (preFillData) {
+      setFormData({
+        ...formData,
+        ...preFillData,
+        bookingReference: sourceBookingId || '',
+        eventTypeSource: sourceEventType || preFillData.eventType
+      });
+      setShowForm(true);
+    }
 
     const fetchExpenses = async () => {
       try {
@@ -68,7 +88,9 @@ const ExpenseManagement = () => {
         eventType: formData.eventType,
         totalAmount: Number(formData.totalAmount),
         paymentAmount: formData.paymentAmount ? Number(formData.paymentAmount) : 0,
-        paymentDate: formData.paymentDate
+        paymentDate: formData.paymentDate,
+        bookingReference: formData.bookingReference,
+        eventTypeSource: formData.eventTypeSource
       };
 
       if (editingId) {
@@ -77,6 +99,12 @@ const ExpenseManagement = () => {
       } else {
         await api.post(API_ENDPOINTS.EXPENSES.CREATE, payload);
         setMessage('Expense added successfully');
+        
+        // If this was from a booking, you might want to update the booking status
+        if (formData.bookingReference) {
+          // Optional: Update booking to mark as having payment
+          // You could add a PATCH request here to update the booking
+        }
       }
 
       // Refresh data
@@ -99,10 +127,15 @@ const ExpenseManagement = () => {
       eventType: 'Wedding',
       totalAmount: '',
       paymentAmount: '',
-      paymentDate: new Date().toISOString().split('T')[0]
+      paymentDate: new Date().toISOString().split('T')[0],
+      bookingReference: '',
+      eventTypeSource: ''
     });
     setEditingId(null);
     setShowForm(false);
+    
+    // Clear location state
+    window.history.replaceState({}, document.title);
   };
 
   const handleEdit = (expense) => {
@@ -305,12 +338,31 @@ const ExpenseManagement = () => {
           </div>
 
           {showForm && (
-            <div className={`${colorTheme.card} rounded-lg shadow-md p-6 mb-6`}>
-              <h2 className="text-lg font-semibold mb-4 text-amber-400">
-                {editingId ? 'Edit Expense' : 'Add New Expense'}
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={`${colorTheme.card} rounded-lg shadow-md p-6 mb-6`}>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-amber-400">
+              {editingId ? 'Edit Expense' : 'Add New Expense'}
+            </h2>
+            {formData.bookingReference && (
+              <span className="px-3 py-1 text-xs bg-blue-900 text-blue-300 rounded-full">
+                From Booking: {formData.bookingReference.slice(-8)}
+              </span>
+            )}
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Add a hidden field for booking reference */}
+              <input
+                type="hidden"
+                name="bookingReference"
+                value={formData.bookingReference}
+              />
+              <input
+                type="hidden"
+                name="eventTypeSource"
+                value={formData.eventTypeSource}
+              />
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-300">
                       Customer Name
