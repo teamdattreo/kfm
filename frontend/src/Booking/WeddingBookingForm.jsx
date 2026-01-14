@@ -34,16 +34,18 @@ const WeddingBookingForm = () => {
   // Retrieve the event and package from location state
   const selectedEvent = location.state?.selectedEvent || '';
   const selectedPackage = location.state?.selectedPackage || '';
+  const selectedPackageLabel = typeof selectedPackage === 'string'
+    ? selectedPackage
+    : (selectedPackage?.name || selectedPackage?.type || selectedPackage?.category || selectedPackage?.title || '');
 
   useEffect(() => {
-    if (selectedEvent) {
+    if (selectedPackageLabel) {
       setFormData((prevData) => ({
         ...prevData,
-        eventDate: selectedEvent,
-        package: selectedPackage,  // Set the selected package in the form
+        package: selectedPackageLabel
       }));
     }
-  }, [selectedEvent, selectedPackage]);
+  }, [selectedPackageLabel]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
