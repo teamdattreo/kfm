@@ -271,12 +271,14 @@ const Login = () => {
   </div>
 </div>
 
-            <p className="text-sm font-medium text-gray-800 text-center mt-4">
-              Don&apos;t have an account?{' '}
+            <p className="text-sm font-medium text-gray-800 text-center mt-4 transition-colors duration-200 group">
+              <span className="transition-colors duration-200 group-hover:text-white">
+                Don&apos;t have an account?{' '}
+              </span>
               <button
                 type="button"
                 onClick={() => navigate('/signup')}
-                className="btn btn-link no-underline text-gray-800 hover:underline hover:text-white p-0 mb-1"
+                className="btn btn-link no-underline text-gray-800 p-0 mb-1 transition-colors duration-200 group-hover:underline group-hover:text-white focus-visible:underline focus-visible:text-white"
               >
                 Sign up
               </button>
