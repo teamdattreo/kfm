@@ -7,6 +7,17 @@ const AdminBookingPage = () => {
   const [bookingsData, setBookingsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [selectedBookingForPayment, setSelectedBookingForPayment] = useState(null);
+  const [expenseFormData, setExpenseFormData] = useState({
+    customerName: '',
+    mobileNumber: '',
+    eventDate: '',
+    eventType: '',
+    totalAmount: '',
+    paymentAmount: '',
+    paymentDate: new Date().toISOString().split('T')[0]
+  });
 
   const fetchBookingData = async (type) => {
     setLoading(true);
@@ -78,6 +89,48 @@ const AdminBookingPage = () => {
     }
   };
 
+  const handleAddPayment = (booking) => {
+    setSelectedBookingForPayment(booking);
+    
+    // Extract data based on booking type
+    let customerName = '';
+    let mobileNumber = '';
+    let eventDate = '';
+    
+    switch (selectedType) {
+      case 'birthday':
+        customerName = booking.parentName || booking.childName || '';
+        mobileNumber = booking.phone || '';
+        eventDate = booking.eventDate || '';
+        break;
+      case 'puberty':
+        customerName = booking.girlName || '';
+        mobileNumber = booking.phone || '';
+        eventDate = booking.eventDate || '';
+        break;
+      case 'wedding':
+        customerName = booking.customerName || booking.brideName || booking.groomName || '';
+        mobileNumber = booking.phone || '';
+        eventDate = booking.eventDate || booking.receptionDate || '';
+        break;
+      default:
+        customerName = '';
+    }
+
+    // Set the expense form data
+    setExpenseFormData({
+      customerName: customerName,
+      mobileNumber: mobileNumber,
+      eventDate: eventDate ? new Date(eventDate).toISOString().split('T')[0] : '',
+      eventType: selectedType.charAt(0).toUpperCase() + selectedType.slice(1),
+      totalAmount: '',
+      paymentAmount: '',
+      paymentDate: new Date().toISOString().split('T')[0]
+    });
+
+    setShowExpenseForm(true);
+  };
+
   const getStatusColor = (status) => {
     switch(status?.toLowerCase()) {
       case 'approved':
@@ -91,9 +144,222 @@ const AdminBookingPage = () => {
     }
   };
 
+  const closeExpenseForm = () => {
+    setShowExpenseForm(false);
+    setSelectedBookingForPayment(null);
+  };
+
+  const handleExpenseSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Validate form data
+  if (!expenseFormData.totalAmount || !expenseFormData.paymentAmount) {
+    setError('Please fill in all required fields');
+    return;
+  }
+
+  try {
+    // Convert string values to numbers
+    const payload = {
+      ...expenseFormData,
+      totalAmount: Number(expenseFormData.totalAmount),
+      paymentAmount: Number(expenseFormData.paymentAmount)
+    };
+
+    console.log("Submitting payment:", payload); // Debug log
+    
+    const response = await api.post(API_ENDPOINTS.EXPENSES.CREATE, payload);
+    
+    console.log("Payment response:", response); // Debug log
+    
+    if (response.success || response.message) {
+      alert(response.message || 'Payment added successfully!');
+      closeExpenseForm();
+    } else {
+      throw new Error('Invalid response from server');
+    }
+  } catch (err) {
+    console.error('Error adding payment:', err);
+    
+    // Show more detailed error
+    if (err.response?.data?.message) {
+      setError(`Failed to add payment: ${err.response.data.message}`);
+    } else if (err.message) {
+      setError(`Failed to add payment: ${err.message}`);
+    } else {
+      setError('Failed to add payment. Please try again.');
+    }
+    
+    // Keep the form open to show error
+  }
+};
+
+  const handleExpenseChange = (e) => {
+    const { name, value } = e.target;
+    setExpenseFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
     <div className="relative">
-      <div className="fixed top-0 left-0 right-0 z-50">
+      {showExpenseForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-amber-400">
+                  Add Payment for Booking
+                </h2>
+                <button
+                  onClick={closeExpenseForm}
+                  className="text-gray-400 hover:text-white text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              {selectedBookingForPayment && (
+                <div className="mb-6 p-4 bg-gray-700 rounded-lg">
+                  <h3 className="text-lg font-semibold text-white mb-2">Booking Details</h3>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <span className="text-gray-400">Customer:</span>
+                    <span className="text-white">{expenseFormData.customerName}</span>
+                    
+                    <span className="text-gray-400">Phone:</span>
+                    <span className="text-white">{expenseFormData.mobileNumber}</span>
+                    
+                    <span className="text-gray-400">Event Type:</span>
+                    <span className="text-white">{expenseFormData.eventType}</span>
+                    
+                    <span className="text-gray-400">Event Date:</span>
+                    <span className="text-white">{expenseFormData.eventDate}</span>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleExpenseSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Customer Name
+                    </label>
+                    <input
+                      type="text"
+                      name="customerName"
+                      value={expenseFormData.customerName}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Mobile Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="mobileNumber"
+                      value={expenseFormData.mobileNumber}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Event Date
+                    </label>
+                    <input
+                      type="date"
+                      name="eventDate"
+                      value={expenseFormData.eventDate}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Event Type
+                    </label>
+                    <select
+                      name="eventType"
+                      value={expenseFormData.eventType}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      required
+                    >
+                      <option value="Wedding">Wedding</option>
+                      <option value="Birthday">Birthday</option>
+                      <option value="Puberty">Puberty</option>
+                      <option value="Corporate">Corporate</option>
+                      <option value="Photoshoot">Photoshoot</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Total Amount (LKR)
+                    </label>
+                    <input
+                      type="number"
+                      name="totalAmount"
+                      value={expenseFormData.totalAmount}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Payment Amount (LKR)
+                    </label>
+                    <input
+                      type="number"
+                      name="paymentAmount"
+                      value={expenseFormData.paymentAmount}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-300">
+                      Payment Date
+                    </label>
+                    <input
+                      type="date"
+                      name="paymentDate"
+                      value={expenseFormData.paymentDate}
+                      onChange={handleExpenseChange}
+                      className="w-full p-2.5 text-sm border border-gray-700 rounded-md bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={closeExpenseForm}
+                    className="px-5 py-2.5 text-sm font-medium text-gray-300 bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-md"
+                  >
+                    Add Payment
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="fixed top-0 left-0 right-0 z-40">
         {/* <Header /> */}
       </div>
       <div className="min-h-screen bg-black text-white flex flex-col items-center pt-32 pb-12 px-4 sm:px-6">
@@ -157,6 +423,7 @@ const AdminBookingPage = () => {
                         <th className="px-4 py-2">Theme</th>
                         <th className="px-4 py-2">Status</th>
                         <th className="px-4 py-2">Actions</th>
+                        <th className="px-4 py-2">Payment</th>
                         <th className="px-4 py-2">Notes</th>
                       </>
                     )}
@@ -171,6 +438,7 @@ const AdminBookingPage = () => {
                         <th className="px-4 py-2">Outfit Change</th>
                         <th className="px-4 py-2">Status</th>
                         <th className="px-4 py-2">Actions</th>
+                        <th className="px-4 py-2">Payment</th>
                         <th className="px-4 py-2">Notes</th>
                       </>
                     )}
@@ -186,6 +454,7 @@ const AdminBookingPage = () => {
                         <th className="px-4 py-2">Location</th>
                         <th className="px-4 py-2">Status</th>
                         <th className="px-4 py-2">Actions</th>
+                        <th className="px-4 py-2">Payment</th>
                         <th className="px-4 py-2">Notes</th>
                       </>
                     )}
@@ -219,6 +488,14 @@ const AdminBookingPage = () => {
                               <option value="denied">Denied</option>
                             </select>
                           </td>
+                          <td className="px-4 py-2">
+                            <button
+                              onClick={() => handleAddPayment(booking)}
+                              className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                            >
+                              Add Payment
+                            </button>
+                          </td>
                           <td className="px-4 py-2">{booking.notes}</td>
                         </>
                       )}
@@ -246,6 +523,14 @@ const AdminBookingPage = () => {
                               <option value="approved">Approved</option>
                               <option value="denied">Denied</option>
                             </select>
+                          </td>
+                          <td className="px-4 py-2">
+                            <button
+                              onClick={() => handleAddPayment(booking)}
+                              className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                            >
+                              Add Payment
+                            </button>
                           </td>
                           <td className="px-4 py-2">{booking.notes}</td>
                         </>
@@ -275,6 +560,14 @@ const AdminBookingPage = () => {
                               <option value="approved">Approved</option>
                               <option value="denied">Denied</option>
                             </select>
+                          </td>
+                          <td className="px-4 py-2">
+                            <button
+                              onClick={() => handleAddPayment(booking)}
+                              className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                            >
+                              Add Payment
+                            </button>
                           </td>
                           <td className="px-4 py-2">{booking.notes}</td>
                         </>
