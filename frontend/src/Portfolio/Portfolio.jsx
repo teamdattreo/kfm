@@ -44,7 +44,7 @@ import editorOne from "../assets/team/editor (2).JPG";
 import photographerOne from "../assets/team/Photographer (1).jpg";
 import photographerThree from "../assets/team/Photographer (3).jpg";
 import photographerFour from "../assets/team/Photographer (4).jpg";
-import ceo from "../assets/team/ceo.JPG";
+import ceo from "../assets/team/ceo.jpg";
 import camera from "../assets/team/lithuraj.jpg";
 import camera2 from "../assets/team/thiruvarangan.jpg";  
 import camera3 from "../assets/team/ki.jpg"; 
