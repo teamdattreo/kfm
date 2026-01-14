@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const OWNER_EMAIL = (process.env.ADMIN_EMAIL || "kishafilmmakers.lmt@gmail.com").trim();
-const FROM_EMAIL = process.env.EMAIL_USER || OWNER_EMAIL;
+const FROM_EMAIL = (process.env.BOOKING_FROM_EMAIL || process.env.EMAIL_USER || OWNER_EMAIL).trim();
 
 const createTransporter = () => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
