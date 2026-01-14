@@ -16,6 +16,8 @@ const AdminUsersPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const getAuthToken = () => localStorage.getItem('authToken');
 
@@ -123,6 +125,25 @@ const AdminUsersPage = () => {
     }
 };
 
+  const filteredUsers = users
+    .filter((user) => {
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return true;
+      return [
+        user.name,
+        user.email,
+        user.mobile,
+        user.address
+      ]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(query));
+    })
+    .sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
   return (
     <div className="relative min-h-screen">
       {/* Background with subtle overlay */}
@@ -154,6 +175,25 @@ const AdminUsersPage = () => {
                 {error}
               </div>
             )}
+
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by name, email, mobile, or address"
+                  className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                className="inline-flex items-center justify-center rounded-lg border border-amber-300/40 bg-amber-500/20 px-4 py-2 text-sm font-medium text-amber-100 hover:bg-amber-500/30 transition-colors"
+              >
+                Sort: {sortOrder === 'asc' ? 'Oldest' : 'Newest'}
+              </button>
+            </div>
 
             {/* Users Table */}
             <div className="overflow-x-auto">
@@ -194,7 +234,7 @@ const AdminUsersPage = () => {
                       </td>
                     </tr>
                   ) : (
-                    users.map((user) => (
+                    filteredUsers.map((user) => (
                       <tr key={user._id} className="hover:bg-white/5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {user.name}

@@ -7,7 +7,10 @@ const OWNER_EMAIL = (process.env.ADMIN_EMAIL || "kishafilmmakers.lmt@gmail.com")
 const FROM_EMAIL = (process.env.BOOKING_FROM_EMAIL || process.env.EMAIL_USER || OWNER_EMAIL).trim();
 
 const createTransporter = () => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = (process.env.EMAIL_PASSWORD || "").replace(/\s+/g, "");
+
+  if (!emailUser || !emailPass) {
     console.warn("Email transport not configured: missing EMAIL_USER/EMAIL_PASSWORD.");
     return null;
   }
@@ -15,8 +18,8 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
+      user: emailUser,
+      pass: emailPass
     },
     tls: { rejectUnauthorized: false }
   });

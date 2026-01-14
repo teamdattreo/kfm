@@ -53,17 +53,20 @@ const sendVerificationEmail = async (email, token) => {
   const verificationLink = `${BACKEND_URL}/UserOperations/verify-email?token=${token}`;
   console.log("🔗 Email link sent:", verificationLink);
 
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = (process.env.EMAIL_PASSWORD || "").replace(/\s+/g, "");
+
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
+      user: emailUser,
+      pass: emailPass
     },
     tls: { rejectUnauthorized: false }
   });
 
   const mailOptions = {
-    from: `"Your App" <${process.env.EMAIL_USER}>`,
+    from: `"Your App" <${emailUser}>`,
     to: email,
     subject: "Verify Your Email Address",
     html: `
