@@ -697,20 +697,35 @@ export default function Portfolio() {
                   <h3 className="mt-3 font-serif text-3xl">Our cinematic journey</h3>
                   <div className="mt-8 grid gap-4 md:grid-cols-2">
                     {[
-                      { title: "Cinematic Reel 01", id: "owTq_baw_mM" },
-                      { title: "Cinematic Reel 02", id: "_jZ9Sh6sNPk" },
-                      { title: "Cinematic Reel 03", id: "VTIxB5XKToQ" },
-                      { title: "Cinematic Reel 04", id: "QV9JVFfQHSY" },
-                      { title: "Cinematic Reel 05", id: "Oty-PgDc7Fo" },
+                      {
+                        title: "Song 00",
+                        src: "https://www.youtube-nocookie.com/embed/Oty-PgDc7Fo?rel=0",
+                      },
+                      {
+                        title: "Song 01",
+                        src: "https://www.youtube-nocookie.com/embed/_jZ9Sh6sNPk?rel=0",
+                      },
+                      {
+                        title: "Song 02",
+                        src: "https://www.youtube-nocookie.com/embed/W0ka7dgFIAU?rel=0",
+                      },
+                      {
+                        title: "Song 03",
+                        src: "https://www.youtube-nocookie.com/embed/videoseries?list=RD7FU-l5JipgI",
+                      },
+                      {
+                        title: "Song 04",
+                        src: "https://www.youtube-nocookie.com/embed/owTq_baw_mM?rel=0",
+                      },
                     ].map((item) => (
                       <div
-                        key={item.id}
+                        key={item.title}
                         className="overflow-hidden rounded-2xl border border-white/10 bg-black/60"
                       >
                         <div className="aspect-video w-full">
                           <iframe
                             className="h-full w-full"
-                            src={`https://www.youtube-nocookie.com/embed/${item.id}?rel=0`}
+                            src={item.src}
                             title={item.title}
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
