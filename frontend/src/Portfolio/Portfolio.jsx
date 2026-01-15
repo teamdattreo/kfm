@@ -497,12 +497,44 @@ export default function Portfolio() {
           <div className="relative mx-auto max-w-6xl px-4 pb-16">
             <div className="mt-6 rounded-3xl bg-white/40 p-5 backdrop-blur-md hairline">
               {/* <p className="text-xs uppercase tracking-[0.18em] text-black">Testimonial</p> */}
-              <p className="mt-3 font-serif text-2xl leading-tight text-zinc-900">
-                Founded with a passion for authentic storytelling, Studio KFM began as a vision to
-                capture life's unscripted beauty. What started with a single camera has grown into
-                a celebrated studio specializing in weddings, portraits, and editorial work.
-              </p>
-              <p className="mt-4 text-xs uppercase tracking-[0.18em] text-black">Our Studio Story</p>
+              <div className="mt-3 space-y-4 text-zinc-900">
+                <p className="font-serif text-2xl leading-tight">
+                 Framing a Dream: The Kisha Film Makers Journey
+                </p>
+                <p className="text-sm leading-relaxed">
+                  It started with a simple dream in the town of Kalmunai: to create cinema that
+                  did not just entertain, but rivaled the international standards of Indian
+                  cinema.
+                </p>
+                <p className="text-sm leading-relaxed">
+                  Our founder, Visvalingam Dilojan, began his journey as an ordinary youth with an
+                  extraordinary vision. Starting with humble short films, he learned that true
+                  cinema is about connecting with people. From early experiments to award-winning
+                  projects like Theerppu, the goal was always to push boundaries.
+                </p>
+                <p className="text-sm leading-relaxed">
+                  But talent alone was not enough. Like many independent artists, we faced the
+                  harsh reality of financial constraints. The turning point came when a local bank
+                  manager, recognizing the raw potential in our work, provided the support needed
+                  to purchase professional equipment. That moment transformed a passion into a
+                  profession, and Kisha Film Makers (KFM) was born.
+                </p>
+                <p className="text-sm leading-relaxed">
+                  We built this studio like a bird builds a nest, piece by piece, resource by
+                  resource. Today, KFM is more than just a production house; it is a creative
+                  family. We have grown from winning short film competitions to producing
+                  high-quality music videos that have garnered international acclaim for their
+                  visual excellence.
+                </p>
+                <p className="text-sm leading-relaxed">
+                  We pride ourselves on being a launchpad for new talent, mentoring the next
+                  generation of singers, actors, and technicians. Today, our team is united by one
+                  ultimate goal: to produce a full-length feature film for theatrical release. We
+                  are working tirelessly to turn that dream into a reality, proving that with hard
+                  work and a shared vision, a small-town studio can light up the big screen.
+                </p>
+              </div>
+              <p className="mt-4 text-xs uppercase tracking-[0.18em] text-black"></p>
               <div className="mt-6 h-px w-full bg-black/10" />
               <p className="text-xs uppercase tracking-[0.18em] text-black">Old Memories</p>
               <h2 className="mt-3 font-serif text-4xl leading-[1.05]">A scrapbook of our earliest frames.</h2>
