@@ -507,7 +507,7 @@ export default function Portfolio() {
                   cinema.
                 </p>
                 <p className="text-sm leading-relaxed">
-                  Our founder, Visvalingam Dilojan, began his journey as an ordinary youth with an
+                  Our founder, Dilojan, began his journey as an ordinary youth with an
                   extraordinary vision. Starting with humble short films, he learned that true
                   cinema is about connecting with people. From early experiments to award-winning
                   projects like Theerppu, the goal was always to push boundaries.
